@@ -1,0 +1,26 @@
+{
+  "n_obs": 53,
+  "n_unique_samples": 4,
+  "metrics": {
+    "answer_change": {
+      "pearson_r": -0.060306570504554305,
+      "pearson_p": 0.667952128294225,
+      "mean": 0.7547169811320753,
+      "n": 53
+    },
+    "correctness_change": {
+      "pearson_r": -0.2134013820948857,
+      "pearson_p": 0.12496233863719826,
+      "mean": 0.025157232704402514,
+      "n": 53
+    },
+    "continuous_distance": {
+      "pearson_r": 0.2535937962441526,
+      "pearson_p": 0.07871396034596483,
+      "mean": 0.24002453104174334,
+      "n": 49
+    }
+  },
+  "decision": "SHELVE_OR_NEED_MORE_DATA",
+  "decision_rule": "GRADUATE if any metric has |r|>0.3 and p<0.05"
+}

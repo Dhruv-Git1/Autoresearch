@@ -1,0 +1,16 @@
+{
+  "n_obs": 9,
+  "n_unique_samples": 3,
+  "answer_change": {
+    "pearson_r": 0.39131189606246314,
+    "pearson_p": 0.2976691017665332,
+    "mean": 0.8888888888888888
+  },
+  "correctness_change": {
+    "pearson_r": 0.06498440561375451,
+    "pearson_p": 0.8680798534860267,
+    "mean": 0.14814814814814814
+  },
+  "decision": "SHELVE_OR_NEED_MORE_DATA",
+  "decision_rule": "GRADUATE if either metric has |r|>0.3 and p<0.05"
+}

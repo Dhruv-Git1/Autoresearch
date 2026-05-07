@@ -1,0 +1,910 @@
+{
+  "nodes": [
+    {
+      "id": "readme_autovoila",
+      "label": "AutoVoila README",
+      "file_type": "document",
+      "source_file": "autovoila/README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Lossfunk",
+      "contributor": null
+    },
+    {
+      "id": "readme_lossfunk",
+      "label": "Lossfunk",
+      "file_type": "rationale",
+      "source_file": "autovoila/README.md",
+      "source_location": null,
+      "source_url": "lossfunk.com",
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_claude_code",
+      "label": "Claude Code",
+      "file_type": "rationale",
+      "source_file": "autovoila/README.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "readme_cco_tool",
+      "label": "CCO (Claude Code Orchestrator)",
+      "file_type": "rationale",
+      "source_file": "autovoila/README.md",
+      "source_location": null,
+      "source_url": "https://github.com/nikvdp/cco",
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "voila_main_prompt",
+      "label": "voila.md — Autonomous Research Agent Prompt",
+      "file_type": "document",
+      "source_file": "autovoila/voila.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Lossfunk",
+      "contributor": null
+    },
+    {
+      "id": "research_philosophy_doc",
+      "label": "Research Philosophy Document",
+      "file_type": "document",
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Lossfunk",
+      "contributor": null
+    },
+    {
+      "id": "philosophy_great_research_question",
+      "label": "Great Research Question Criteria",
+      "file_type": "rationale",
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A great research question must be: (1) Surprising to experts — claims known or easily predicted by experts have no research value; (2) Fruitful — opens downstream programs and questions, not dead-end micro-improvements; (3) Foreclosing alternative explanations — rigorous enough that the claim holds via ablations, baselines, and confound analysis; (4) Feasible — completable with available resources, skills, and time. These criteria exist because selection of the problem has disproportionate influence on total research impact."
+    },
+    {
+      "id": "philosophy_surprisingness",
+      "label": "Surprisingness Criterion",
+      "file_type": "rationale",
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Research must surprise domain experts. Novelty to the researcher alone is insufficient — it requires rigorous literature review to verify the claim is not already known. Failure mode: reviewer demonstrates prior art exists."
+    },
+    {
+      "id": "philosophy_fruitfulness",
+      "label": "Fruitfulness Criterion",
+      "file_type": "rationale",
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Great research opens entire new programs downstream (e.g., backpropagation, scaling laws). Failure mode: making novel but inconsequential claims — answered by asking 'so what?' early. The importance must also be communicated clearly in the paper."
+    },
+    {
+      "id": "philosophy_rigor",
+      "label": "Rigor and Claim Scope Criterion",
+      "file_type": "rationale",
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Claims must not exceed what evidence can support. Experimentation design must track the actual claim scope. Narrower claims are more technically correct but less impactful — walking this tightrope is a necessary scientific skill. Example: testing on GSM8K alone supports claims only about GSM8K, not 'reasoning in general'."
+    },
+    {
+      "id": "philosophy_feasibility",
+      "label": "Feasibility Criterion",
+      "file_type": "rationale",
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Research must be completable with available resources, knowledge, skills, and time. Ambition and feasibility are in tension: more ambitious projects require more evidence, more confound foreclosure, and more alternative explanations to address."
+    },
+    {
+      "id": "philosophy_research_phases",
+      "label": "Research Phases (Exploration → Sharpening → Execution → Writing)",
+      "file_type": "rationale",
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Four sequential phases: (1) Exploration — time-boxed sprint to discover a potentially surprising claim; (2) Research Question Sharpening — put candidate claims through criteria for surprisingness, fruitfulness, rigor, feasibility; (3) Experiment Execution — after internal review and alignment; (4) Paper Writing — begins only when a strong cohesive story emerges. Novel experiments and new directions emerge during execution as part of the process."
+    },
+    {
+      "id": "philosophy_claim_intuition",
+      "label": "Research Claim as Prior Intuition",
+      "file_type": "rationale",
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Every research question carries an implicit or explicit prior belief before any experiment. Because infinite things can be measured empirically, experiment choice must be guided by intuitions about what is true. Analogized to Einstein's hunch about equivalence between acceleration and gravity leading to general relativity."
+    },
+    {
+      "id": "template_exploration_sprint",
+      "label": "Exploration Sprint Template",
+      "file_type": "document",
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Lossfunk",
+      "contributor": null
+    },
+    {
+      "id": "template_rq_sharpener",
+      "label": "Research Question Sharpener Template",
+      "file_type": "document",
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": "Lossfunk",
+      "contributor": null
+    },
+    {
+      "id": "sprint_what_if",
+      "label": "What-If Curiosity Prompt",
+      "file_type": "rationale",
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "The starting point of exploration — a naturally-stated curiosity ('What would happen if...' or 'I wonder whether...'). Capturing the origin of curiosity helps identify which kinds of intuitions tend to be productive."
+    },
+    {
+      "id": "sprint_expectations",
+      "label": "Written Expectations Before Sprint",
+      "file_type": "rationale",
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Without written, specific expectations you cannot recognize surprise — and surprise is what turns exploration into research. Vague expectations cannot be violated. The template requires explicit articulation of what would genuinely surprise the researcher (1-2 outcomes)."
+    },
+    {
+      "id": "sprint_fruitfulness_precheck",
+      "label": "Fruitfulness Pre-Check",
+      "file_type": "rationale",
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Before investing sprint time, check whether the best possible outcome would actually lead somewhere worth going. Questions: (1) If this surprises you, then what downstream consequences follow? (2) Who would care — can you name a specific community or researcher? (3) Does this connect to LossFunk research directions? Strategically pointless explorations may be intellectually fun but waste lab time."
+    },
+    {
+      "id": "sprint_timebox",
+      "label": "Time-Box Discipline",
+      "file_type": "rationale",
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Sprints are strictly time-boxed (3 days, 1 week, or 2 weeks) with a check-in date and a hard stop date. At check-in: if nothing surprising is emerging, consider stopping early. No extensions without a new sprint. Forces a decision (Graduate/Shelve/Pivot) rather than allowing exploration to drift."
+    },
+    {
+      "id": "sprint_decision_gsp",
+      "label": "Graduate / Shelve / Pivot Decision",
+      "file_type": "rationale",
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Three outcomes: GRADUATE (surprise found — 'I expected X but observed Y' — pull out the Research Question Sharpener); SHELVE (no surprise found, expectations confirmed or ambiguous — file notes, no shame, most sprints end here); PIVOT (original what-if wasn't fruitful but something adjacent is — start a new sprint). Most sprints ending in 'shelve' is explicitly framed as success, not failure."
+    },
+    {
+      "id": "sprint_lossfunk_flow",
+      "label": "LossFunk Research Flow",
+      "file_type": "rationale",
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Formal pipeline: Curiosity ('what if...') → Exploration Sprint (time-boxed) → Surprise found? Yes → Research Question Sharpener → Project. No → Shelve or Pivot to new sprint. Exploration is search, not commitment."
+    },
+    {
+      "id": "rqs_the_what",
+      "label": "Section 1: The What — Specific Claim",
+      "file_type": "rationale",
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Requires a specific, falsifiable claim ('we show that X, which matters because Y' — not 'we investigate X'). Includes: articulating what prior belief is violated (the Surprise), stating the contribution in one sentence (if you can't, the idea isn't sharp enough), and confirming alignment with LossFunk research directions at lossfunk.com."
+    },
+    {
+      "id": "rqs_the_why",
+      "label": "Section 2: The Why — Fruitfulness",
+      "file_type": "rationale",
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "A fruitful result opens a research program. High-fruitfulness examples cited: Grokking (delayed generalization opened phase transition questions), Adversarial examples (spawned robustness/alignment subfield), Sycophancy paper. Low-fruitfulness examples: beating SOTA by 2% (no mechanism to explore), 'LLMs worse in Swahili' (confirms expectations, next step is engineering not science). Key question: is your result a crossroads (multiple inquiry directions, cross-field) or a corridor (single direction)?"
+    },
+    {
+      "id": "rqs_the_how",
+      "label": "Section 3: The How — Experimental Design",
+      "file_type": "rationale",
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Every experiment must be traceable to a specific alternative explanation it forecloses. Requires identifying the 'Killer Alternative Explanation' (simplest skeptical dismissal — training data, scale, cherry-picking, confound) and designing a control or ablation to foreclose it. Rigor involves seeds/trials, statistical tests, preregistration, ablations."
+    },
+    {
+      "id": "rqs_the_so_what",
+      "label": "Section 4: The So What — Impact Depth",
+      "file_type": "rationale",
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Four-level depth framework: Level 0 (we propose X, it works), Level 1 (X works + strong evidence), Level 2 (WHY X works + reveals problem structure), Level 3 (general principle that reframes broader thinking). Aim for Level 2+. Impact types: Conceptual (changes how experts think), Practical (enables previously impossible), Methodological (tools others adopt). Also requires identifying broadest truthful audience and the 'Science Version' title/press release framing."
+    },
+    {
+      "id": "voila_codex_feedback",
+      "label": "Codex Feedback Integration",
+      "file_type": "rationale",
+      "source_file": "autovoila/voila.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "The agent is instructed to take Codex feedback (if available) at each critical step — including when rating research questions and before the first draft. Codex must also read the research philosophy document. Feedback always resolves confusion and improves outcomes."
+    },
+    {
+      "id": "voila_reviewer_role",
+      "label": "AI Conference Reviewer Self-Check",
+      "file_type": "rationale",
+      "source_file": "autovoila/voila.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Before writing the first draft, the agent must act as an AI conference reviewer to ensure research passes minimum bar (workshop level baseline, main conference or journal level as bonus). Prevents investing in write-up before validating research quality."
+    },
+    {
+      "id": "voila_draft_output",
+      "label": "Submittable Paper Output (LaTeX + PDF)",
+      "file_type": "rationale",
+      "source_file": "autovoila/voila.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Final expected outcome is a folder containing a submittable paper in LaTeX (.tex) and compiled PDF. Draft must have no AI style, minimal em dashes, and must include acknowledgements that the paper was assisted by Claude (for experiments and writing)."
+    },
+    {
+      "id": "voila_resource_check",
+      "label": "System Resource Discovery",
+      "file_type": "rationale",
+      "source_file": "autovoila/voila.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Agent must figure out available CPU, GPU, and memory before proposing experiments, so that experiments can actually be run on the available system. Directly operationalizes the Feasibility criterion from research-philosophy.md."
+    },
+    {
+      "id": "rqs_grokking_example",
+      "label": "Grokking (High Fruitfulness Example)",
+      "file_type": "rationale",
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Cited as a high-fruitfulness crossroads: networks suddenly generalize long after memorizing. Opened questions about delayed generalization, phase transitions, behavior in large models, and connection to double descent."
+    },
+    {
+      "id": "rqs_adversarial_examples",
+      "label": "Adversarial Examples (High Fruitfulness Example)",
+      "file_type": "rationale",
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Cited as a high-fruitfulness crossroads: one finding spawned an entire subfield — robustness, certified defenses, loss landscapes, alignment implications."
+    },
+    {
+      "id": "rqs_sycophancy_paper",
+      "label": "Sycophancy Paper (High Fruitfulness Example)",
+      "file_type": "rationale",
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "rationale": "Cited as high-fruitfulness: users prefer the thing that harms them. Opens questions about long-term effects, other domains, cognitive mechanism, and policy implications."
+    }
+  ],
+  "edges": [
+    {
+      "source": "readme_autovoila",
+      "target": "readme_lossfunk",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/README.md",
+      "source_location": "line 1",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_autovoila",
+      "target": "readme_claude_code",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/README.md",
+      "source_location": "line 4",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_autovoila",
+      "target": "readme_cco_tool",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/README.md",
+      "source_location": "line 5",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_autovoila",
+      "target": "voila_main_prompt",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/README.md",
+      "source_location": "line 9",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_autovoila",
+      "target": "research_philosophy_doc",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/README.md",
+      "source_location": "line 10",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_autovoila",
+      "target": "template_exploration_sprint",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/README.md",
+      "source_location": "line 12",
+      "weight": 1.0
+    },
+    {
+      "source": "readme_autovoila",
+      "target": "template_rq_sharpener",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/README.md",
+      "source_location": "line 12",
+      "weight": 1.0
+    },
+    {
+      "source": "voila_main_prompt",
+      "target": "research_philosophy_doc",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/voila.md",
+      "source_location": "line 3",
+      "weight": 1.0
+    },
+    {
+      "source": "voila_main_prompt",
+      "target": "template_exploration_sprint",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/voila.md",
+      "source_location": "line 4",
+      "weight": 1.0
+    },
+    {
+      "source": "voila_main_prompt",
+      "target": "template_rq_sharpener",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/voila.md",
+      "source_location": "line 4",
+      "weight": 1.0
+    },
+    {
+      "source": "voila_main_prompt",
+      "target": "voila_codex_feedback",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/voila.md",
+      "source_location": "lines 9-10",
+      "weight": 1.0
+    },
+    {
+      "source": "voila_main_prompt",
+      "target": "voila_reviewer_role",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/voila.md",
+      "source_location": "line 14",
+      "weight": 1.0
+    },
+    {
+      "source": "voila_main_prompt",
+      "target": "voila_draft_output",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/voila.md",
+      "source_location": "line 18",
+      "weight": 1.0
+    },
+    {
+      "source": "voila_main_prompt",
+      "target": "voila_resource_check",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/voila.md",
+      "source_location": "line 6",
+      "weight": 1.0
+    },
+    {
+      "source": "research_philosophy_doc",
+      "target": "philosophy_great_research_question",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": "lines 9-17",
+      "weight": 1.0
+    },
+    {
+      "source": "philosophy_great_research_question",
+      "target": "philosophy_surprisingness",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": "lines 11-12",
+      "weight": 1.0
+    },
+    {
+      "source": "philosophy_great_research_question",
+      "target": "philosophy_fruitfulness",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": "lines 13-14",
+      "weight": 1.0
+    },
+    {
+      "source": "philosophy_great_research_question",
+      "target": "philosophy_rigor",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": "lines 15-16",
+      "weight": 1.0
+    },
+    {
+      "source": "philosophy_great_research_question",
+      "target": "philosophy_feasibility",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": "line 17",
+      "weight": 1.0
+    },
+    {
+      "source": "research_philosophy_doc",
+      "target": "philosophy_research_phases",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": "lines 33-42",
+      "weight": 1.0
+    },
+    {
+      "source": "research_philosophy_doc",
+      "target": "philosophy_claim_intuition",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": "lines 1-6",
+      "weight": 1.0
+    },
+    {
+      "source": "template_exploration_sprint",
+      "target": "sprint_what_if",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": "page 1, BEFORE YOU START",
+      "weight": 1.0
+    },
+    {
+      "source": "template_exploration_sprint",
+      "target": "sprint_expectations",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": "page 1, EXPECTATIONS",
+      "weight": 1.0
+    },
+    {
+      "source": "template_exploration_sprint",
+      "target": "sprint_fruitfulness_precheck",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": "page 1-2, FRUITFULNESS PRE-CHECK",
+      "weight": 1.0
+    },
+    {
+      "source": "template_exploration_sprint",
+      "target": "sprint_timebox",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": "page 2, TIME BOX",
+      "weight": 1.0
+    },
+    {
+      "source": "template_exploration_sprint",
+      "target": "sprint_decision_gsp",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": "page 3, THE DECISION",
+      "weight": 1.0
+    },
+    {
+      "source": "template_exploration_sprint",
+      "target": "sprint_lossfunk_flow",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": "page 3, The LossFunk Research Flow",
+      "weight": 1.0
+    },
+    {
+      "source": "sprint_decision_gsp",
+      "target": "template_rq_sharpener",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": "page 3, GRADUATE column",
+      "weight": 1.0
+    },
+    {
+      "source": "sprint_lossfunk_flow",
+      "target": "template_rq_sharpener",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": "page 3, LossFunk Research Flow",
+      "weight": 1.0
+    },
+    {
+      "source": "template_rq_sharpener",
+      "target": "rqs_the_what",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": "page 1, Section 1",
+      "weight": 1.0
+    },
+    {
+      "source": "template_rq_sharpener",
+      "target": "rqs_the_why",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": "page 2, Section 2",
+      "weight": 1.0
+    },
+    {
+      "source": "template_rq_sharpener",
+      "target": "rqs_the_how",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": "page 2-3, Section 3",
+      "weight": 1.0
+    },
+    {
+      "source": "template_rq_sharpener",
+      "target": "rqs_the_so_what",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": "page 3, Section 4",
+      "weight": 1.0
+    },
+    {
+      "source": "rqs_the_why",
+      "target": "rqs_grokking_example",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": "page 2, high fruitfulness table",
+      "weight": 1.0
+    },
+    {
+      "source": "rqs_the_why",
+      "target": "rqs_adversarial_examples",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": "page 2, high fruitfulness table",
+      "weight": 1.0
+    },
+    {
+      "source": "rqs_the_why",
+      "target": "rqs_sycophancy_paper",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": "page 2, high fruitfulness table",
+      "weight": 1.0
+    },
+    {
+      "source": "rqs_the_what",
+      "target": "readme_lossfunk",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": "page 1, Alignment with LossFunk",
+      "weight": 1.0
+    },
+    {
+      "source": "sprint_fruitfulness_precheck",
+      "target": "readme_lossfunk",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": "page 2, Does this connect to our research directions?",
+      "weight": 1.0
+    },
+    {
+      "source": "philosophy_fruitfulness",
+      "target": "rqs_the_why",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "philosophy_rigor",
+      "target": "rqs_the_how",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "philosophy_feasibility",
+      "target": "voila_resource_check",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "autovoila/voila.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "philosophy_surprisingness",
+      "target": "sprint_expectations",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "philosophy_research_phases",
+      "target": "sprint_lossfunk_flow",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": null,
+      "weight": 0.85
+    },
+    {
+      "source": "sprint_fruitfulness_precheck",
+      "target": "rqs_the_why",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "autovoila/templates/exploration_sprint.pdf",
+      "source_location": null,
+      "weight": 0.85
+    },
+    {
+      "source": "voila_reviewer_role",
+      "target": "philosophy_surprisingness",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "autovoila/voila.md",
+      "source_location": null,
+      "weight": 0.75
+    },
+    {
+      "source": "rqs_the_so_what",
+      "target": "philosophy_fruitfulness",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "autovoila/templates/research_question_sharpner.pdf",
+      "source_location": null,
+      "weight": 0.85
+    },
+    {
+      "source": "readme_claude_code",
+      "target": "readme_cco_tool",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "autovoila/README.md",
+      "source_location": null,
+      "weight": 0.75
+    },
+    {
+      "source": "philosophy_claim_intuition",
+      "target": "sprint_what_if",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "autovoila/research-philosophy.md",
+      "source_location": null,
+      "weight": 0.85
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "lossfunk_research_pipeline",
+      "label": "LossFunk Full Research Pipeline",
+      "nodes": [
+        "sprint_what_if",
+        "template_exploration_sprint",
+        "sprint_decision_gsp",
+        "template_rq_sharpener",
+        "philosophy_research_phases",
+        "voila_main_prompt"
+      ],
+      "relation": "implement",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.95,
+      "source_file": "autovoila/templates/exploration_sprint.pdf"
+    },
+    {
+      "id": "research_quality_criteria",
+      "label": "Four Criteria for Research Question Quality",
+      "nodes": [
+        "philosophy_surprisingness",
+        "philosophy_fruitfulness",
+        "philosophy_rigor",
+        "philosophy_feasibility"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/research-philosophy.md"
+    },
+    {
+      "id": "rqs_sharpener_structure",
+      "label": "Research Question Sharpener Four-Section Structure",
+      "nodes": [
+        "rqs_the_what",
+        "rqs_the_why",
+        "rqs_the_how",
+        "rqs_the_so_what"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "autovoila/templates/research_question_sharpner.pdf"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}
