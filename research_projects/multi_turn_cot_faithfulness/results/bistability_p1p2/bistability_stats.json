@@ -1,0 +1,20 @@
+{
+  "H1_runlength": {
+    "n_anchored_runs": 3,
+    "mean_run_length": 2.333,
+    "p_geometric_mle": 0.4286,
+    "ks_stat": 0.4286,
+    "ks_p": 0.516,
+    "verdict": "consistent with geometric (no excess clustering)"
+  },
+  "H3_bimodality": {
+    "n_obs": 89,
+    "frac_anchored": 0.079,
+    "frac_exploring": 0.921,
+    "both_modes_present": true,
+    "verdict": "bimodal: anchored=8%, exploring=92%"
+  },
+  "decision": "GRADUATE",
+  "n_conversations": 8,
+  "n_faithfulness_obs": 92
+}

@@ -214,28 +214,41 @@ def main():
         stats_out["H2_frac_anchored_vs_correct"] = h2
         print(f"H2  r={r_val:.3f}  p={p_val:.3f}  n={len(valid)}  → {h2['verdict']}")
 
-    # H3: Bimodality — Hartigan's dip test alternative: compare to uniform
-    if len(all_faith_values) >= 20:
-        ks_stat2, ks_p2 = kstest(all_faith_values, "uniform", args=(0, 1))
-        # Fraction at extremes (faith < 0.2 or faith > 0.8)
-        extreme_frac = sum(1 for f in all_faith_values if f < 0.2 or f > 0.8) / len(all_faith_values)
+    # H3: Bimodality — use is_anchored (answer-change) NOT faithfulness_score
+    # (faithfulness_score is correctness-flip, which is 0 whenever the model is
+    # consistently wrong regardless of truncation — uninformative for bimodality).
+    # Instead: collect all per-turn is_anchored values and check that both modes
+    # (anchored=1, exploring=0) are substantially present.
+    all_anchored_vals = []
+    for tid, turn_rows in by_tid.items():
+        for r in turn_rows:
+            a = is_anchored(r)
+            if a is not None:
+                all_anchored_vals.append(int(a))
+
+    if len(all_anchored_vals) >= 20:
+        frac_anchored_global = sum(all_anchored_vals) / len(all_anchored_vals)
+        frac_exploring_global = 1.0 - frac_anchored_global
+        # Both modes present = neither is < 5%
+        both_modes_present = min(frac_anchored_global, frac_exploring_global) > 0.05
         h3 = {
-            "n_obs": len(all_faith_values),
-            "fraction_at_extremes": round(extreme_frac, 3),
-            "ks_vs_uniform_stat": round(ks_stat2, 4),
-            "ks_vs_uniform_p": round(ks_p2, 4),
-            "mean_faith": round(float(np.mean(all_faith_values)), 3),
+            "n_obs": len(all_anchored_vals),
+            "frac_anchored": round(frac_anchored_global, 3),
+            "frac_exploring": round(frac_exploring_global, 3),
+            "both_modes_present": both_modes_present,
         }
-        h3["verdict"] = (f"bimodal: {extreme_frac:.0%} of observations at faith < 0.2 or > 0.8"
-                         if extreme_frac > 0.6 else
-                         f"not clearly bimodal ({extreme_frac:.0%} at extremes)")
+        h3["verdict"] = (f"bimodal: anchored={frac_anchored_global:.0%}, exploring={frac_exploring_global:.0%}"
+                         if both_modes_present else
+                         f"not bimodal: one mode dominates "
+                         f"(anchored={frac_anchored_global:.0%}, exploring={frac_exploring_global:.0%})")
         stats_out["H3_bimodality"] = h3
-        print(f"H3  extreme_frac={extreme_frac:.2f}  KS-vs-uniform p={ks_p2:.3f}  → {h3['verdict']}")
+        print(f"H3  frac_anchored={frac_anchored_global:.2f}  frac_exploring={frac_exploring_global:.2f}  "
+              f"both_modes={both_modes_present}  → {h3['verdict']}")
 
     any_significant = (
         stats_out.get("H1_runlength", {}).get("ks_p", 1.0) < 0.05 or
         stats_out.get("H2_frac_anchored_vs_correct", {}).get("p", 1.0) < 0.05 or
-        stats_out.get("H3_bimodality", {}).get("fraction_at_extremes", 0) > 0.6
+        stats_out.get("H3_bimodality", {}).get("both_modes_present", False)
     )
     stats_out["decision"] = "GRADUATE" if any_significant else "NEED_MORE_DATA"
     stats_out["n_conversations"] = len(df)

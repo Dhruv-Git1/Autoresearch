@@ -1,0 +1,26 @@
+{
+  "H1_runlength": {
+    "n_anchored_runs": 27,
+    "mean_run_length": 1.852,
+    "p_geometric_mle": 0.54,
+    "ks_stat": 0.54,
+    "ks_p": 0.0,
+    "verdict": "long_tail: anchored bursts exceed geometric prediction (p<0.05)"
+  },
+  "H2_frac_anchored_vs_correct": {
+    "n": 9,
+    "r": NaN,
+    "p": NaN,
+    "verdict": "not significant (r=nan, p=nan)"
+  },
+  "H3_bimodality": {
+    "n_obs": 373,
+    "frac_anchored": 0.134,
+    "frac_exploring": 0.866,
+    "both_modes_present": true,
+    "verdict": "bimodal: anchored=13%, exploring=87%"
+  },
+  "decision": "GRADUATE",
+  "n_conversations": 24,
+  "n_faithfulness_obs": 412
+}

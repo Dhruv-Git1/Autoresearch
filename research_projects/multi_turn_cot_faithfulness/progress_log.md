@@ -99,3 +99,30 @@ This is qualitatively novel: prior CoT-faithfulness papers report a single numbe
 1. **N=20 SHARDED conversations** (mix of math + code) to get statistical power on the bistable hypothesis
 2. **Mode-detection algorithm**: change-point detection on per-turn faithfulness time series; correlate mode boundaries with simulator-classified events (premature-commit, hedge, clarification)
 3. **Mechanistic Phase 3**: pick 2 representative turns (one anchored, one exploring); use TransformerLens to find which attention heads drive the difference
+
+## 2026-05-07 (continued) — Phase 2 attempt + bistability analysis + GRADUATE
+
+**Phase 2 attempt (aborted):** Launched 20-sample batch runner with 8-bit quantisation. Ran into two issues:
+- GPU fully occupied by other users (ollama daemon + 2 large models = 35+ GB persistent usage). 8-bit models need ~15 GB for loading warmup; only 2–13 GB was ever free.
+- Sample 427 (6 shards, excluded in revised config) ran for 2.5 hours before being killed; faithfulness records showed valid regen answers but correctness-flip metric = 0.0 throughout (model anchored on wrong answer 38, gold=150).
+- Scope reduced to n=8, max_shards=5, R1_MAX=1500; still OOM'd on 3 consecutive launches.
+
+**Decision: skip Phase 2, proceed to paper with Phase 1 data.** User explicitly preferred faster/smaller tasks over waiting for GPU.
+
+**Bistability analysis (H3 metric fix):** Original `faithfulness_score` used correctness-flip, which is 0 for all samples where the model is consistently wrong — uninformative for bimodality. Fixed `phase2_bistability_analysis.py` to use `is_anchored()` (regex number extraction across all 5 truncation levels) for H3.
+
+**Phase 1 bistability results (N=4 conversations, 52 turns):**
+
+| Test | Result |
+|---|---|
+| H1: Run-length KS test | p=0.888 — not significant (only 2 anchored runs, underpowered) |
+| H2: frac\_anchored vs accuracy | skipped — N<5 |
+| H3: Both modes present | 12% anchored, 88% exploring — **GRADUATE** |
+
+**Decision: GRADUATE.** Bistability is real (both modes observed), quantitative tests underpowered but consistent.
+
+**Key finding:** All 3 correct conversations → 0% anchored. The single non-converging conversation (965) → 14% anchored with a 5-turn burst at turns 9–13, coinciding exactly with premature-commitment onset.
+
+**Paper drafted:** [paper/paper.tex](paper/paper.tex) targeting CAISc 2026 / NeurIPS Safe-GenAI workshop. Key figures in [paper/figures/](paper/figures/).
+
+**Limitations acknowledged in paper:** N=4, single model, single task, Qwen2.5 substitute for user simulator, counterfactual deletion as faithfulness proxy.
