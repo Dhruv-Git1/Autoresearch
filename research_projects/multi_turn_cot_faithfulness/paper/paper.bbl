@@ -1,0 +1,91 @@
+\begin{thebibliography}{13}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Arcuschin et~al.(2025)]{arcuschin2025}
+Ben Arcuschin et~al.
+\newblock Chain-of-thought reasoning in the wild is not always faithful.
+\newblock \emph{arXiv preprint}, arXiv:2503.08679, 2025.
+
+\bibitem[Boppana et~al.(2026)Boppana, Ma, Loeffler, Sarfati, Bigelow, Geiger,
+  Lewis, and Merullo]{reasoning_theater2026}
+Siddharth Boppana, Annabel Ma, Max Loeffler, Raphael Sarfati, Eric Bigelow,
+  Atticus Geiger, Owen Lewis, and Jack Merullo.
+\newblock Reasoning theater: Disentangling model beliefs from chain-of-thought.
+\newblock \emph{arXiv preprint}, arXiv:2603.05488, 2026.
+
+\bibitem[Chen et~al.(2025)]{chen2025}
+Yanda Chen et~al.
+\newblock Reasoning models don't always say what they think.
+\newblock \emph{arXiv preprint}, arXiv:2505.05410, 2025.
+
+\bibitem[Guo et~al.(2025)Guo, Yang, Zhang, Song, Zhang, Xu, Zhu, Ma, Wang, Bi,
+  et~al.]{deepseekr1_2025}
+Daya Guo, Dejian Yang, Haowei Zhang, Junxiao Song, Ruoyu Zhang, Runxin Xu,
+  Qihao Zhu, Shirong Ma, Peiyi Wang, Xiao Bi, et~al.
+\newblock {DeepSeek-R1}: Incentivizing reasoning capability in {LLMs} via
+  reinforcement learning.
+\newblock \emph{arXiv preprint}, arXiv:2501.12948, 2025.
+
+\bibitem[Korbak et~al.(2025)Korbak, Bloom, Cooney, Irving, Soto, and
+  Wang]{korbak2025}
+Tomek Korbak, Joseph Bloom, Alan Cooney, Geoffrey Irving, Mart{\'i}n Soto, and
+  Jasmine Wang.
+\newblock Chain of thought monitorability: A new and fragile opportunity for
+  {AI} safety.
+\newblock \emph{arXiv preprint}, arXiv:2507.11473, 2025.
+\newblock URL \url{https://arxiv.org/abs/2507.11473}.
+
+\bibitem[Laban et~al.(2025)Laban, Hayashi, Zhou, and Neville]{laban2025}
+Philippe Laban, Hiroaki Hayashi, Yingbo Zhou, and Jennifer Neville.
+\newblock {LLMs} get lost in multi-turn conversation.
+\newblock \emph{arXiv preprint}, arXiv:2505.06120, 2025.
+
+\bibitem[Lanham et~al.(2023)Lanham, Chen, Radhakrishnan, Steiner, Denison,
+  Hernandez, Li, Durmus, Hubinger, Kernion, et~al.]{lanham2023}
+Tamera Lanham, Anna Chen, Ansh Radhakrishnan, Miles Steiner, Carson Denison,
+  Danny Hernandez, Evan Li, Esin Durmus, Evan Hubinger, Jackson Kernion, et~al.
+\newblock Measuring faithfulness in chain-of-thought reasoning.
+\newblock \emph{arXiv preprint}, arXiv:2307.13702, 2023.
+
+\bibitem[Liu et~al.(2026)]{liu2026}
+Yao Liu et~al.
+\newblock Intent mismatch causes {LLMs} to get lost in multi-turn conversation.
+\newblock \emph{arXiv preprint}, arXiv:2602.07338, 2026.
+
+\bibitem[Massey(1951)]{massey1951}
+Frank~J. Massey.
+\newblock The kolmogorov-smirnov test for goodness of fit.
+\newblock \emph{Journal of the American Statistical Association}, 46\penalty0
+  (253):\penalty0 68--78, 1951.
+
+\bibitem[{Microsoft Research}(2025)]{lost_in_conversation_repo}
+{Microsoft Research}.
+\newblock lost-in-conversation: Benchmark for multi-turn {LLM} evaluation.
+\newblock \url{https://github.com/microsoft/lost-in-conversation}, 2025.
+
+\bibitem[{OpenAI}(2025)]{openai_monitoring2025}
+{OpenAI}.
+\newblock Monitoring monitorability.
+\newblock Technical report, OpenAI, 2025.
+\newblock URL
+  \url{https://cdn.openai.com/pdf/d57827c6-10bc-47fe-91aa-0fde55bd3901/monitoring-monitorability.pdf}.
+
+\bibitem[Turpin et~al.(2023)Turpin, Michael, Perez, and Bowman]{turpin2023}
+Miles Turpin, Julian Michael, Ethan Perez, and Samuel~R. Bowman.
+\newblock Language models don't always say what they think: Unfaithful
+  explanations in chain-of-thought prompting.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, 2023.
+
+\bibitem[Ye et~al.(2026)Ye, Loffgren, Kotadia, and
+  Wong]{mechanistic_faithfulness2026}
+Donald Ye, Max Loffgren, Om~Kotadia, and Linus Wong.
+\newblock Mechanistic evidence for faithfulness decay in chain-of-thought
+  reasoning.
+\newblock \emph{arXiv preprint}, arXiv:2602.11201, 2026.
+
+\end{thebibliography}

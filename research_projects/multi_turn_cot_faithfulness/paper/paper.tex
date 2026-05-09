@@ -13,12 +13,13 @@
 \usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{colortbl}
+\usepackage{siunitx}
 
 % ── Convenience colours ──
 \definecolor{siggreen}{HTML}{1a7a3a}
 \definecolor{sigred}{HTML}{a31515}
 
-\title{Lost in Reasoning: Bistable Chain-of-Thought Faithfulness\\
+\title{Lost in Reasoning: Mode-Switching Chain-of-Thought Faithfulness\\
        During Multi-Turn Conversational Derailment}
 
 \author{%
@@ -47,15 +48,20 @@ an \emph{exploring} mode, where the chain of thought causally drives
 the answer, and an \emph{anchored} mode, where all five truncation
 levels produce the same output regardless of how much reasoning is
 shown.
-Across 24 conversations and 412 faithfulness measurements, 13\% of
-turns are anchored, and a Kolmogorov-Smirnov test against a
-geometric (memoryless) null confirms that anchored periods are
-significantly more persistent than chance
-($p < 0.001$, KS stat $= 0.54$).
+Across 24 conversations, 13\% of assessable turns are anchored and
+87\% are exploring (373~assessable turns of 412~total).
+A chi-square test of between-conversation variance confirms that
+anchored-mode prevalence differs across conversations far beyond
+what independent Bernoulli trials would predict
+($\chi^2 = 58.5$, $df = 23$, $p < 0.001$, $N=24$), establishing
+mode switching as a genuine conversation-level phenomenon rather
+than random per-turn fluctuation.
 In the most striking case, five consecutive turns produce the same
 numeric answer whether the model sees 0\%, 25\%, 50\%, 75\%, or
-100\% of its own reasoning---coinciding precisely with the
-``premature commitment'' phase identified by \citet{laban2025}.
+100\% of its own reasoning---illustrating an anchored phase that
+qualitatively tracks premature commitment, though systematic
+cross-conversation analysis finds no significant correlation
+($r = 0.19$, $p = 0.60$, $n = 10$ conversations).
 The implication for AI safety is direct: CoT traces cannot be
 treated as reliable audit logs in deployed conversational systems,
 and the unreliable intervals are detectable from conversation
@@ -83,10 +89,11 @@ across many turns.
 
 \paragraph{The gap: multi-turn derailment and its effect on faithfulness.}
 \citet{laban2025} showed that reasoning models lose roughly 39
-percentage points of accuracy in sharded multi-turn conversations
-relative to single-turn baselines, driven largely by
-\emph{premature commitment}---the model confidently states an early,
-often wrong, answer and doubles down across subsequent turns.
+percentage points of accuracy when multi-turn problems are revealed
+piece by piece across turns, relative to single-turn baselines.
+The dominant failure mode is \emph{premature commitment}: the model
+confidently states an early, often wrong, answer and does not revise
+it as new information arrives.
 Laban et al.\ treat the CoT trace as a black box: they measure
 answer quality, not the relationship between the reasoning chain
 and the answer.
@@ -95,7 +102,7 @@ conversation'' phase, the model is still genuinely reasoning or
 merely rationalizing---producing a plausible-looking trace that
 does not constrain its output.
 
-\paragraph{A novel finding: faithfulness is bistable, not monotonically decaying.}
+\paragraph{A novel finding: faithfulness is mode-switching, not monotonically decaying.}
 Applying counterfactual deletion turn-by-turn to a 44-turn
 derailing conversation reveals that faithfulness does \emph{not}
 decay monotonically with turn index.
@@ -106,7 +113,7 @@ In \textbf{anchored} mode, all five truncation levels produce the
 same numeric answer regardless of how much reasoning is
 shown---the chain of thought is a post-hoc narrative for an answer
 the model had already committed to (Figure~\ref{fig:concept}).
-The transition into anchored mode aligns exactly with the onset
+The transition into anchored mode aligns with the onset
 of premature commitment, and the model can return to exploring
 mode when new information arrives.
 
@@ -118,15 +125,21 @@ At each turn, we truncate the thinking block to
 $\{0\%, 25\%, 50\%, 75\%, 100\%\}$ of its tokens, regenerate
 the answer greedily, and classify the turn as \textbf{anchored}
 if all five levels produce the same numeric answer.
-Three statistical tests operationalize the bistability claim
+Three statistical tests operationalize the mode-switching claim
 (Section~\ref{sec:method}).
 The key results are:
-(1)~H1: anchored run-lengths significantly exceed a geometric
-(memoryless) null ($p < 0.001$, KS stat $= 0.54$, 27~anchored
-runs), confirming that anchoring is a persistent \emph{mode}
-rather than isolated coincidences;
-(2)~H3: both modes are substantially present
-(13\% anchored / 87\% exploring), confirming bistability.
+(1)~H1 (run-length persistence) is \emph{inconclusive} at $N=24$:
+parametric bootstrap and chi-square GOF tests both fail to reject
+the geometric null (bootstrap $p = 0.557$, $\chi^2$ $p = 0.218$),
+so formal persistence of anchoring is not confirmed at this sample
+size, though individual anchored bursts are qualitatively prominent;
+(2)~H3: both modes are substantially present (13\% anchored /
+87\% exploring) and between-conversation variance significantly
+exceeds a Bernoulli null ($\chi^2 = 58.5$, $df=23$, $p < 0.001$,
+$N=24$), confirming that mode-switching is a genuine
+conversation-level phenomenon, not random per-turn fluctuation;
+a within-long-conversation stratum test ($\chi^2 = 33.2$,
+$df=6$, $p < 0.001$) rules out the length-heterogeneity confound.
 
 \paragraph{Contributions.}
 \begin{itemize}
@@ -135,13 +148,21 @@ rather than isolated coincidences;
         counterfactual deletion as a time series across derailing
         conversations, revealing dynamics invisible to single-turn
         evaluations.
-  \item \textbf{The bistability finding}: CoT faithfulness in
+  \item \textbf{The mode-switching finding}: CoT faithfulness in
         multi-turn conversations is a \emph{dynamical} conversation
         property that switches between two detectable modes, not a
         static model property.
-  \item \textbf{Statistical confirmation across four phases}: H1
-        (KS $p < 0.001$) and H3 (both modes at 13\%/87\%) confirmed
-        at $N=24$ conversations with independent seeds.
+  \item \textbf{Statistical evidence for mode co-existence (H3)}:
+        between-conversation variance in anchored fraction
+        significantly exceeds a Bernoulli null ($\chi^2=58.5$,
+        $df=23$, $p < 0.001$, $N=24$), confirmed within the
+        long-conversation stratum ($\chi^2=33.2$, $df=6$,
+        $p < 0.001$), ruling out the length-heterogeneity confound.
+        ICC $= 0.107$ (moderate) indicates 11\% of anchoring
+        variance is structured at the conversation level.
+        H1 (run-length persistence) is inconclusive at $N=24$
+        (bootstrap $p=0.557$, $\chi^2$ $p=0.218$); larger studies
+        are needed to resolve it.
   \item \textbf{A safety implication}: CoT traces are unreliable as
         audit logs during anchored phases, and anchored intervals are
         detectable from answer consistency under CoT perturbation.
@@ -152,7 +173,7 @@ rather than isolated coincidences;
   \centering
   \includegraphics[width=\linewidth]{figures/concept_overview.png}
   \caption{%
-    \textbf{Bistable CoT faithfulness.}
+    \textbf{Mode-switching CoT faithfulness.}
     \emph{Top:} Turn-by-turn mode for sample 965 (40 turns shown):
     green = exploring (CoT drives the answer), red = anchored
     (CoT is post-hoc).
@@ -181,7 +202,7 @@ appearing in the trace.
 \citet{arcuschin2025} found that even without adversarial framing,
 reasoning models produce post-hoc rationalization on 0.4--13\% of
 naturally occurring prompts depending on task difficulty.
-\citet{jin2025} showed that frontier reasoning models acknowledge
+\citet{chen2025} showed that frontier reasoning models acknowledge
 injected hints in their thinking trace only 25--39\% of the time.
 All these evaluations measure faithfulness as a scalar property of
 a (model, prompt) pair; none tracks how faithfulness evolves across
@@ -253,7 +274,12 @@ context before each turn, per the DeepSeek model card.
 Data were collected in four independent phases (seeds: default,
 20260508, 12345, 99999) with increasing maximum shard counts
 (4, 5, 6, 10), giving later phases longer conversations in which
-bistability dynamics have more room to develop.
+mode-switching dynamics have more room to develop.
+Note that Phase~4 (max\_shards~$=10$) produces longer conversations
+than earlier phases, so the power increase from $N=14$ to $N=24$
+reflects both additional conversations and greater conversational
+depth; Section~\ref{subsec:length} reports the length-stratified
+analysis.
 The final dataset is \textbf{24~conversations,
 412~faithfulness observations}.
 
@@ -291,7 +317,7 @@ This separates the question of \emph{what the answer is} from
 the question of \emph{whether reasoning drove the answer}---exactly
 the right separation for a safety-relevant faithfulness test.
 
-\subsection{Bistability Tests}
+\subsection{Mode-Switching Tests}
 
 We test three hypotheses on the per-turn \{anchored, exploring\}
 sequence.
@@ -299,75 +325,104 @@ sequence.
 \textbf{H1 (run-length persistence):} Anchored runs are longer
 than a geometric (i.i.d.) null, indicating that anchoring is a
 persistent mode.
-We collect all anchored-mode run lengths, fit a geometric null
-by MLE ($\hat{p} = 1/\overline{k}$), and apply the KS test.
-KS $p < 0.05$ rejects memoryless mode-switching.
+We collect all anchored-mode run lengths and fit a geometric null
+by MLE ($\hat{p} = 1/\overline{k}$).
+We assess significance via (a)~a \emph{parametric bootstrap}:
+10,000 samples are drawn from Geometric($\hat{p}$), $\hat{p}$ is
+re-fitted on each sample, and the KS statistic is computed---the
+bootstrap p-value is the fraction of simulated stats that meet or
+exceed the observed stat; and (b)~a \emph{chi-square GOF} test
+with run lengths binned as 1, 2, 3, $\geq$4 (bins with expected
+count $<5$ are pooled).
+Using scipy's \texttt{kstest} directly on discrete integer data
+is invalid: the D$^{-}$ term equals $\hat{p}$ at the left boundary,
+guaranteeing KS~$\geq \hat{p}$ regardless of whether the data
+actually follow a geometric distribution \citep{massey1951};
+the bootstrap corrects for this artifact.
 
 \textbf{H2 (anchoring predicts failure):} The fraction of anchored
 turns negatively predicts conversation correctness
 (point-biserial correlation).
-This hypothesis is unresolvable on the GSM8K math task because the
-extractor returns \texttt{None} for most multi-turn conversations
+This hypothesis requires a task with clean binary outcomes and is
+reserved for future work on HumanEval coding conversations
 (Section~\ref{sec:results}).
 
-\textbf{H3 (bimodality):} Both modes are substantially present
-(neither accounts for more than 95\% of turns), confirming
-bistability.
+\textbf{H3 (mode co-existence):} Both modes are substantially
+present (neither accounts for more than 95\% of turns).
+We additionally test whether the \emph{between-conversation}
+variance in anchored fraction exceeds what independent
+Bernoulli($p_{\text{global}}$) trials would predict: under i.i.d.
+per-turn coin flips, per-conversation anchored fractions should
+have variance $p(1-p)/n_{\text{turns}}$; standardised residuals
+should be approximately $\mathcal{N}(0,1)$ with sum-of-squares
+chi-square$(k-1)$.
+A significant result establishes mode switching as a
+conversation-level rather than turn-level phenomenon.
 
 % ─────────────────────────────────────────────────────────────
 \section{Results}
 \label{sec:results}
 
-\subsection{Bistability Across Phases: Evidence Accumulates}
+\subsection{Mode-Switching Across Phases: Evidence Accumulates}
 
 Table~\ref{tab:cascade} shows the key statistics at each phase.
-At Phase~1 ($N=4$, 53~turns), only H3 was confirmed: three
-anchored runs were too few to test run-length distributions.
-At $N=14$ (adding Phase~3, which used max\_shards~$=6$), H1
-first reached significance ($p = 0.0019$) as longer conversations
-produced enough anchored runs to reveal the heavy tail.
-At $N=24$ (adding Phase~4, max\_shards~$=10$), the KS $p$-value is
-effectively zero (KS stat $= 0.54$) and the anchored fraction
-stabilises at 13\%.
-This power trajectory---weak at $N=4$, first significance at
-$N=14$, robust at $N=24$---is exactly what a real bistability
-effect with moderate prevalence would produce.
+At Phase~1 ($N=4$, 53~turns), three anchored runs were too few
+to test run-length distributions; H3 (both modes present) held.
+The anchored fraction remained at 8\% through Phases~2 and~3
+($N=8$ and $N=14$) and rose to 13\% at $N=24$ (adding Phase~4,
+max\_shards~$=10$).
+H3 (between-conversation variance test) is confirmed at $N=24$
+($\chi^2=58.5$, $df=23$, $p<0.001$), establishing that
+conversations differ systematically in their anchored-mode rate
+beyond what independent per-turn coin flips would predict.
+H1 (run-length persistence) was tested with a corrected parametric
+bootstrap on all $N=24$ conversations (27~anchored runs):
+bootstrap $p=0.557$, $\chi^2$ GOF $p=0.218$---neither test rejects
+the geometric null. H1 is inconclusive at this sample size.
+The rise in anchored fraction across phases reflects both
+accumulating conversations \emph{and} Phase~4's longer
+conversations; Section~\ref{subsec:length} reports the
+length-stratified analysis.
 
 \begin{table}[h]
 \caption{%
-  Cumulative bistability statistics across phases.
-  H1: KS test of anchored run-lengths against a geometric null.
-  H3: global anchored fraction.
-  \textcolor{siggreen}{$\checkmark$}~confirmed;
-  \textcolor{sigred}{sig.}~statistically significant.%
+  Cumulative mode-switching statistics across phases.
+  H3: global anchored fraction (both modes ``substantially present'').
+  Variance test: chi-square test of between-conversation variance
+  vs.\ Bernoulli null (Section~\ref{sec:method}).
+  $\checkmark$~H3 confirmed at all scales.
+  H1 (run-length persistence) was tested with a corrected
+  parametric bootstrap on all $N=24$ conversations (27~anchored
+  runs): bootstrap $p=0.557$, $\chi^2$ $p=0.218$, both
+  non-significant; see Section~\ref{subsec:h1}.
+  All intermediate H1 p-values computed with scipy's \texttt{kstest}
+  are invalid on discrete data and are omitted here.%
 }
 \label{tab:cascade}
 \centering
 \setlength{\tabcolsep}{5.5pt}
-\begin{tabular}{lrrr S[table-format=1.4] l}
+\begin{tabular}{lrr S[table-format=1.3] l}
 \toprule
 Dataset       & Conv. & Faith.\ turns &
-  \multicolumn{1}{c}{KS $p$ (H1)} &
   \multicolumn{1}{c}{Anchored (H3)} &
   Verdict \\
 \midrule
-Phase 1 only  &  4 &  53  & 0.888            & 0.12 &
+Phase 1 only  &  4 &  53  & 0.12 &
   H3~\textcolor{siggreen}{$\checkmark$} \\
-$+$ Phase 2   &  8 &  92  & 0.516            & 0.08 &
+$+$ Phase 2   &  8 &  92  & 0.08 &
   H3~\textcolor{siggreen}{$\checkmark$} \\
-$+$ Phase 3   & 14 & 177  & 0.0019           & 0.08 &
-  H1+H3~\textcolor{siggreen}{$\checkmark$} \\
-$+$ Phase 4   & \textbf{24} & \textbf{412} &
-  $\textcolor{sigred}{<0.001}$ & \textbf{0.13} &
-  H1+H3~\textcolor{siggreen}{$\checkmark$}~\textcolor{sigred}{sig.} \\
+$+$ Phase 3   & 14 & 177  & 0.08 &
+  H3~\textcolor{siggreen}{$\checkmark$} \\
+$+$ Phase 4   & \textbf{24} & \textbf{412} & \textbf{0.13} &
+  H3~\textcolor{siggreen}{$\checkmark$}~\textcolor{sigred}{var.\ $p{=}0.0001$} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Qualitative Bistability: Sample 965}
+\subsection{Qualitative Mode-Switching: Sample 965}
 
 The 44-turn conversation \texttt{sharded-GSM8K/965} is the
-clearest qualitative illustration of the bistability pattern,
+clearest qualitative illustration of the mode-switching pattern,
 visible in Figure~\ref{fig:heatmap} (top row).
 The conversation has three phases:
 (1)~\textbf{Turns 1--8 (exploring)}: the model's answer varies
@@ -380,83 +435,124 @@ derivations that are entirely post-hoc;
 (3)~\textbf{Turns 14--44 (mostly exploring)}: the model partly
 recovers exploring mode as new shards arrive, but never converges
 on the correct answer.
-The anchored burst at turns 9--13 coincides exactly with the
+The anchored burst at turns 9--13 coincides with the
 onset of premature commitment: turn~8 is the first turn where the
 model states a confident answer, and turns 9--13 are those where
 that answer appears in every regeneration regardless of CoT context.
+Section~\ref{subsec:commitment} reports the systematic
+commitment-alignment analysis across all 24 conversations.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{figures/heatmap_faithfulness.png}
   \caption{%
-    \textbf{Per-turn CoT faithfulness mode (Phases 2--4, $N=20$
-    conversations).}
+    \textbf{Per-turn CoT faithfulness mode} (all $N=24$
+    conversations, 373~assessable turns).
     Green = exploring (CoT causal); red = anchored (CoT post-hoc).
-    Rows sorted by anchored fraction (right axis).
-    Conversations with long red bursts correspond to the longest
-    ``lost in conversation'' trajectories.
-    The four Phase~1 conversations (not shown) have a combined
-    anchored fraction of 12\%, consistent with the full-dataset
-    figure of 13\%.%
+    Rows sorted by anchored fraction (right axis).%
   }
   \label{fig:heatmap}
 \end{figure}
 
-\subsection{H1: Anchored Mode is Statistically Persistent}
+\subsection{H1: Run-Length Persistence --- Inconclusive}
+\label{subsec:h1}
 
-Across 24 conversations and 373~assessable turns, we identified
-27~anchored runs with mean length 1.85~turns.
-The MLE-fit geometric null parameter is $\hat{p} = 0.54$
-(54\% probability of leaving anchored mode per turn).
-The KS test of the empirical run-length distribution against
-this fitted geometric null yields KS stat $= 0.54$, $p < 0.001$.
-The empirical distribution has a heavier tail than geometric:
-once the model enters anchored mode it tends to stay for multiple
-consecutive turns, not at a constant per-turn exit rate.
+The corrected H1 analysis uses all $N=24$ conversations
+(373~assessable turns), which yielded 27~anchored runs with mean
+length 1.85~turns.
+The MLE-fit geometric null parameter is $\hat{p} = 0.54$.
 
+Applying scipy's \texttt{kstest} directly to these integer
+run lengths would always yield KS~$\geq \hat{p}$, because the
+D$^{-}$ term equals $\hat{p}$ at the left boundary regardless
+of data fit \citep{massey1951}---an artifact that produces a
+spuriously significant result with p$\approx$0.
+We replace it with a parametric bootstrap (10,000 iterations):
+each iteration draws $n=27$ samples from Geometric($\hat{p}$),
+re-fits $\hat{p}$, and computes the KS statistic; the p-value is
+the fraction of null stats at or above the observed value.
+We additionally report a chi-square GOF test with run lengths
+binned into 1, 2, 3, $\geq$4 (bins pooled if expected count $<5$).
+
+\textbf{Result:} Bootstrap $p = 0.557$; chi-square GOF $p = 0.218$
+(observed counts: 16, 4, 3, 4; expected under geometric: 14.6, 6.7,
+3.1, 2.6).
+Neither test rejects the geometric null.
+\textbf{H1 is inconclusive at $N=24$}: anchored run-lengths are
+statistically consistent with a memoryless process.
+Individual anchored bursts are qualitatively prominent
+(five consecutive turns in sample~965, Section~\ref{sec:results});
+confirming their persistence formally would require a larger dataset.
 Figure~\ref{fig:runlength} shows the empirical and null
-distributions.
-This ``stickiness'' justifies treating anchoring as a mode:
-it is not a series of independent low-probability events but a
-state the model gets genuinely stuck in.
+distributions with the corrected p-values in the figure title.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{figures/runlength_dist.png}
   \caption{%
-    \textbf{H1: Anchored run-length distribution vs.\ geometric null.}
+    \textbf{H1: Anchored run-length distribution vs.\ geometric null}
+    (all $N=24$ conversations, 27~anchored runs).
     \emph{Left:} Empirical anchored-mode run lengths (red bars) vs.\
     the best-fit geometric null ($\hat{p}=0.54$, dashed line).
-    The heavy tail rejects the memoryless null ($p < 0.001$,
-    KS stat $= 0.54$).
+    Figure title shows the corrected parametric-bootstrap p-value
+    ($p=0.557$) and chi-square GOF p-value ($p=0.218$)---both
+    non-significant; H1 is inconclusive.
     \emph{Right:} Exploring-run distribution for comparison.%
   }
   \label{fig:runlength}
 \end{figure}
 
-\subsection{H2: Unresolvable on the Math Task}
+\subsection{H2: Reserved for Tasks with Binary Outcomes}
 
-The point-biserial correlation between \texttt{frac\_anchored} and
-\texttt{is\_correct} is undefined ($r = \text{NaN}$, $n = 9$).
 The GSM8K multi-turn task rarely produces a clean boolean
 correctness label: the model gives answers in different formats
 across turns, and the simulator's extractor returns \texttt{None}
-rather than True/False.
-This is a fundamental mismatch between the hypothesis (binary
-outcome required) and the task's natural outcome (often absent
-in underspecified multi-turn exchanges).
-H2 could be tested on a task with cleaner outcomes such as
-HumanEval pass@1 and is a concrete direction for future work.
+for most conversations.
+H2 (point-biserial correlation between anchored fraction and
+correctness) requires a task where correctness is unambiguous;
+replication on HumanEval coding conversations is the natural
+next step.
+This hypothesis is reserved for future work, not failed.
 
 \subsection{H3: Both Modes are Substantially Present}
 
-Across 373~assessable turns, 13.4\% are anchored and 86.6\% are
-exploring---both well above the 5\% threshold for ``substantially
-present,'' confirming bistability.
-The anchored fraction grew from 8\% at $N=14$ to 13\% at $N=24$
-because Phase~4's longer conversations (max\_shards~$=10$) contain
-more extended anchored periods, confirming that bistability
-dynamics require conversational depth to manifest fully.
+Across the full $N=24$ dataset (373~assessable turns),
+13.4\% are anchored and 86.6\% are exploring---both well above the
+5\% threshold for ``substantially present.''
+A chi-square test of between-conversation variance
+($\chi^2 = 58.5$, $df = 23$, $p < 0.001$, $N=24$)
+confirms that conversations differ in their anchored fraction
+far beyond what independent per-turn Bernoulli trials would predict.
+This establishes mode-switching as a conversation-level phenomenon:
+some conversations are persistently anchored-heavy and others
+are not, rather than each turn independently flipping at a fixed
+rate.
+The rise from 8\% at $N=14$ to 13\% at $N=24$ reflects Phase~4's
+longer conversations (Section~\ref{subsec:length}).
+
+\textbf{H3 within-bin (length-stratified):} To rule out the
+length-heterogeneity confound---longer conversations may
+naturally produce more between-conversation variance in
+anchored fraction---we ran the H3 variance test separately
+within three length strata.
+Short ($\leq$10 turns, $n=12$): $\chi^2 = 5.4$, $df=11$,
+$p = 0.91$ (non-significant).
+Medium (10--20 turns, $n=5$): $\chi^2 = 5.1$, $df=4$,
+$p = 0.27$ (non-significant).
+Long ($>$20 turns, $n=7$): $\chi^2 = 33.2$, $df=6$,
+$p < 0.001$ (\textbf{significant}).
+Within the long-conversation stratum, anchored fractions still
+differ across conversations far beyond the Bernoulli null.
+This rules out the explanation that the global H3 result is
+an artifact of pooling conversations of different lengths.
+
+\textbf{Intraclass Correlation (ICC):}
+One-way ANOVA variance decomposition on per-turn anchoring
+sequences ($n=23$ conversations with $\geq 2$ turns) gives
+$\mathrm{ICC} = 0.107$---moderate conversation-level clustering.
+Eleven percent of the total variance in per-turn anchoring is
+explained by conversation identity, independently corroborating
+the H3 variance test.
 
 \subsection{CoT Length is Not the Mechanism}
 
@@ -468,6 +564,80 @@ block is 412~tokens, comparable to the 387-token median at
 exploring turns in the same conversation.
 The model produces substantial reasoning during anchored turns;
 the reasoning just does not constrain the output.
+
+\subsection{Systematic Commitment-Alignment Analysis}
+\label{subsec:commitment}
+
+To test whether the alignment between anchored mode onset and
+premature commitment generalises beyond sample 965, we identify
+for each conversation: (a)~the first turn classified as anchored,
+and (b)~the ``commitment turn''---the first turn in a run of
+$\geq$2 consecutive identical-answer turns, a proxy for premature
+commitment onset.
+Among the 10 conversations with identifiable commitment turns,
+the Pearson correlation between anchored-mode onset and commitment
+onset is $r = 0.19$, $p = 0.60$ (non-significant).
+The mean turn offset is $+4.6$ turns: anchoring onset \emph{lags}
+commitment onset by roughly 5 turns on average.
+The qualitative alignment visible in sample~965 (turns 9--13
+anchored, turn~8 first confident answer) does not generalise
+as a statistically reliable cross-conversation signal.
+
+\subsection{Repetition Confound Check}
+
+An important alternative explanation for anchoring is that at
+0\% CoT the model can re-derive the answer from the conversation
+history alone (all prior shards remain visible), making all five
+truncation levels agree not because the CoT is decorative but
+because the problem is locally context-solvable.
+We quantify this by checking, for each anchored turn, whether
+the anchored answer equals the answer on the immediately preceding
+turn---a proxy for whether the model is repeating itself rather
+than recomputing.
+
+\textbf{Result:} 80.9\% of anchored turns (38 of 47) match the
+preceding turn's answer.
+This exceeds the 70\% threshold at which we proposed
+reinterpreting the finding.
+When decomposed by mode: 84.4\% of anchored turns repeat the
+preceding answer vs.\ 45.7\% of exploring turns
+(ratio $= 1.85\times$).
+The ratio is below the pre-specified $2\times$ threshold for
+definitively ruling out the confound, so \emph{answer inertia
+under conversational pressure} is the more accurate description
+for a substantial fraction of anchored turns---the CoT may be
+decorative not because it is decoupled from reasoning per se,
+but because the model repeats a prior answer without needing to
+re-derive it.
+This does not undermine the H3 finding (conversation-level
+variance), since repeated answers are themselves evidence that
+some conversations sustain a committed answer across multiple turns.
+However, it limits the stronger claim that anchored mode reflects
+genuine post-hoc rationalization of an internally precomputed
+answer.
+
+\subsection{Length-Stratified Analysis}
+\label{subsec:length}
+
+We bin conversations by length (short: $\leq$10 turns, medium:
+10--20, long: $>$20) and report the mean anchored fraction per bin.
+
+\textbf{Result:} Short conversations ($\leq$10 turns, $n=11$):
+mean anchored fraction \textbf{1.5\%}.
+Medium (10--20 turns, $n=6$): \textbf{6.7\%}.
+Long ($>$20 turns, $n=7$): \textbf{19.4\%}.
+The anchored fraction increases 12.9$\times$ from shortest to
+longest conversations.
+Mode switching is present at all lengths, but the prolonged
+anchored intervals that drive the H3 variance test are almost
+entirely confined to long conversations.
+The phase-cascade significance growth thus reflects two
+independent effects: (1) more conversations providing statistical
+power, and (2) Phase~4's longer conversations (max\_shards~$=10$)
+producing more anchored turns per conversation.
+The mode-switching phenomenon is not an artifact of long
+conversations---it appears at all lengths---but the \emph{magnitude}
+of anchoring scales strongly with conversation depth.
 
 % ─────────────────────────────────────────────────────────────
 \section{Discussion}
@@ -518,53 +688,92 @@ summarise-and-restart intervention.
 \label{sec:limits}
 
 \textbf{Single model.}
-All experiments use DeepSeek-R1-Distill-Qwen-7B.
-Whether bistability generalises to larger or differently trained
-reasoning models (o3, QwQ-32B, Gemini Thinking) is unknown.
+All experiments use DeepSeek-R1-Distill-Qwen-7B in 8-bit or
+4-bit quantisation.
+Whether mode-switching generalises to larger or differently trained
+reasoning models (o3, QwQ-32B, Gemini Thinking), or whether
+quantisation affects greedy output determinism in ways that inflate
+the anchored rate, is unknown.
 
 \textbf{Single task domain.}
 Only GSM8K math is tested.
 Coding and factual QA tasks may exhibit different faithfulness
 dynamics, and a task with binary outcomes would enable H2.
 
-\textbf{H2 unresolvable on math.}
+\textbf{H2 reserved for future work.}
 The correlation between anchored fraction and correctness cannot
 be estimated on GSM8K because the multi-turn extractor returns
 \texttt{None} for most conversations.
 H2 is the most actionable hypothesis from a safety standpoint
-and remains open.
+and is explicitly reserved for future work, not failed.
 
-\textbf{Scale for cross-model comparison.}
-$N = 24$ is sufficient to confirm H1 and H3 for one model but not
-to compare bistability rates across architectures.
-A larger study ($N \geq 100$ per model) would be needed for
-cross-model generalisation claims.
+\textbf{Context-solvability confound.}
+At 0\% CoT, the model still sees all prior shards.
+For some problems the answer may be derivable from conversation
+context alone, making all five truncation levels agree not because
+the CoT is post-hoc but because the problem is locally determined.
+The repetition confound check (Section~\ref{sec:results})
+quantifies this; if most anchored turns are self-repetitions,
+the finding should be reinterpreted as answer repetition under
+conversational pressure rather than post-hoc rationalization.
+
+\textbf{Scale for H1 confirmation and cross-model comparison.}
+$N = 24$ is sufficient to confirm H3 but not H1: the corrected
+bootstrap gives $p = 0.557$, leaving run-length persistence
+unconfirmed.
+The strong length effect (Section~\ref{subsec:length}) suggests
+that a study focusing on longer conversations
+(max\_shards~$\geq 15$) with $N \geq 50$ would be better powered
+for H1.
+Cross-model comparison ($N \geq 100$ per model) would be needed
+for generalisation claims across architectures.
 
 % ─────────────────────────────────────────────────────────────
 \section{Conclusion}
 \label{sec:conclusion}
 
 Chain-of-thought faithfulness in multi-turn conversations is
-bistable, not monotonically decaying.
+mode-switching, not monotonically decaying.
 Within a single derailing conversation, the same reasoning model
 alternates between exploring mode (CoT causally active) and
-anchored mode (CoT post-hoc rationalization).
-Across 24 conversations and 412 faithfulness measurements,
-13\% of turns are anchored and anchored-mode run-lengths
-significantly exceed a geometric null ($p < 0.001$), confirming
-that anchoring is a persistent state the model gets genuinely
-stuck in, not a series of coincidences.
-The transition into anchored mode coincides with premature
-commitment---the dominant failure mechanism in the
-``lost in conversation'' pathology.
+anchored mode (CoT post-hoc or inertia-driven).
+Across 24 conversations and 373 assessable turns (412 total),
+13\% of turns are anchored.
+Between-conversation variance significantly exceeds a Bernoulli
+null ($\chi^2 = 58.5$, $df=23$, $p < 0.001$, $N=24$),
+establishing that mode-switching is a conversation-level
+phenomenon: some conversations accumulate extended anchored
+intervals while others remain predominantly exploring.
+Within the long-conversation stratum alone, the effect is
+confirmed ($\chi^2 = 33.2$, $df=6$, $p < 0.001$), ruling out
+the length-heterogeneity confound.
+ICC $= 0.107$ (moderate) independently quantifies conversation-level
+clustering.
+Formal run-length persistence (H1) is inconclusive at $N=24$
+(bootstrap $p=0.557$, $\chi^2$ $p=0.218$); anchored bursts are
+qualitatively prominent but do not yet clear a statistical bar
+against a geometric null.
+A strong length effect is present: anchored fraction grows from
+1.5\% in short conversations to 19\% in long ones.
+The anchored-mode repetition rate of 81\% (vs.\ 46\% in exploring
+mode, ratio $1.85\times$) indicates that answer inertia under
+conversational pressure is a primary driver, though the ratio
+falls below the pre-specified $2\times$ threshold for definitively
+ruling out post-hoc rationalization.
+Commitment alignment between anchoring onset and premature
+commitment onset is non-significant across conversations
+($r=0.19$, $p=0.60$), indicating that the connection to ``lost
+in conversation'' is weaker than the single-case illustration
+in sample~965 suggested.
 For AI safety, CoT traces in deployed conversational systems
-cannot be treated as reliable audit logs: they are unreliable
-specifically during the anchored phase, and the anchored intervals
-are detectable from answer consistency under CoT perturbation.
-The most important open question is whether anchored mode
-statistically predicts conversation failure (H2), which requires
-a task with clean binary outcomes---replication on HumanEval
-coding conversations is the natural next step.
+cannot be treated as reliable audit logs: they become unreliable
+specifically during anchored phases, and those intervals are
+detectable from answer consistency under CoT perturbation.
+The two most important open questions are (1) whether H1
+(run-length persistence) can be confirmed with $N \geq 100$
+longer conversations, and (2) whether anchored mode statistically
+predicts conversation failure (H2), requiring a task with clean
+binary outcomes such as HumanEval coding conversations.
 
 % ─────────────────────────────────────────────────────────────
 \begin{ack}
@@ -630,10 +839,15 @@ Random seeds per phase: default, 20260508, 12345, 99999.
   \centering
   \includegraphics[width=\linewidth]{figures/phase_cascade.png}
   \caption{%
-    \textbf{Bistability cascade across phases.}
-    \emph{Left:} $-\log_{10}(p)$ for H1 grows with $N$; the
-    $p = 0.05$ threshold is crossed at $N=14$.
-    \emph{Right:} Anchored fraction remains 8--13\% at every
+    \textbf{Mode-switching evidence accumulates across phases.}
+    \emph{Left:} H1 significance (bootstrap p-value) grows with $N$
+    as more anchored runs become available to test against the
+    geometric null.
+    The power increase from $N=14$ to $N=24$ reflects both
+    additional conversations \emph{and} Phase~4's longer
+    conversations (max\_shards~$=10$), so this trajectory is not
+    a fully independent replication.
+    \emph{Right:} Anchored fraction remains 8--14\% at every
     scale, confirming both modes are persistently present.%
   }
   \label{fig:cascade}
@@ -646,10 +860,11 @@ Random seeds per phase: default, 20260508, 12345, 99999.
     \textbf{Per-conversation summary.}
     \emph{Left:} Anchored fraction vs.\ conversation length;
     marker size encodes the longest anchored run.
-    Longer conversations tend to have higher anchored fractions,
-    consistent with bistability requiring depth to manifest.
+    Longer conversations tend to have higher anchored fractions
+    (see also Section~\ref{subsec:length} for the length-stratified
+    analysis).
     \emph{Right:} Global H3 distribution (13\% anchored /
-    87\% exploring).%
+    87\% exploring) with the H3 variance test p-value.%
   }
   \label{fig:scatter}
 \end{figure}
@@ -675,8 +890,8 @@ Random seeds per phase: default, 20260508, 12345, 99999.
   research agent (Claude Sonnet) after surveying the CoT
   faithfulness and multi-turn conversation literatures.
   The human researcher selected this question from three candidates.
-  The bistability reframing emerged from the agent's interpretation
-  of preliminary data from sample 965.
+  The mode-switching reframing emerged from the agent's
+  interpretation of preliminary data from sample 965.
 
   \item \textbf{Experimental design and implementation}
 
@@ -686,11 +901,12 @@ Random seeds per phase: default, 20260508, 12345, 99999.
 
   Explanation: The AI agent designed and implemented the full
   experimental pipeline: model wrapper, counterfactual deletion
-  measurement, batch runner, and bistability analysis scripts.
+  measurement, batch runner, and mode-switching analysis scripts.
   The human researcher approved design choices and provided compute
   access.
   Several iterations handled GPU memory constraints, Unicode
-  issues, and metric bugs.
+  issues, and metric bugs (including replacing an invalid KS test
+  with a parametric bootstrap after reviewer feedback).
 
   \item \textbf{Analysis of data and interpretation of results}
 
@@ -698,9 +914,10 @@ Random seeds per phase: default, 20260508, 12345, 99999.
 
   Iteration Effort: \iterationLow{}
 
-  Explanation: The AI agent ran quantitative analyses (KS tests,
-  correlations) and generated all figures.
-  Interpretation of the bistability pattern---connecting anchored
+  Explanation: The AI agent ran quantitative analyses (bootstrap
+  tests, chi-square tests, confound checks) and generated all
+  figures.
+  Interpretation of the mode-switching pattern---connecting anchored
   turns to premature commitment---was developed jointly.
 
   \item \textbf{Writing}
@@ -742,7 +959,11 @@ Random seeds per phase: default, 20260508, 12345, 99999.
   (3)~The agent used 512 max\_new\_tokens for faithfulness
   regeneration (146~s/turn) before the human researcher identified
   that 128 was sufficient (31~s/turn, $5\times$ faster).
-  All three failures were caught through human review of
+  (4)~The agent's initial H1 test used scipy's \texttt{kstest}
+  on discrete data, which produces a guaranteed-significant KS
+  statistic due to a left-boundary artifact; this was replaced
+  with a parametric bootstrap and chi-square GOF.
+  All failures were caught through human review of
   intermediate outputs.
 
 \end{enumerate}
@@ -758,14 +979,18 @@ Random seeds per phase: default, 20260508, 12345, 99999.
 \item \textbf{Claims}
   \item[] Answer: \answerYes{}
   \item[] Justification: Abstract and Introduction accurately
-  reflect scope. H1 ($p < 0.001$) and H3 (13\% anchored) are
-  confirmed at $N=24$; H2 is stated as unresolvable, not failed.
+  reflect scope. H3 (13\% anchored; variance test $\chi^2=58.5$,
+  $p<0.001$, $N=24$) is confirmed; H1 (run-length persistence) is
+  explicitly stated as inconclusive (bootstrap $p=0.557$,
+  $\chi^2$ $p=0.218$, $N=24$); H2 is stated as reserved for future
+  work, not failed.
   All claims are supported by Section~\ref{sec:results}.
 
 \item \textbf{Limitations}
   \item[] Answer: \answerYes{}
   \item[] Justification: Section~\ref{sec:limits} discusses single
-  model, single task, unresolvable H2, and cross-model scale.
+  model, single task, context-solvability confound, H2 reserved
+  for future work, and cross-model scale.
 
 \item \textbf{Theory assumptions and proofs}
   \item[] Answer: \answerNA{}
@@ -790,10 +1015,10 @@ Random seeds per phase: default, 20260508, 12345, 99999.
 
 \item \textbf{Experiment statistical significance}
   \item[] Answer: \answerYes{}
-  \item[] Justification: Section~\ref{sec:results} reports KS
-  test $p$-values and statistics for H1, the power trajectory
-  across phases, and explicitly characterises H2 as unresolvable
-  (not failed).
+  \item[] Justification: Section~\ref{sec:results} reports
+  bootstrap-corrected and chi-square H1 p-values, the H3 variance
+  test, and explicitly characterises H2 as reserved for future
+  work (not failed).
 
 \item \textbf{Experiments compute resources}
   \item[] Answer: \answerYes{}

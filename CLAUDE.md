@@ -34,27 +34,33 @@ Experiments in `code/` are written to run from the working directory of the rele
 
 Investigates bistable CoT faithfulness in multi-turn derailing conversations using DeepSeek-R1-Distill-Qwen-7B. All experiment code runs on a remote GPU server (172.24.16.177) via SSH/paramiko, not locally.
 
-**Status: data collection complete, paper needs updating.**
-- Final dataset: **N=24 conversations, 412 faithfulness observations** across Phases 1–4
-- Final bistability result (GRADUATE): H1 significant (p<0.05), H3 confirmed (13% anchored / 87% exploring)
-- Paper draft at `paper/paper.tex` was written with N=4 — **needs updating to reflect N=24 and new H1 result**
-- Paper not yet compiled to PDF
+**Status (2026-05-08): Phase B data collection running. Paper updated and compiled.**
+- Phase A dataset: **N=24 conversations, 412 faithfulness observations** across Phases 1–4 — COMPLETE
+- Phase B (uplift): 3 seeds × 15 samples = 45 new conversations — **IN PROGRESS** (tmux session: `uplift`)
+- Paper `paper/paper.tex` updated with full N=24 stats (H3 χ²=58.5, ICC=0.107, etc.) — compiled to PDF at `paper/paper.pdf`
+- After Phase B: combine N=24+45 dataset, update paper, check H1 at N=69
+
+**Root-cause lesson from Phase B startup (2026-05-08):**
+`simulator_sharded.py` had NO max_turns limit. Shard revelation only happens on answer attempts (not clarification questions), so a 6-shard problem could run 12+ turns per shard → 76-turn conversations. GSM8K/913 ran 76 turns (116 min faithfulness time alone). Fix: `--max_turns 30` was added to `phase2_batch_runner.py` and `simulator_sharded.py`. **Always use `--max_turns 30` for Phase B data collection.**
 
 **Core scripts (run from `~/multi_turn_cot/lost_in_conversation/` on server):**
 
 ```bash
 # Run sharded conversations + faithfulness measurement
 # IMPORTANT: use --faith_tokens 128 (not 512). 512 takes 146s/turn; 128 takes ~31s/turn.
+# IMPORTANT: use --max_turns 30. Without it, conversations run 26-76 turns (no termination limit).
 # Use --exclude_dirs to avoid re-running already-measured conversations from prior phases.
 LOAD_IN_8BIT=1 HF_HOME=/dev/shm/vasudev_hf_cache R1_MAX_NEW_TOKENS=1500 \
   PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
-  python3 phase2_batch_runner.py --n_samples 15 --max_shards 6 --faith_tokens 128 \
+  python3 phase2_batch_runner.py --n_samples 15 --max_shards 20 --max_turns 30 --faith_tokens 128 \
   --exclude_dirs ../multi_turn_cot_faithfulness/results/phase2 \
                  ../multi_turn_cot_faithfulness/results/phase3 \
-  --out_dir ../multi_turn_cot_faithfulness/results/phase5
+                 ../multi_turn_cot_faithfulness/results/phase4 \
+  --out_dir ../multi_turn_cot_faithfulness/results/phase5_s1
 
 # Bistability analysis — pure Python, no GPU required
 # Pass ALL faith paths together to get full dataset stats
+# Phase B adds phase5_s1, phase5_s2, phase5_s3 to the path list
 python3 ../multi_turn_cot_faithfulness/code/phase2_bistability_analysis.py \
   --faith_paths \
     ../results/day2/faithfulness.jsonl \
@@ -62,12 +68,29 @@ python3 ../multi_turn_cot_faithfulness/code/phase2_bistability_analysis.py \
     ../multi_turn_cot_faithfulness/results/phase2/faithfulness.jsonl \
     ../multi_turn_cot_faithfulness/results/phase3/faithfulness.jsonl \
     ../multi_turn_cot_faithfulness/results/phase4/faithfulness.jsonl \
+    ../multi_turn_cot_faithfulness/results/phase5_s1/faithfulness.jsonl \
+    ../multi_turn_cot_faithfulness/results/phase5_s2/faithfulness.jsonl \
+    ../multi_turn_cot_faithfulness/results/phase5_s3/faithfulness.jsonl \
   --trace_dirs ../results/day1 \
     ../multi_turn_cot_faithfulness/results/phase2 \
     ../multi_turn_cot_faithfulness/results/phase3 \
     ../multi_turn_cot_faithfulness/results/phase4 \
-  --out_dir ../multi_turn_cot_faithfulness/results/bistability_final
+    ../multi_turn_cot_faithfulness/results/phase5_s1 \
+    ../multi_turn_cot_faithfulness/results/phase5_s2 \
+    ../multi_turn_cot_faithfulness/results/phase5_s3 \
+  --out_dir ../multi_turn_cot_faithfulness/results/bistability_v2_full
 ```
+
+**Phase B tmux session `uplift` on server (started 2026-05-08):**
+
+| Window | Script | Status |
+|---|---|---|
+| phaseB_long_conv | run_phase5_s1.sh → s2 → s3 → run_analysis_full.sh | RUNNING (seed 1 loading models) |
+| phaseC_humaneval | waits PHASEB_DONE → humaneval → HUMANEVAL_DONE | WAITING |
+| phaseC_fp16 | waits HUMANEVAL_DONE → deepseek_fp16 → FP16_DONE | WAITING |
+| phaseA_v2 | bistability_v2_full analysis | DONE |
+
+Scripts in `/home/vasudev_majhi_2021/multi_turn_cot/uplift_scripts/`. Each seed: `--n_samples 15 --max_shards 20 --max_turns 30 --faith_tokens 128`.
 
 **Key env vars:**
 - `LOAD_IN_8BIT=1` — load both models in int8 (~7 GB each); prefer when GPU has ~15 GB free
@@ -76,6 +99,7 @@ python3 ../multi_turn_cot_faithfulness/code/phase2_bistability_analysis.py \
 - `R1_MAX_NEW_TOKENS=1500` — cap R1 generation per turn
 - `HF_HOME=/dev/shm/vasudev_hf_cache` — model weights on RAM-disk (ephemeral; re-download on reboot)
 - `--faith_tokens 128` — use 128, NOT 512. 512 was the default and took 146s/turn; 128 takes ~31s/turn. The metric only needs a numeric answer, so 128 is always sufficient.
+- `--max_turns 30` — CRITICAL. Without this, conversations run indefinitely (simulator terminates only when all shards revealed OR correct answer; shards reveal on answer attempts only → 12+ turns per shard).
 
 **GPU constraint (shared server):** The RTX 6000 Ada (49 GB) is shared. Other users' ollama models can occupy 18–35 GB persistently. Strategy: run one 8-bit process (~18 GB) + one 4-bit process (~8 GB) simultaneously to fill the GPU when ~26+ GB is free. Both processes will compete for compute but combined throughput beats running serially.
 
@@ -107,8 +131,21 @@ Phase 1 results are at `~/multi_turn_cot/results/` (not inside `multi_turn_cot_f
 ~/multi_turn_cot/results/day2/           # faithfulness.jsonl (9 turns, 3 small samples)
 ~/multi_turn_cot/results/day2_sample965/ # faithfulness.jsonl (44 turns, sample 965)
 ~/multi_turn_cot/results/bistability_phase1_only/  # bistability plots + stats JSON
-~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase2/  # Phase 2 traces + faithfulness
+~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase2/   # Phase 2 traces + faithfulness
+~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase3/   # Phase 3 traces + faithfulness
+~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase4/   # Phase 4 traces + faithfulness
+~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase5_s1/ # Phase B seed 1 (IN PROGRESS)
+~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase5_s2/ # Phase B seed 2 (PENDING)
+~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase5_s3/ # Phase B seed 3 (PENDING)
+~/multi_turn_cot/multi_turn_cot_faithfulness/results/bistability_v2_full/  # N=24 final analysis (Phase A)
 ```
+
+Sentinel files (written to results/ dir on server as progress markers):
+- `PHASEB_DATA_DONE_S1` — seed 1 data collection complete
+- `PHASEB_DATA_DONE` — all 3 seeds complete
+- `PHASEB_DONE` — Phase B analysis also done (bistability_v2_full updated)
+- `HUMANEVAL_DONE` — HumanEval H2 analysis complete
+- `FP16_DONE` — FP16 precision comparison complete
 
 ## Research philosophy (decision criteria)
 

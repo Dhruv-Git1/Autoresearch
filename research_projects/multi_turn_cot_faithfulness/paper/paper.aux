@@ -1,0 +1,110 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{lanham2023,turpin2023,arcuschin2025}
+\citation{laban2025}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\newlabel{sec:intro}{{1}{1}{Introduction}{section.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{The faithfulness assumption in deployed AI.}{1}{section*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The gap: multi-turn derailment and its effect on faithfulness.}{1}{section*.2}\protected@file@percent }
+\citation{lanham2023}
+\citation{lanham2023}
+\citation{turpin2023}
+\citation{arcuschin2025}
+\citation{chen2025}
+\@writefile{toc}{\contentsline {paragraph}{A novel finding: faithfulness is mode-switching, not monotonically decaying.}{2}{section*.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Our method and results.}{2}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Contributions.}{2}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Background and Related Work}{2}{section.2}\protected@file@percent }
+\newlabel{sec:related}{{2}{2}{Background and Related Work}{section.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{CoT faithfulness in single-turn settings.}{2}{section*.6}\protected@file@percent }
+\citation{reasoning_theater2026}
+\citation{laban2025}
+\citation{liu2026}
+\citation{korbak2025,openai_monitoring2025}
+\citation{laban2025}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \textbf  {Mode-switching CoT faithfulness.} \emph  {Top:} Turn-by-turn mode for sample 965 (40 turns shown): green = exploring (CoT drives the answer), red = anchored (CoT is post-hoc). The red burst coincides with premature commitment to the wrong answer ``300'' (gold = 660). \emph  {Bottom left:} In exploring mode, different truncation levels produce different answers---the CoT is causally active. \emph  {Bottom right:} In anchored mode, all five levels agree on the same answer regardless of how much reasoning is visible---the CoT is decorative.}}{3}{figure.1}\protected@file@percent }
+\newlabel{fig:concept}{{1}{3}{\textbf {Mode-switching CoT faithfulness.} \emph {Top:} Turn-by-turn mode for sample 965 (40 turns shown): green = exploring (CoT drives the answer), red = anchored (CoT is post-hoc). The red burst coincides with premature commitment to the wrong answer ``300'' (gold = 660). \emph {Bottom left:} In exploring mode, different truncation levels produce different answers---the CoT is causally active. \emph {Bottom right:} In anchored mode, all five levels agree on the same answer regardless of how much reasoning is visible---the CoT is decorative}{figure.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Reasoning Theater: the single-generation analog.}{3}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Lost in conversation.}{3}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{CoT monitorability and the safety stakes.}{3}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Method}{3}{section.3}\protected@file@percent }
+\newlabel{sec:method}{{3}{3}{Method}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Experimental Setup}{3}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Motivation.}{3}{section*.10}\protected@file@percent }
+\citation{lost_in_conversation_repo}
+\citation{deepseekr1_2025}
+\citation{lanham2023}
+\citation{massey1951}
+\@writefile{toc}{\contentsline {paragraph}{Design.}{4}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Faithfulness Measurement}{4}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Motivation.}{4}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Design.}{4}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Technical advantage.}{4}{section*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Mode-Switching Tests}{4}{subsection.3.3}\protected@file@percent }
+\citation{massey1951}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Results}{5}{section.4}\protected@file@percent }
+\newlabel{sec:results}{{4}{5}{Results}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Mode-Switching Across Phases: Evidence Accumulates}{5}{subsection.4.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Cumulative mode-switching statistics across phases. H3: global anchored fraction (both modes ``substantially present''). Variance test: chi-square test of between-conversation variance vs.\ Bernoulli null (Section~\ref {sec:method}). $\text  {$\mathsurround \z@ \mathchar "458$}$~H3 confirmed at all scales. H1 (run-length persistence) was tested with a corrected parametric bootstrap on all $N=24$ conversations (27~anchored runs): bootstrap $p=0.557$, $\chi ^2$ $p=0.218$, both non-significant; see Section~\ref {subsec:h1}. All intermediate H1 p-values computed with scipy's \texttt  {kstest} are invalid on discrete data and are omitted here.}}{5}{table.1}\protected@file@percent }
+\newlabel{tab:cascade}{{1}{5}{Cumulative mode-switching statistics across phases. H3: global anchored fraction (both modes ``substantially present''). Variance test: chi-square test of between-conversation variance vs.\ Bernoulli null (Section~\ref {sec:method}). $\checkmark $~H3 confirmed at all scales. H1 (run-length persistence) was tested with a corrected parametric bootstrap on all $N=24$ conversations (27~anchored runs): bootstrap $p=0.557$, $\chi ^2$ $p=0.218$, both non-significant; see Section~\ref {subsec:h1}. All intermediate H1 p-values computed with scipy's \texttt {kstest} are invalid on discrete data and are omitted here}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Qualitative Mode-Switching: Sample 965}{5}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}H1: Run-Length Persistence --- Inconclusive}{5}{subsection.4.3}\protected@file@percent }
+\newlabel{subsec:h1}{{4.3}{5}{H1: Run-Length Persistence --- Inconclusive}{subsection.4.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \textbf  {Per-turn CoT faithfulness mode} (all $N=24$ conversations, 373~assessable turns). Green = exploring (CoT causal); red = anchored (CoT post-hoc). Rows sorted by anchored fraction (right axis).}}{6}{figure.2}\protected@file@percent }
+\newlabel{fig:heatmap}{{2}{6}{\textbf {Per-turn CoT faithfulness mode} (all $N=24$ conversations, 373~assessable turns). Green = exploring (CoT causal); red = anchored (CoT post-hoc). Rows sorted by anchored fraction (right axis)}{figure.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {H1: Anchored run-length distribution vs.\ geometric null} (all $N=24$ conversations, 27~anchored runs). \emph  {Left:} Empirical anchored-mode run lengths (red bars) vs.\ the best-fit geometric null ($\hat  {p}=0.54$, dashed line). Figure title shows the corrected parametric-bootstrap p-value ($p=0.557$) and chi-square GOF p-value ($p=0.218$)---both non-significant; H1 is inconclusive. \emph  {Right:} Exploring-run distribution for comparison.}}{6}{figure.3}\protected@file@percent }
+\newlabel{fig:runlength}{{3}{6}{\textbf {H1: Anchored run-length distribution vs.\ geometric null} (all $N=24$ conversations, 27~anchored runs). \emph {Left:} Empirical anchored-mode run lengths (red bars) vs.\^^Mthe best-fit geometric null ($\hat {p}=0.54$, dashed line). Figure title shows the corrected parametric-bootstrap p-value ($p=0.557$) and chi-square GOF p-value ($p=0.218$)---both non-significant; H1 is inconclusive. \emph {Right:} Exploring-run distribution for comparison}{figure.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}H2: Reserved for Tasks with Binary Outcomes}{6}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}H3: Both Modes are Substantially Present}{7}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}CoT Length is Not the Mechanism}{7}{subsection.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Systematic Commitment-Alignment Analysis}{7}{subsection.4.7}\protected@file@percent }
+\newlabel{subsec:commitment}{{4.7}{7}{Systematic Commitment-Alignment Analysis}{subsection.4.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Repetition Confound Check}{7}{subsection.4.8}\protected@file@percent }
+\citation{lanham2023,arcuschin2025}
+\citation{reasoning_theater2026}
+\citation{mechanistic_faithfulness2026}
+\citation{korbak2025,openai_monitoring2025}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.9}Length-Stratified Analysis}{8}{subsection.4.9}\protected@file@percent }
+\newlabel{subsec:length}{{4.9}{8}{Length-Stratified Analysis}{subsection.4.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{8}{section.5}\protected@file@percent }
+\newlabel{sec:discussion}{{5}{8}{Discussion}{section.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{Faithfulness as a dynamical conversation property.}{8}{section*.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Connection to Reasoning Theater and the Reasoning Horizon.}{8}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Implications for CoT oversight.}{8}{section*.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Limitations}{8}{section.6}\protected@file@percent }
+\newlabel{sec:limits}{{6}{8}{Limitations}{section.6}{}}
+\bibstyle{plainnat}
+\bibdata{references}
+\bibcite{arcuschin2025}{{1}{2025}{{Arcuschin et~al.}}{{}}}
+\bibcite{reasoning_theater2026}{{2}{2026}{{Boppana et~al.}}{{Boppana, Ma, Loeffler, Sarfati, Bigelow, Geiger, Lewis, and Merullo}}}
+\bibcite{chen2025}{{3}{2025}{{Chen et~al.}}{{}}}
+\bibcite{deepseekr1_2025}{{4}{2025}{{Guo et~al.}}{{Guo, Yang, Zhang, Song, Zhang, Xu, Zhu, Ma, Wang, Bi, et~al.}}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{9}{section.7}\protected@file@percent }
+\newlabel{sec:conclusion}{{7}{9}{Conclusion}{section.7}{}}
+\bibcite{korbak2025}{{5}{2025}{{Korbak et~al.}}{{Korbak, Bloom, Cooney, Irving, Soto, and Wang}}}
+\bibcite{laban2025}{{6}{2025}{{Laban et~al.}}{{Laban, Hayashi, Zhou, and Neville}}}
+\bibcite{lanham2023}{{7}{2023}{{Lanham et~al.}}{{Lanham, Chen, Radhakrishnan, Steiner, Denison, Hernandez, Li, Durmus, Hubinger, Kernion, et~al.}}}
+\bibcite{liu2026}{{8}{2026}{{Liu et~al.}}{{}}}
+\bibcite{massey1951}{{9}{1951}{{Massey}}{{}}}
+\bibcite{lost_in_conversation_repo}{{10}{2025}{{Microsoft Research}}{{}}}
+\bibcite{openai_monitoring2025}{{11}{2025}{{OpenAI}}{{}}}
+\bibcite{turpin2023}{{12}{2023}{{Turpin et~al.}}{{Turpin, Michael, Perez, and Bowman}}}
+\bibcite{mechanistic_faithfulness2026}{{13}{2026}{{Ye et~al.}}{{Ye, Loffgren, Kotadia, and Wong}}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Experimental Details}{10}{appendix.A}\protected@file@percent }
+\newlabel{app:details}{{A}{10}{Experimental Details}{appendix.A}{}}
+\@writefile{toc}{\contentsline {paragraph}{Dataset.}{10}{section*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Infrastructure.}{10}{section*.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Hyperparameters.}{10}{section*.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Faithfulness token budget.}{10}{section*.23}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Compute.}{10}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Reproducibility.}{10}{section*.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Additional figures.}{10}{figure.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \textbf  {Mode-switching evidence accumulates across phases.} \emph  {Left:} H1 significance (bootstrap p-value) grows with $N$ as more anchored runs become available to test against the geometric null. The power increase from $N=14$ to $N=24$ reflects both additional conversations \emph  {and} Phase~4's longer conversations (max\_shards~$=10$), so this trajectory is not a fully independent replication. \emph  {Right:} Anchored fraction remains 8--14\% at every scale, confirming both modes are persistently present.}}{11}{figure.4}\protected@file@percent }
+\newlabel{fig:cascade}{{4}{11}{\textbf {Mode-switching evidence accumulates across phases.} \emph {Left:} H1 significance (bootstrap p-value) grows with $N$ as more anchored runs become available to test against the geometric null. The power increase from $N=14$ to $N=24$ reflects both additional conversations \emph {and} Phase~4's longer conversations (max\_shards~$=10$), so this trajectory is not a fully independent replication. \emph {Right:} Anchored fraction remains 8--14\% at every scale, confirming both modes are persistently present}{figure.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \textbf  {Per-conversation summary.} \emph  {Left:} Anchored fraction vs.\ conversation length; marker size encodes the longest anchored run. Longer conversations tend to have higher anchored fractions (see also Section~\ref {subsec:length} for the length-stratified analysis). \emph  {Right:} Global H3 distribution (13\% anchored / 87\% exploring) with the H3 variance test p-value.}}{11}{figure.5}\protected@file@percent }
+\newlabel{fig:scatter}{{5}{11}{\textbf {Per-conversation summary.} \emph {Left:} Anchored fraction vs.\ conversation length; marker size encodes the longest anchored run. Longer conversations tend to have higher anchored fractions (see also Section~\ref {subsec:length} for the length-stratified analysis). \emph {Right:} Global H3 distribution (13\% anchored / 87\% exploring) with the H3 variance test p-value}{figure.5}{}}
+\newlabel{checklist_ai_involvement}{{A}{11}{Conference For AI Scientists 2026 --- AI Involvement Checklist}{section*.27}{}}
+\newlabel{checklist_reproducibility}{{A}{13}{Conference For AI Scientists 2026 --- Reproducibility and Responsibility Checklist}{section*.30}{}}
+\gdef \@abspage@last{13}

@@ -1,0 +1,63 @@
+{
+  "H1_runlength": {
+    "n_anchored_runs": 25,
+    "mean_run_length": 1.76,
+    "p_geometric_mle": 0.5682,
+    "bootstrap_ks_stat": 0.5682,
+    "bootstrap_ks_p": 0.5584,
+    "chisq_stat": 1.3174,
+    "chisq_p": 0.5175,
+    "obs_run_counts": [
+      15,
+      4,
+      3,
+      3
+    ],
+    "exp_run_counts": [
+      14.2,
+      6.13,
+      2.65,
+      2.01
+    ],
+    "verdict": "INCONCLUSIVE: run-length distribution does not significantly exceed geometric null (bootstrap p=0.558)"
+  },
+  "H2_frac_anchored_vs_correct": {
+    "n": 0,
+    "r": null,
+    "p": null,
+    "verdict": "unresolvable: insufficient conversations with is_correct label"
+  },
+  "H3_bimodality": {
+    "n_obs": 321,
+    "frac_anchored": 0.137,
+    "frac_exploring": 0.863,
+    "both_modes_present": true,
+    "variance_test_chi2": 90.179,
+    "variance_test_df": 19,
+    "variance_test_p": 0.0,
+    "verdict": "CONFIRMED: anchored=14%, exploring=86%; variance test significant (p=0.0)"
+  },
+  "repetition_confound": {
+    "fraction_repeating_prior_answer": 0.614,
+    "n_repeating": 27,
+    "n_total_anchored": 44,
+    "interpretation": "MODERATE: some repetition but not dominant (<70%)"
+  },
+  "length_controlled": {
+    "short_leq10": {
+      "n": 9,
+      "mean_frac_anchored": 0.03
+    },
+    "medium_10_20": {
+      "n": 5,
+      "mean_frac_anchored": 0.061
+    },
+    "long_gt20": {
+      "n": 6,
+      "mean_frac_anchored": 0.204
+    }
+  },
+  "decision": "GRADUATE",
+  "n_conversations": 20,
+  "n_faithfulness_obs": 359
+}

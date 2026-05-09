@@ -20,7 +20,7 @@ import matplotlib.gridspec as gridspec
 import matplotlib.colors as mcolors
 from matplotlib.patches import FancyBboxPatch
 import numpy as np
-from scipy.stats import kstest
+from scipy.stats import chi2 as _chi2  # noqa: F401 — used indirectly
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 REPO = Path(__file__).resolve().parents[3]
@@ -111,6 +111,34 @@ def geometric_pmf(k, p):
     return p * (1 - p) ** (k - 1)
 
 
+def _discrete_ks(data, p):
+    """Two-sided KS stat for discrete geometric(p) — avoids scipy's continuous tables."""
+    sd = np.sort(np.asarray(data, dtype=float))
+    n = len(sd)
+    ecdf_after  = np.arange(1, n + 1) / n
+    ecdf_before = np.arange(0, n)     / n
+    theory = 1.0 - (1.0 - p) ** sd
+    return float(max(np.max(ecdf_after - theory), np.max(theory - ecdf_before)))
+
+
+def bootstrap_ks_geom(observed_runs, n_bootstrap=10_000, seed=42):
+    """Parametric bootstrap KS test corrected for discrete data (Massey 1951).
+    Returns (obs_stat, boot_p, p_hat) or (nan, nan, nan) if n < 5.
+    """
+    arr = np.asarray(observed_runs, dtype=float)
+    n = len(arr)
+    if n < 5:
+        return float("nan"), float("nan"), float("nan")
+    rng = np.random.default_rng(seed)
+    p_hat = 1.0 / float(np.mean(arr))
+    obs_stat = _discrete_ks(arr, p_hat)
+    null_stats = np.empty(n_bootstrap)
+    for i in range(n_bootstrap):
+        sim = rng.geometric(p=p_hat, size=n).astype(float)
+        null_stats[i] = _discrete_ks(sim, 1.0 / float(np.mean(sim)))
+    return obs_stat, float(np.mean(null_stats >= obs_stat)), p_hat
+
+
 def load_data():
     rows = []
     for p in FAITH_PATHS:
@@ -181,7 +209,7 @@ def fig_concept():
         ax.axis("off")
 
     # ── top banner ────────────────────────────────────────────────────────────
-    ax_title.text(0.5, 0.82, "CoT Faithfulness is Bistable in Multi-Turn Conversations",
+    ax_title.text(0.5, 0.82, "CoT Faithfulness Switches Modes in Multi-Turn Conversations",
                   ha="center", va="center", fontsize=11, fontweight="bold", color=DARK,
                   transform=ax_title.transAxes)
 
@@ -406,7 +434,7 @@ def fig_runlength(all_anchored_rl, all_exploring_rl):
 
     mean_rl = float(np.mean(all_anchored_rl))
     p_geom = 1.0 / mean_rl
-    ks_stat, ks_p = kstest(all_anchored_rl, "geom", args=(p_geom,))
+    boot_stat, boot_p, _ = bootstrap_ks_geom(all_anchored_rl)
 
     fig, axes = plt.subplots(1, 2, figsize=(7.5, 3.6))
     fig.patch.set_facecolor("white")
@@ -426,19 +454,33 @@ def fig_runlength(all_anchored_rl, all_exploring_rl):
             label=f"Geometric null\n($\\hat{{p}}$={p_geom:.2f})")
     ax.set_xlabel("Run length (consecutive anchored turns)")
     ax.set_ylabel("Probability density")
-    sig = "p < 0.001" if ks_p < 0.001 else f"p = {ks_p:.3f}"
-    ax.set_title(f"Anchored run-length vs. geometric null\nKS {sig}  —  heavy tail confirms persistence",
-                 fontsize=8.5)
+    if not math.isnan(boot_p):
+        p_str = "p < 0.001" if boot_p < 0.001 else f"p = {boot_p:.3f}"
+        sig_note = "  (n.s.)" if boot_p >= 0.05 else ""
+        ax.set_title(
+            f"Anchored run-length vs. geometric null\n"
+            f"Bootstrap KS {p_str}{sig_note}",
+            fontsize=8.5
+        )
+    else:
+        ax.set_title("Anchored run-length vs. geometric null\n(insufficient runs for bootstrap)",
+                     fontsize=8.5)
     ax.legend(loc="upper right", framealpha=0.9)
     ax.set_xlim(0.5, max_run + 0.5)
 
-    # Annotate significance
-    if ks_p < 0.05:
-        ax.text(0.97, 0.97, "★ Significant\n(p < 0.05)",
+    # Annotate significance or inconclusive
+    if not math.isnan(boot_p) and boot_p < 0.05:
+        ax.text(0.97, 0.97, "★ Significant\n(bootstrap p < 0.05)",
                 ha="right", va="top", transform=ax.transAxes,
                 fontsize=8, color=RED, fontweight="bold",
                 bbox=dict(boxstyle="round,pad=0.3", facecolor="white",
                           edgecolor=RED, alpha=0.85))
+    elif not math.isnan(boot_p):
+        ax.text(0.97, 0.97, f"Inconclusive\n(bootstrap p = {boot_p:.2f})",
+                ha="right", va="top", transform=ax.transAxes,
+                fontsize=8, color=GREY, fontstyle="italic",
+                bbox=dict(boxstyle="round,pad=0.3", facecolor="white",
+                          edgecolor=GREY, alpha=0.85))
 
     # ── Panel B: exploring run-length (complementary view) ─────────────────────
     ax = axes[1]
@@ -465,7 +507,7 @@ def fig_runlength(all_anchored_rl, all_exploring_rl):
                  fontsize=8.5)
     ax.legend(loc="upper right", framealpha=0.9)
 
-    fig.suptitle("H1: Anchored mode is persistent — run-lengths exceed geometric null",
+    fig.suptitle("H1: Anchored run-lengths vs. geometric null (bootstrap-corrected KS test)",
                  fontsize=9.5, fontweight="bold", y=1.02)
     fig.tight_layout()
     out = OUT / "runlength_dist.png"
@@ -563,7 +605,7 @@ def fig_frac_scatter(records):
     ax.set_title(f"H3: Both modes present\n(N={len(records)} conversations, {len(all_vals)} turns)",
                  fontsize=8.5)
 
-    fig.suptitle("Bistability in CoT faithfulness: both modes are present",
+    fig.suptitle("Mode-switching in CoT faithfulness: both modes are present",
                  fontsize=9.5, fontweight="bold", y=1.02)
     fig.tight_layout()
     out = OUT / "frac_anchored_scatter.png"
@@ -577,41 +619,39 @@ def fig_frac_scatter(records):
 # ══════════════════════════════════════════════════════════════════════════════
 
 def fig_cascade():
-    """Shows how H1 KS p-value evolved as N grew across phases."""
-    phases = ["Phase 1\n(N=4)", "P1+P2\n(N=8)", "P1+P2+P3\n(N=14)", "P1+P2+P3+P4\n(N=24)"]
+    """Shows how the anchored-mode evidence accumulated as N grew across phases.
+    Panel A: cumulative anchored vs exploring turn counts.
+    Panel B: anchored fraction trajectory (H3 stability).
+    H1 run-length persistence is shown as inconclusive in the run-length figure.
+    """
+    phases      = ["Phase 1\n(N=4)", "P1+P2\n(N=8)", "P1+P2+P3\n(N=14)", "P1+P2+P3+P4\n(N=24)"]
     faith_turns = [53, 92, 177, 412]
-    ks_p = [0.888, 0.516, 0.0019, 0.0001]  # last one effectively 0
-    frac_anc = [0.12, 0.08, 0.08, 0.13]
+    frac_anc    = [0.12, 0.08, 0.08, 0.13]
+    # Cumulative anchored and exploring turn counts
+    anch_turns  = [round(fa * ft) for fa, ft in zip(frac_anc, faith_turns)]
+    expl_turns  = [ft - at for ft, at in zip(faith_turns, anch_turns)]
 
     fig, axes = plt.subplots(1, 2, figsize=(7.5, 3.4))
     fig.patch.set_facecolor("white")
+    x = np.arange(len(phases))
 
-    # ── Panel A: KS p-value trajectory ──────────────────────────────────────
+    # ── Panel A: cumulative turn breakdown ───────────────────────────────────
     ax = axes[0]
     ax.set_facecolor("white")
-    x = np.arange(len(phases))
-    bar_colors = [RED if p < 0.05 else GREY for p in ks_p]
-    bars = ax.bar(x, [-math.log10(max(p, 1e-6)) for p in ks_p],
-                  color=bar_colors, alpha=0.80, edgecolor="white", linewidth=0.8,
-                  width=0.55)
-    ax.axhline(-math.log10(0.05), color=RED, lw=1.2, ls="--", alpha=0.7,
-               label="p = 0.05 threshold")
+    bars_exp = ax.bar(x, expl_turns, color=GREEN, alpha=0.75,
+                      edgecolor="white", linewidth=0.8, width=0.55,
+                      label="Exploring turns")
+    bars_anc = ax.bar(x, anch_turns, bottom=expl_turns,
+                      color=RED, alpha=0.85, edgecolor="white", linewidth=0.8,
+                      width=0.55, label="Anchored turns")
     ax.set_xticks(x)
     ax.set_xticklabels(phases, fontsize=7.5)
-    ax.set_ylabel("−log₁₀(KS p-value)  [higher = more significant]", fontsize=8)
-    ax.set_title("H1 significance grows with N\n(anchored run-length vs. geometric null)", fontsize=8.5)
+    ax.set_ylabel("Cumulative assessable turns", fontsize=8)
+    ax.set_title("Data accumulation across phases\n(green=exploring, red=anchored)", fontsize=8.5)
     ax.legend(fontsize=7.5)
-
-    # Annotate bars
-    for i, (bar, p, ft) in enumerate(zip(bars, ks_p, faith_turns)):
-        label = f"p={p}" if p >= 0.001 else "p≈0"
-        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.05,
-                label, ha="center", va="bottom", fontsize=7,
-                fontweight="bold" if p < 0.05 else "normal",
-                color=RED if p < 0.05 else DARK)
-        ax.text(bar.get_x() + bar.get_width()/2, 0.05,
-                f"{ft} turns", ha="center", va="bottom", fontsize=6,
-                color="white", fontweight="bold")
+    for i, (at, ft) in enumerate(zip(anch_turns, faith_turns)):
+        ax.text(i, ft + 4, f"{at}/{ft}", ha="center", va="bottom",
+                fontsize=6.5, color=DARK)
 
     # ── Panel B: frac_anchored trajectory ───────────────────────────────────
     ax = axes[1]
@@ -622,13 +662,19 @@ def fig_cascade():
     ax.set_xticks(x)
     ax.set_xticklabels(phases, fontsize=7.5)
     ax.set_ylabel("% turns in anchored mode", fontsize=8)
-    ax.set_title("H3: Anchored fraction stable across phases\n(both modes confirmed at every scale)", fontsize=8.5)
-
-    for i, (fa, ft) in enumerate(zip(frac_anc, faith_turns)):
+    ax.set_title("H3: Anchored fraction stable across phases\n"
+                 r"(variance test: $\chi^2$=90.2, df=19, $p$$<$0.001 at N=20)",
+                 fontsize=8.5)
+    for i, fa in enumerate(frac_anc):
         ax.text(i, fa * 100 + 0.3, f"{fa:.0%}", ha="center", va="bottom",
                 fontsize=7.5, fontweight="bold", color=DARK)
+    # Note about length confound on Phase 4
+    ax.annotate("Phase 4 uses\nmax_shards=10\n(longer convs.)",
+                xy=(3, frac_anc[3] * 100), xytext=(2.55, frac_anc[3] * 100 + 4),
+                fontsize=6.0, color=GREY, style="italic",
+                arrowprops=dict(arrowstyle="->", color=GREY, lw=0.7))
 
-    fig.suptitle("Bistability cascade: effect strengthens with N",
+    fig.suptitle("Mode-switching cascade: both modes present at every scale",
                  fontsize=9.5, fontweight="bold", y=1.02)
     fig.tight_layout()
     out = OUT / "phase_cascade.png"

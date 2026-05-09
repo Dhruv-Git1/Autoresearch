@@ -1,6 +1,61 @@
 # Project Status — multi_turn_cot_faithfulness
 
-Last updated: 2026-05-07 (overnight experiment session complete)
+Last updated: 2026-05-08 (Phase B started; paper updated with N=24 stats)
+
+---
+
+## Session 2 Update (2026-05-08)
+
+### Paper — DONE
+Paper `paper/paper.tex` fully updated with correct Phase A (N=24) statistics and compiles cleanly to `paper/paper.pdf` (742 KB).
+
+Key changes from session 1 state (N=4 paper):
+- All stats updated to N=24 bistability_v2_full dataset
+- H3: χ²=58.5, df=23, p<0.001 (was χ²=90.2, df=19, N=20)
+- H3 within-bin: long-conv χ²=33.2, df=6, p<0.001 (rules out length-heterogeneity confound)
+- ICC: 0.107 (moderate conversation-level clustering, 11% between-conversation variance)
+- H1: bootstrap p=0.557, chi-sq p=0.218 (still inconclusive at N=24)
+- Commitment alignment: r=0.19, p=0.604, lag=4.6 turns (NOT significant; "coinciding precisely" language corrected)
+- Repetition confound: 80.9% (38/47), reinterpreted as "answer inertia under conversational pressure" (ratio 1.85×, below 2× threshold)
+- Length bins: short n=11 1.5%, medium n=6 6.7%, long n=7 19.4% (12.9× ratio)
+- Citation jin2025 → chen2025 corrected; siunitx package added; phase_cascade.png restored from git
+- Figures: heatmap, runlength_dist, frac_anchored_scatter replaced with bistability_v2_full versions
+
+### Root-cause Bug Found and Fixed: No max_turns in simulator
+**Problem:** `simulator_sharded.py` had no turn limit. Shards only reveal on answer-attempt turns (not clarification questions). For a 6-shard problem, minimum 12 turns just to reveal all shards. GSM8K/913 ran 76 turns (116 min faithfulness time alone). Old seed-1 process ran 6+ hours and completed only 2 conversations.
+
+**Fix:**
+- Added `max_turns` parameter to `simulator_sharded.py` `run()` method (server-side)
+- Added `--max_turns` argument to `phase2_batch_runner.py` (server-side)
+- Rewrote all 3 seed scripts: `n_samples=15` (was 60), `--max_turns 30`, `--max_shards 20`
+- Killed old PID 3797281; started new seed-1 process (PID 2619508)
+- Resume preserved 2 already-completed conversations (237: 26 turns, 913: 76 turns)
+
+### Phase B — IN PROGRESS
+tmux session `uplift` on server (172.24.16.177):
+
+| Window | Status | Notes |
+|---|---|---|
+| phaseB_long_conv | **RUNNING** (seed 1 loading models) | 15 samples × 3 seeds; max_turns=30 |
+| phaseC_humaneval | WAITING on PHASEB_DONE sentinel | H2 on HumanEval |
+| phaseC_fp16 | WAITING on HUMANEVAL_DONE sentinel | FP16 vs 8-bit comparison |
+| phaseA_v2 | DONE | bistability_v2_full, N=24 |
+
+**Expected timeline (worst case — ollama occupying ~15 GB GPU):**
+- Per conversation: ≤30 turns × ~90s/turn faithfulness + ~120s/turn generation ≈ ~90 min per conversation
+- 15 samples per seed: ~22h per seed
+- 3 seeds: ~67h total (with ollama); ~29h without ollama
+- Target dataset: N=24 (Phase A) + 45 (Phase B) = **N=69**
+
+### After Phase B completes — TODO
+1. Download new bistability_v2_full/ figures and stats from server
+2. Run combined analysis on N=69 dataset
+3. Update paper with new N and stats (especially: does H1 become significant at N=69?)
+4. Check H2 verdict from HumanEval (HUMANEVAL_DONE sentinel)
+5. Compare FP16 vs 8-bit anchored fraction (FP16_DONE sentinel)
+6. Recompile paper PDF
+
+---
 
 ---
 
