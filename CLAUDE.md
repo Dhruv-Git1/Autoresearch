@@ -34,11 +34,21 @@ Experiments in `code/` are written to run from the working directory of the rele
 
 Investigates bistable CoT faithfulness in multi-turn derailing conversations using DeepSeek-R1-Distill-Qwen-7B. All experiment code runs on a remote GPU server (172.24.16.177) via SSH/paramiko, not locally.
 
-**Status (2026-05-08): Phase B data collection running. Paper updated and compiled.**
+**Status (2026-05-10): Phase B COMPLETE. Combined N=67 analysis done. Supplementary figures generated.**
 - Phase A dataset: **N=24 conversations, 412 faithfulness observations** across Phases 1–4 — COMPLETE
-- Phase B (uplift): 3 seeds × 15 samples = 45 new conversations — **IN PROGRESS** (tmux session: `uplift`)
-- Paper `paper/paper.tex` updated with full N=24 stats (H3 χ²=58.5, ICC=0.107, etc.) — compiled to PDF at `paper/paper.pdf`
-- After Phase B: combine N=24+45 dataset, update paper, check H1 at N=69
+- Phase B (uplift): 3 seeds × ~43 conversations — **COMPLETE** (tmux session `uplift` finished)
+- Combined analysis: **N=67 conversations, 1,289 obs** — `results/bistability_v3_combined/bistability_stats.json` downloaded locally
+- Paper `paper/paper.tex` has N=24 stats; **needs update to N=67** (combined stats below)
+- 5 new supplementary figures generated: `code/generate_supplementary_figures.py` → `paper/figures/`
+
+**Combined N=67 key stats (use these for paper update):**
+- H3: χ²=236.9, df=66, p≈0 — bistability confirmed across all 67 conversations
+- H3 within-bin: medium p=0.0035, long p<0.001 — holds within each length bin
+- ICC: 0.152 — 15% of anchoring variance is between conversations
+- H1: bootstrap p=0.521 — still inconclusive (insufficient anchored runs at N=67)
+- H2: r=−0.242, p=0.291, N=21 — correct direction, underpowered
+- Length gradient: short 7.2% → medium 12.8% → long 28.4% (**3.9× ratio**)
+- Repetition confound: anchored 75.8%, exploring 45.6%, ratio 1.66× (not pure inertia)
 
 **Root-cause lesson from Phase B startup (2026-05-08):**
 `simulator_sharded.py` had NO max_turns limit. Shard revelation only happens on answer attempts (not clarification questions), so a 6-shard problem could run 12+ turns per shard → 76-turn conversations. GSM8K/913 ran 76 turns (116 min faithfulness time alone). Fix: `--max_turns 30` was added to `phase2_batch_runner.py` and `simulator_sharded.py`. **Always use `--max_turns 30` for Phase B data collection.**
@@ -81,16 +91,18 @@ python3 ../multi_turn_cot_faithfulness/code/phase2_bistability_analysis.py \
   --out_dir ../multi_turn_cot_faithfulness/results/bistability_v2_full
 ```
 
-**Phase B tmux session `uplift` on server (started 2026-05-08):**
+**Phase B tmux session `uplift` on server — ALL COMPLETE (2026-05-10):**
 
 | Window | Script | Status |
 |---|---|---|
-| phaseB_long_conv | run_phase5_s1.sh → s2 → s3 → run_analysis_full.sh | RUNNING (seed 1 loading models) |
-| phaseC_humaneval | waits PHASEB_DONE → humaneval → HUMANEVAL_DONE | WAITING |
-| phaseC_fp16 | waits HUMANEVAL_DONE → deepseek_fp16 → FP16_DONE | WAITING |
+| phaseB_long_conv | run_phase5_s1.sh → s2 → s3 → run_analysis_full.sh | **DONE** |
+| phaseC_humaneval | waits PHASEB_DONE → humaneval → HUMANEVAL_DONE | Did not complete (HumanEval not reached) |
+| phaseC_fp16 | waits HUMANEVAL_DONE → deepseek_fp16 → FP16_DONE | Did not complete |
 | phaseA_v2 | bistability_v2_full analysis | DONE |
 
 Scripts in `/home/vasudev_majhi_2021/multi_turn_cot/uplift_scripts/`. Each seed: `--n_samples 15 --max_shards 20 --max_turns 30 --faith_tokens 128`.
+
+**GPU note:** Seeds 2 and 3 ran in parallel (8-bit + 4-bit) after a watcher script fired when ollama freed ≥18 GB. Total wall-clock ~48h for all 3 seeds.
 
 **Key env vars:**
 - `LOAD_IN_8BIT=1` — load both models in int8 (~7 GB each); prefer when GPU has ~15 GB free
@@ -134,10 +146,11 @@ Phase 1 results are at `~/multi_turn_cot/results/` (not inside `multi_turn_cot_f
 ~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase2/   # Phase 2 traces + faithfulness
 ~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase3/   # Phase 3 traces + faithfulness
 ~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase4/   # Phase 4 traces + faithfulness
-~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase5_s1/ # Phase B seed 1 (IN PROGRESS)
-~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase5_s2/ # Phase B seed 2 (PENDING)
-~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase5_s3/ # Phase B seed 3 (PENDING)
-~/multi_turn_cot/multi_turn_cot_faithfulness/results/bistability_v2_full/  # N=24 final analysis (Phase A)
+~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase5_s1/ # Phase B seed 1 (COMPLETE)
+~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase5_s2/ # Phase B seed 2 (COMPLETE)
+~/multi_turn_cot/multi_turn_cot_faithfulness/results/phase5_s3/ # Phase B seed 3 (COMPLETE)
+~/multi_turn_cot/multi_turn_cot_faithfulness/results/bistability_v2_full/  # N=24 Phase A analysis (superseded)
+~/multi_turn_cot/multi_turn_cot_faithfulness/results/bistability_v3_combined/  # N=67 combined analysis (CURRENT)
 ```
 
 Sentinel files (written to results/ dir on server as progress markers):

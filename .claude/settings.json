@@ -3,7 +3,9 @@
     "allow": [
       "Read(//d/d/**)",
       "Read(//d/Desktop/Autoresearch/**)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(pdflatex -interaction=nonstopmode paper.tex)",
+      "Bash(bibtex paper *)"
     ]
   }
 }

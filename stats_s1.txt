@@ -1,0 +1,151 @@
+Loaded 303 faithfulness rows across 13 conversations
+
+13 conversations analyzed:
+           task_id  n_turns  frac_anchored  max_anchored_run is_correct
+sharded-GSM8K/1011       26          0.154                 2       None
+sharded-GSM8K/1260       26          0.231                 2       None
+ sharded-GSM8K/140        3          0.000                 0       True
+ sharded-GSM8K/237       23          0.565                 6       None
+ sharded-GSM8K/369       30          0.133                 1       None
+ sharded-GSM8K/416       29          0.310                 3       None
+ sharded-GSM8K/534       25          0.120                 1       None
+ sharded-GSM8K/646        9          0.000                 0       None
+ sharded-GSM8K/739        6          0.333                 2       True
+ sharded-GSM8K/740        7          0.000                 0       None
+ sharded-GSM8K/871       26          0.308                 4       None
+ sharded-GSM8K/913       74          0.459                 5       None
+ sharded-GSM8K/968       10          0.000                 0       True
+
+H1  n_runs=40  mean_rl=2.08  p_hat=0.482
+    Bootstrap KS: stat=0.482  p=0.5420
+    Chi-square:   stat=1.599  p=0.4495
+    -> consistent with geometric null -- no significant excess clustering at N=40 runs (bootstrap p=0.5420, chisq p=0.4495)
+
+H3  frac_anchored=0.28  both_modes=True  variance_chisq_p=0.0000  -> mode co-existence confirmed: anchored=28%, exploring=72%; variance test p=0.0000
+
+H3 within-bin variance test (length-stratified):
+  short_leq10: n=5  chi2=10.242  p=0.0365 ** SIGNIFICANT **
+  medium_10_20: n=0  chi2=?  p=?
+  long_gt20: n=8  chi2=26.872  p=0.0004 ** SIGNIFICANT **
+
+ICC: ICC=0.111 (moderate conversation-level clustering); 11% of anchoring variance is between conversations
+
+Confound check (pooled): 64/81 anchored turns are self-repetitions (79.0%)
+Repetition by mode: Anchored repetition (80%) similar to exploring (49%, ratio=1.63) — confound may be substantial; reinterpret as answer-inertia effect
+
+Commitment alignment: no significant correlation between anchored and commitment onset (r=0.13, p=0.745)
+
+Anchored fraction by conversation length:
+  short (<10): n_conv=4  mean_anchored=0.083
+  medium (10-20): n_conv=1  mean_anchored=0.000
+  long (>20): n_conv=8  mean_anchored=0.285
+
+=== DECISION: GRADUATE ===
+{
+  "H1_runlength": {
+    "n_anchored_runs": 40,
+    "mean_run_length": 2.075,
+    "p_geometric_mle": 0.4819,
+    "bootstrap_ks_stat": 0.4819,
+    "bootstrap_ks_p": 0.542,
+    "chisq_stat": 1.5994,
+    "chisq_p": 0.4495,
+    "obs_counts_1_2_3_ge4": [
+      20,
+      7,
+      7,
+      6
+    ],
+    "exp_counts_1_2_3_ge4": [
+      19.3,
+      10.0,
+      5.2,
+      5.6
+    ],
+    "verdict": "consistent with geometric null -- no significant excess clustering at N=40 runs (bootstrap p=0.5420, chisq p=0.4495)"
+  },
+  "H3_bimodality": {
+    "n_obs": 294,
+    "frac_anchored": 0.282,
+    "frac_exploring": 0.718,
+    "both_modes_present": true,
+    "variance_chisq_stat": 41.167,
+    "variance_chisq_df": 12,
+    "variance_chisq_p": 0.0,
+    "verdict": "mode co-existence confirmed: anchored=28%, exploring=72%; variance test p=0.0000"
+  },
+  "H3_within_bin_variance": {
+    "short_leq10": {
+      "n_conv": 5,
+      "chi2": 10.242,
+      "df": 4,
+      "p": 0.0365,
+      "p_global": 0.057,
+      "significant": true
+    },
+    "medium_10_20": {
+      "n_conv": 0,
+      "verdict": "insufficient data"
+    },
+    "long_gt20": {
+      "n_conv": 8,
+      "chi2": 26.872,
+      "df": 7,
+      "p": 0.0004,
+      "p_global": 0.313,
+      "significant": true
+    }
+  },
+  "icc_conversation_level": {
+    "icc": 0.1108,
+    "ms_between": 0.69601,
+    "ms_within": 0.182263,
+    "n_conv": 13,
+    "n_turns_total": 294,
+    "verdict": "ICC=0.111 (moderate conversation-level clustering); 11% of anchoring variance is between conversations"
+  },
+  "confound_repetition": {
+    "n_anchored_turns": 81,
+    "n_self_repetitions": 64,
+    "repetition_fraction": 0.79,
+    "interpretation": "HIGH: anchored mode may largely reflect answer repetition under conversational pressure (context-solvability confound)"
+  },
+  "confound_repetition_by_mode": {
+    "anchored_repetition_rate": 0.8,
+    "exploring_repetition_rate": 0.49,
+    "anchored_n": 80,
+    "exploring_n": 198,
+    "rate_ratio_anchored_over_exploring": 1.63,
+    "interpretation": "Anchored repetition (80%) similar to exploring (49%, ratio=1.63) \u2014 confound may be substantial; reinterpret as answer-inertia effect"
+  },
+  "commitment_alignment": {
+    "n_conversations_with_commitment": 9,
+    "pearson_r": 0.1269,
+    "pearson_p": 0.7449,
+    "mean_offset_turns": 1.11,
+    "verdict": "no significant correlation between anchored and commitment onset (r=0.13, p=0.745)"
+  },
+  "anchored_by_length_bin": {
+    "short (<10)": {
+      "n_conv": 4,
+      "mean_anchored": 0.083
+    },
+    "medium (10-20)": {
+      "n_conv": 1,
+      "mean_anchored": 0.0
+    },
+    "long (>20)": {
+      "n_conv": 8,
+      "mean_anchored": 0.285
+    }
+  },
+  "decision": "GRADUATE",
+  "n_conversations": 13,
+  "n_faithfulness_obs": 303
+}
+saved heatmap_faithfulness.png
+saved runlength_dist.png
+saved faith_distribution.png
+saved frac_anchored_scatter.png
+
+All outputs saved to ../results/phase5_s1_quick_check/

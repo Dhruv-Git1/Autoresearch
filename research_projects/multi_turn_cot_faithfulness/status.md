@@ -1,6 +1,61 @@
 # Project Status — multi_turn_cot_faithfulness
 
-Last updated: 2026-05-08 (Phase B started; paper updated with N=24 stats)
+Last updated: 2026-05-10 (Phase B complete; combined N=67 analysis done; supplementary figures generated)
+
+---
+
+## Session 3 Update (2026-05-10)
+
+### Phase B — COMPLETE
+All 3 seeds finished. Combined dataset: **N=67 conversations, 1,289 faithfulness observations**.
+
+| Seed | Script | Conversations | Frac_anchored |
+|---|---|---|---|
+| Seed 1 (11111) | run_phase5_s1.sh | ~14 | ~27% |
+| Seed 2 (22222) | run_phase5_s2.sh | ~15 | ~35.9% |
+| Seed 3 (33333) | run_phase5_s3.sh | ~14 | ~38.1% |
+
+Seeds 2+3 ran in **parallel** (8-bit + 4-bit on RTX 6000 Ada) after the auto-watcher fired when ollama freed GPU memory. Combined wall-clock: ~48h.
+
+### Combined Analysis — COMPLETE
+`bistability_v3_combined` downloaded locally to `results/bistability_v3_combined/bistability_stats.json`.
+
+| Metric | Phase A (N=24) | Combined (N=67) |
+|---|---|---|
+| H3 χ² (variance test) | 58.5, df=23, p<0.001 | **236.9, df=66, p≈0** |
+| H3 within-bin (long) | 33.2, p<0.001 | 130.1, p≈0 |
+| H3 within-bin (medium) | — | **36.9, p=0.0035** |
+| ICC | 0.107 | **0.152** |
+| H1 bootstrap p | 0.557 | 0.521 (still n.s.) |
+| H2 r | — | −0.242, p=0.291, N=21 |
+| Length gradient (long/short) | 12.9× | **3.9×** (more convs → tighter) |
+| Frac_anchored overall | 13.4% | **23.3%** |
+
+Note: higher combined frac_anchored vs Phase A is explained by Phase B's longer conversations (max_shards=20 vs 5–10 in Phase A).
+
+### Supplementary Figures — GENERATED
+5 new paper figures created by `code/generate_supplementary_figures.py`, saved to `paper/figures/`:
+
+| Figure | Content |
+|---|---|
+| `length_anchoring_gradient.png` | 3.9× length–anchoring gradient with individual data points, 95% CI, within-bin tests |
+| `seed_reproducibility.png` | Cross-seed anchoring rates + length scatter |
+| `repetition_confound.png` | Anchored (75.8%) vs exploring (45.6%) repetition rates |
+| `per_conv_frac_by_phase.png` | Box plots by length bin + within-bin variance p-values |
+| `h2_association.png` | H2 scatter (r=−0.242) + power analysis (80% power needs N≈130) |
+
+### Paper — PENDING UPDATE
+`paper/paper.tex` still has N=24 stats. Needs update to N=67 before submission:
+- Replace N=24 → N=67 throughout
+- Update H3 χ²=58.5 → 236.9; ICC 0.107 → 0.152
+- Add length gradient finding (3.9×) and new figures
+- Update repetition confound rates (anchored 75.8% vs 45.6% exploring)
+- H1 remains inconclusive (p=0.521); H2 now has r=−0.242 (underpowered)
+
+### Infrastructure Key Lessons (this session)
+- **Parallel 8-bit + 4-bit strategy confirmed:** Seeds 2+3 ran simultaneously in 4h vs the 8h serial estimate. RTX 6000 Ada 49 GB handled both processes at 99% GPU utilization.
+- **Auto-watcher works:** Script polled GPU free memory every 2 min; fired seed 2 automatically when ollama offloaded (freed 19 GB). No manual intervention needed.
+- **SFTP + single-line commands only:** Never write bash scripts via paramiko with `\n` continuation backslashes — they get mangled. Use heredoc or single long lines.
 
 ---
 

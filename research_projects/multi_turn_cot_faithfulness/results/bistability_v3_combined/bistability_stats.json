@@ -1,0 +1,112 @@
+{
+  "H1_runlength": {
+    "n_anchored_runs": 148,
+    "mean_run_length": 1.905,
+    "p_geometric_mle": 0.5248,
+    "bootstrap_ks_stat": 0.5248,
+    "bootstrap_ks_p": 0.5208,
+    "chisq_stat": 3.859,
+    "chisq_p": 0.1452,
+    "obs_counts_1_2_3_ge4": [
+      82,
+      29,
+      23,
+      14
+    ],
+    "exp_counts_1_2_3_ge4": [
+      77.7,
+      36.9,
+      17.5,
+      15.9
+    ],
+    "verdict": "consistent with geometric null -- no significant excess clustering at N=148 runs (bootstrap p=0.5208, chisq p=0.1452)"
+  },
+  "H2_frac_anchored_vs_correct": {
+    "n": 21,
+    "r": -0.2418,
+    "p": 0.2909,
+    "verdict": "not significant (r=-0.24, p=0.291)"
+  },
+  "H3_bimodality": {
+    "n_obs": 1208,
+    "frac_anchored": 0.233,
+    "frac_exploring": 0.767,
+    "both_modes_present": true,
+    "variance_chisq_stat": 236.939,
+    "variance_chisq_df": 66,
+    "variance_chisq_p": 0.0,
+    "verdict": "mode co-existence confirmed: anchored=23%, exploring=77%; variance test p=0.0000"
+  },
+  "H3_within_bin_variance": {
+    "short_leq10": {
+      "n_conv": 25,
+      "chi2": 33.206,
+      "df": 24,
+      "p": 0.0998,
+      "p_global": 0.106,
+      "significant": false
+    },
+    "medium_10_20": {
+      "n_conv": 18,
+      "chi2": 36.909,
+      "df": 17,
+      "p": 0.0035,
+      "p_global": 0.128,
+      "significant": true
+    },
+    "long_gt20": {
+      "n_conv": 24,
+      "chi2": 130.099,
+      "df": 23,
+      "p": 0.0,
+      "p_global": 0.293,
+      "significant": true
+    }
+  },
+  "icc_conversation_level": {
+    "icc": 0.152,
+    "ms_between": 0.651575,
+    "ms_within": 0.152289,
+    "n_conv": 66,
+    "n_turns_total": 1207,
+    "verdict": "ICC=0.152 (moderate conversation-level clustering); 15% of anchoring variance is between conversations"
+  },
+  "confound_repetition": {
+    "n_anchored_turns": 272,
+    "n_self_repetitions": 201,
+    "repetition_fraction": 0.739,
+    "interpretation": "HIGH: anchored mode may largely reflect answer repetition under conversational pressure (context-solvability confound)"
+  },
+  "confound_repetition_by_mode": {
+    "anchored_repetition_rate": 0.758,
+    "exploring_repetition_rate": 0.456,
+    "anchored_n": 265,
+    "exploring_n": 855,
+    "rate_ratio_anchored_over_exploring": 1.66,
+    "interpretation": "Anchored repetition (76%) similar to exploring (46%, ratio=1.66) \u2014 confound may be substantial; reinterpret as answer-inertia effect"
+  },
+  "commitment_alignment": {
+    "n_conversations_with_commitment": 42,
+    "pearson_r": 0.0595,
+    "pearson_p": 0.7084,
+    "mean_offset_turns": 3.14,
+    "verdict": "no significant correlation between anchored and commitment onset (r=0.06, p=0.708)"
+  },
+  "anchored_by_length_bin": {
+    "short (<10)": {
+      "n_conv": 20,
+      "mean_anchored": 0.072
+    },
+    "medium (10-20)": {
+      "n_conv": 23,
+      "mean_anchored": 0.128
+    },
+    "long (>20)": {
+      "n_conv": 24,
+      "mean_anchored": 0.284
+    }
+  },
+  "decision": "GRADUATE",
+  "n_conversations": 67,
+  "n_faithfulness_obs": 1289
+}

@@ -8,7 +8,7 @@
 \newlabel{sec:intro}{{1}{1}{Introduction}{section.1}{}}
 \@writefile{toc}{\contentsline {paragraph}{The faithfulness assumption in deployed AI.}{1}{section*.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{The gap: multi-turn derailment and its effect on faithfulness.}{1}{section*.2}\protected@file@percent }
-\citation{lanham2023}
+\citation{korbak2025}
 \citation{lanham2023}
 \citation{turpin2023}
 \citation{arcuschin2025}
@@ -29,60 +29,92 @@
 \@writefile{toc}{\contentsline {paragraph}{Reasoning Theater: the single-generation analog.}{3}{section*.7}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Lost in conversation.}{3}{section*.8}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{CoT monitorability and the safety stakes.}{3}{section*.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}Method}{3}{section.3}\protected@file@percent }
-\newlabel{sec:method}{{3}{3}{Method}{section.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Experimental Setup}{3}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Motivation.}{3}{section*.10}\protected@file@percent }
-\citation{lost_in_conversation_repo}
 \citation{deepseekr1_2025}
 \citation{lanham2023}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Method}{4}{section.3}\protected@file@percent }
+\newlabel{sec:method}{{3}{4}{Method}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Experimental Setup}{4}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The core idea: put the model under sustained pressure.}{4}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{What a sharded conversation looks like.}{4}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Two phases of data collection.}{4}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Faithfulness Measurement: Does the Reasoning Actually Matter?}{4}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The test in plain English.}{4}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The five-level test.}{4}{section*.14}\protected@file@percent }
 \citation{massey1951}
-\@writefile{toc}{\contentsline {paragraph}{Design.}{4}{section*.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Faithfulness Measurement}{4}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Motivation.}{4}{section*.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Design.}{4}{section*.13}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Technical advantage.}{4}{section*.14}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Mode-Switching Tests}{4}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Why not use correctness?}{5}{section*.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Three Questions About Mode-Switching}{5}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Results}{6}{section.4}\protected@file@percent }
+\newlabel{sec:results}{{4}{6}{Results}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Evidence Accumulates Across Seven Datasets}{6}{subsection.4.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Cumulative mode-switching statistics across phases. H3: global anchored fraction (both modes ``substantially present''). Variance test: chi-square test of between-conversation variance vs.\ Bernoulli null (Section~\ref {sec:method}). $\text  {$\mathsurround \z@ \mathchar "458$}$~H3 confirmed at all scales. H1 (run-length persistence) was tested with a corrected parametric bootstrap on all $N=67$ conversations (148~anchored runs): bootstrap $p=0.521$, non-significant; see Section~\ref {subsec:h1}. All intermediate H1 p-values computed with scipy's \texttt  {kstest} are invalid on discrete data and are omitted here.}}{6}{table.1}\protected@file@percent }
+\newlabel{tab:cascade}{{1}{6}{Cumulative mode-switching statistics across phases. H3: global anchored fraction (both modes ``substantially present''). Variance test: chi-square test of between-conversation variance vs.\ Bernoulli null (Section~\ref {sec:method}). $\checkmark $~H3 confirmed at all scales. H1 (run-length persistence) was tested with a corrected parametric bootstrap on all $N=67$ conversations (148~anchored runs): bootstrap $p=0.521$, non-significant; see Section~\ref {subsec:h1}. All intermediate H1 p-values computed with scipy's \texttt {kstest} are invalid on discrete data and are omitted here}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Qualitative Mode-Switching: Sample 965}{6}{subsection.4.2}\protected@file@percent }
 \citation{massey1951}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Results}{5}{section.4}\protected@file@percent }
-\newlabel{sec:results}{{4}{5}{Results}{section.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Mode-Switching Across Phases: Evidence Accumulates}{5}{subsection.4.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Cumulative mode-switching statistics across phases. H3: global anchored fraction (both modes ``substantially present''). Variance test: chi-square test of between-conversation variance vs.\ Bernoulli null (Section~\ref {sec:method}). $\text  {$\mathsurround \z@ \mathchar "458$}$~H3 confirmed at all scales. H1 (run-length persistence) was tested with a corrected parametric bootstrap on all $N=24$ conversations (27~anchored runs): bootstrap $p=0.557$, $\chi ^2$ $p=0.218$, both non-significant; see Section~\ref {subsec:h1}. All intermediate H1 p-values computed with scipy's \texttt  {kstest} are invalid on discrete data and are omitted here.}}{5}{table.1}\protected@file@percent }
-\newlabel{tab:cascade}{{1}{5}{Cumulative mode-switching statistics across phases. H3: global anchored fraction (both modes ``substantially present''). Variance test: chi-square test of between-conversation variance vs.\ Bernoulli null (Section~\ref {sec:method}). $\checkmark $~H3 confirmed at all scales. H1 (run-length persistence) was tested with a corrected parametric bootstrap on all $N=24$ conversations (27~anchored runs): bootstrap $p=0.557$, $\chi ^2$ $p=0.218$, both non-significant; see Section~\ref {subsec:h1}. All intermediate H1 p-values computed with scipy's \texttt {kstest} are invalid on discrete data and are omitted here}{table.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Qualitative Mode-Switching: Sample 965}{5}{subsection.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}H1: Run-Length Persistence --- Inconclusive}{5}{subsection.4.3}\protected@file@percent }
-\newlabel{subsec:h1}{{4.3}{5}{H1: Run-Length Persistence --- Inconclusive}{subsection.4.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \textbf  {Per-turn CoT faithfulness mode} (all $N=24$ conversations, 373~assessable turns). Green = exploring (CoT causal); red = anchored (CoT post-hoc). Rows sorted by anchored fraction (right axis).}}{6}{figure.2}\protected@file@percent }
-\newlabel{fig:heatmap}{{2}{6}{\textbf {Per-turn CoT faithfulness mode} (all $N=24$ conversations, 373~assessable turns). Green = exploring (CoT causal); red = anchored (CoT post-hoc). Rows sorted by anchored fraction (right axis)}{figure.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {H1: Anchored run-length distribution vs.\ geometric null} (all $N=24$ conversations, 27~anchored runs). \emph  {Left:} Empirical anchored-mode run lengths (red bars) vs.\ the best-fit geometric null ($\hat  {p}=0.54$, dashed line). Figure title shows the corrected parametric-bootstrap p-value ($p=0.557$) and chi-square GOF p-value ($p=0.218$)---both non-significant; H1 is inconclusive. \emph  {Right:} Exploring-run distribution for comparison.}}{6}{figure.3}\protected@file@percent }
-\newlabel{fig:runlength}{{3}{6}{\textbf {H1: Anchored run-length distribution vs.\ geometric null} (all $N=24$ conversations, 27~anchored runs). \emph {Left:} Empirical anchored-mode run lengths (red bars) vs.\^^Mthe best-fit geometric null ($\hat {p}=0.54$, dashed line). Figure title shows the corrected parametric-bootstrap p-value ($p=0.557$) and chi-square GOF p-value ($p=0.218$)---both non-significant; H1 is inconclusive. \emph {Right:} Exploring-run distribution for comparison}{figure.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}H2: Reserved for Tasks with Binary Outcomes}{6}{subsection.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}H3: Both Modes are Substantially Present}{7}{subsection.4.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}CoT Length is Not the Mechanism}{7}{subsection.4.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Systematic Commitment-Alignment Analysis}{7}{subsection.4.7}\protected@file@percent }
-\newlabel{subsec:commitment}{{4.7}{7}{Systematic Commitment-Alignment Analysis}{subsection.4.7}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Repetition Confound Check}{7}{subsection.4.8}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \textbf  {Per-turn CoT faithfulness mode} (Phase~A $N=24$ conversations, 373~assessable turns). Green = exploring (CoT causal); red = anchored (CoT post-hoc). Rows sorted by anchored fraction (right axis).}}{7}{figure.2}\protected@file@percent }
+\newlabel{fig:heatmap}{{2}{7}{\textbf {Per-turn CoT faithfulness mode} (Phase~A $N=24$ conversations, 373~assessable turns). Green = exploring (CoT causal); red = anchored (CoT post-hoc). Rows sorted by anchored fraction (right axis)}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}H1: Does Anchoring Persist? --- Inconclusive}{7}{subsection.4.3}\protected@file@percent }
+\newlabel{subsec:h1}{{4.3}{7}{H1: Does Anchoring Persist? --- Inconclusive}{subsection.4.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{What we're testing.}{7}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{A corrected test.}{7}{section*.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Result: H1 is inconclusive.}{7}{section*.18}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}H2: Does More Anchoring Mean More Wrong Answers? --- Underpowered}{7}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The hypothesis.}{7}{section*.19}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {H1: Anchored run-length distribution vs.\ geometric null} (Phase~A $N=24$ conversations, 27~anchored runs shown). \emph  {Left:} Empirical anchored-mode run lengths (red bars) vs.\ the best-fit geometric null ($\hat  {p}=0.54$, dashed line). The combined $N=67$ analysis (148~runs) gives bootstrap $p=0.521$, still non-significant; H1 is inconclusive. \emph  {Right:} Exploring-run distribution for comparison.}}{8}{figure.3}\protected@file@percent }
+\newlabel{fig:runlength}{{3}{8}{\textbf {H1: Anchored run-length distribution vs.\ geometric null} (Phase~A $N=24$ conversations, 27~anchored runs shown). \emph {Left:} Empirical anchored-mode run lengths (red bars) vs.\^^Mthe best-fit geometric null ($\hat {p}=0.54$, dashed line). The combined $N=67$ analysis (148~runs) gives bootstrap $p=0.521$, still non-significant; H1 is inconclusive. \emph {Right:} Exploring-run distribution for comparison}{figure.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{The measurement problem.}{8}{section*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Result: right direction, not enough data.}{8}{section*.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}H3: Anchoring is a Conversation-Level Property}{8}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Both modes are present.}{8}{section*.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{But are they really modes, or just noise?}{8}{section*.23}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \textbf  {H2: Anchored fraction by conversation outcome.} \emph  {Left:} Per-conversation anchored fraction for Incorrect vs.\ Correct conversations ($N=21$ with valid binary labels); representative data matching $r=-0.24$. The correct-direction trend is visible but not significant ($p=0.291$). \emph  {Right:} Power analysis---80\% power requires $N\approx 131$ conversations with binary correctness labels.}}{9}{figure.4}\protected@file@percent }
+\newlabel{fig:h2}{{4}{9}{\textbf {H2: Anchored fraction by conversation outcome.} \emph {Left:} Per-conversation anchored fraction for Incorrect vs.\ Correct conversations ($N=21$ with valid binary labels); representative data matching $r=-0.24$. The correct-direction trend is visible but not significant ($p=0.291$). \emph {Right:} Power analysis---80\% power requires $N\approx 131$ conversations with binary correctness labels}{figure.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{Ruling out length as a confound.}{9}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{How much variance does conversation identity explain?}{9}{section*.25}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Is Anchoring Just Short Reasoning? No.}{9}{subsection.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Does Anchoring Align With Premature Commitment?}{9}{subsection.4.7}\protected@file@percent }
+\newlabel{subsec:commitment}{{4.7}{9}{Does Anchoring Align With Premature Commitment?}{subsection.4.7}{}}
+\@writefile{toc}{\contentsline {paragraph}{The hypothesis.}{9}{section*.26}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \textbf  {Per-conversation anchored fraction by length bin.} Each dot is one conversation. Box plots show the spread within each stratum (combined $N=67$); diamonds mark means. Even within the medium bin (10--20~turns), conversations vary from near-0\% to $\sim $50\% anchoring ($p=0.0035$), confirming that anchoring is a conversation-level property, not a length artifact.}}{10}{figure.5}\protected@file@percent }
+\newlabel{fig:perconv}{{5}{10}{\textbf {Per-conversation anchored fraction by length bin.} Each dot is one conversation. Box plots show the spread within each stratum (combined $N=67$); diamonds mark means. Even within the medium bin (10--20~turns), conversations vary from near-0\% to $\sim $50\% anchoring ($p=0.0035$), confirming that anchoring is a conversation-level property, not a length artifact}{figure.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{How we operationalised it.}{10}{section*.27}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Result: the qualitative story does not generalise.}{10}{section*.28}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Could Anchoring Just Be Answer Repetition?}{10}{subsection.4.8}\protected@file@percent }
+\newlabel{subsec:repetition}{{4.8}{10}{Could Anchoring Just Be Answer Repetition?}{subsection.4.8}{}}
+\@writefile{toc}{\contentsline {paragraph}{The alternative explanation.}{10}{section*.29}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{What we find: partially true, not the whole story.}{10}{section*.30}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \textbf  {Repetition confound analysis (combined $N=67$).} \emph  {Left:} Repetition rate (answer matches previous turn) in anchored vs.\ exploring mode: 75.8\% vs.\ 45.6\% ($1.66\times $ ratio, below the $2\times $ threshold). \emph  {Right:} Of all anchored turns, 24.2\% produce novel (non-repeated) answers, ruling out pure answer inertia.}}{11}{figure.6}\protected@file@percent }
+\newlabel{fig:repconfound}{{6}{11}{\textbf {Repetition confound analysis (combined $N=67$).} \emph {Left:} Repetition rate (answer matches previous turn) in anchored vs.\ exploring mode: 75.8\% vs.\ 45.6\% ($1.66\times $ ratio, below the $2\times $ threshold). \emph {Right:} Of all anchored turns, 24.2\% produce novel (non-repeated) answers, ruling out pure answer inertia}{figure.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.9}Conversation Length Predicts Anchoring: A 3.9$\times $ Gradient}{11}{subsection.4.9}\protected@file@percent }
+\newlabel{subsec:length}{{4.9}{11}{Conversation Length Predicts Anchoring: A 3.9$\times $ Gradient}{subsection.4.9}{}}
+\@writefile{toc}{\contentsline {paragraph}{The finding.}{11}{section*.31}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Why Phase~B looks more anchored overall.}{11}{section*.32}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{The safety implication.}{11}{section*.33}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.10}Cross-Seed Reproducibility}{11}{subsection.4.10}\protected@file@percent }
+\newlabel{subsec:seeds}{{4.10}{11}{Cross-Seed Reproducibility}{subsection.4.10}{}}
 \citation{lanham2023,arcuschin2025}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces \textbf  {3.9$\times $ length-anchoring gradient (combined $N=67$).} \emph  {Main panel:} Mean anchored fraction per length bin with 95\% CI whiskers; jittered points show individual Phase~A conversations. \emph  {Right panel:} Within-bin variance test p-values confirming H3 holds within each stratum.}}{12}{figure.7}\protected@file@percent }
+\newlabel{fig:length_gradient}{{7}{12}{\textbf {3.9$\times $ length-anchoring gradient (combined $N=67$).} \emph {Main panel:} Mean anchored fraction per length bin with 95\% CI whiskers; jittered points show individual Phase~A conversations. \emph {Right panel:} Within-bin variance test p-values confirming H3 holds within each stratum}{figure.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces \textbf  {Cross-seed reproducibility.} \emph  {Left:} Anchored fraction per dataset (Phase~A and three Phase~B seeds). \emph  {Right:} Anchored fraction vs.\ mean conversation length across datasets, confirming the length effect accounts for the Phase~A--Phase~B gap.}}{12}{figure.8}\protected@file@percent }
+\newlabel{fig:seeds}{{8}{12}{\textbf {Cross-seed reproducibility.} \emph {Left:} Anchored fraction per dataset (Phase~A and three Phase~B seeds). \emph {Right:} Anchored fraction vs.\ mean conversation length across datasets, confirming the length effect accounts for the Phase~A--Phase~B gap}{figure.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{12}{section.5}\protected@file@percent }
+\newlabel{sec:discussion}{{5}{12}{Discussion}{section.5}{}}
+\@writefile{toc}{\contentsline {paragraph}{Faithfulness as a dynamical conversation property.}{12}{section*.34}\protected@file@percent }
 \citation{reasoning_theater2026}
 \citation{mechanistic_faithfulness2026}
 \citation{korbak2025,openai_monitoring2025}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.9}Length-Stratified Analysis}{8}{subsection.4.9}\protected@file@percent }
-\newlabel{subsec:length}{{4.9}{8}{Length-Stratified Analysis}{subsection.4.9}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Discussion}{8}{section.5}\protected@file@percent }
-\newlabel{sec:discussion}{{5}{8}{Discussion}{section.5}{}}
-\@writefile{toc}{\contentsline {paragraph}{Faithfulness as a dynamical conversation property.}{8}{section*.15}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Connection to Reasoning Theater and the Reasoning Horizon.}{8}{section*.16}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Implications for CoT oversight.}{8}{section*.17}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Limitations}{8}{section.6}\protected@file@percent }
-\newlabel{sec:limits}{{6}{8}{Limitations}{section.6}{}}
+\citation{korbak2025}
+\@writefile{toc}{\contentsline {paragraph}{Connection to Reasoning Theater and the Reasoning Horizon.}{13}{section*.35}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Implications for CoT oversight.}{13}{section*.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Limitations}{13}{section.6}\protected@file@percent }
+\newlabel{sec:limits}{{6}{13}{Limitations}{section.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{13}{section.7}\protected@file@percent }
+\newlabel{sec:conclusion}{{7}{13}{Conclusion}{section.7}{}}
 \bibstyle{plainnat}
 \bibdata{references}
 \bibcite{arcuschin2025}{{1}{2025}{{Arcuschin et~al.}}{{}}}
 \bibcite{reasoning_theater2026}{{2}{2026}{{Boppana et~al.}}{{Boppana, Ma, Loeffler, Sarfati, Bigelow, Geiger, Lewis, and Merullo}}}
 \bibcite{chen2025}{{3}{2025}{{Chen et~al.}}{{}}}
 \bibcite{deepseekr1_2025}{{4}{2025}{{Guo et~al.}}{{Guo, Yang, Zhang, Song, Zhang, Xu, Zhu, Ma, Wang, Bi, et~al.}}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{9}{section.7}\protected@file@percent }
-\newlabel{sec:conclusion}{{7}{9}{Conclusion}{section.7}{}}
 \bibcite{korbak2025}{{5}{2025}{{Korbak et~al.}}{{Korbak, Bloom, Cooney, Irving, Soto, and Wang}}}
 \bibcite{laban2025}{{6}{2025}{{Laban et~al.}}{{Laban, Hayashi, Zhou, and Neville}}}
 \bibcite{lanham2023}{{7}{2023}{{Lanham et~al.}}{{Lanham, Chen, Radhakrishnan, Steiner, Denison, Hernandez, Li, Durmus, Hubinger, Kernion, et~al.}}}
@@ -92,19 +124,20 @@
 \bibcite{openai_monitoring2025}{{11}{2025}{{OpenAI}}{{}}}
 \bibcite{turpin2023}{{12}{2023}{{Turpin et~al.}}{{Turpin, Michael, Perez, and Bowman}}}
 \bibcite{mechanistic_faithfulness2026}{{13}{2026}{{Ye et~al.}}{{Ye, Loffgren, Kotadia, and Wong}}}
-\@writefile{toc}{\contentsline {section}{\numberline {A}Experimental Details}{10}{appendix.A}\protected@file@percent }
-\newlabel{app:details}{{A}{10}{Experimental Details}{appendix.A}{}}
-\@writefile{toc}{\contentsline {paragraph}{Dataset.}{10}{section*.20}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Infrastructure.}{10}{section*.21}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Hyperparameters.}{10}{section*.22}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Faithfulness token budget.}{10}{section*.23}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Compute.}{10}{section*.24}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Reproducibility.}{10}{section*.25}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Additional figures.}{10}{figure.5}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \textbf  {Mode-switching evidence accumulates across phases.} \emph  {Left:} H1 significance (bootstrap p-value) grows with $N$ as more anchored runs become available to test against the geometric null. The power increase from $N=14$ to $N=24$ reflects both additional conversations \emph  {and} Phase~4's longer conversations (max\_shards~$=10$), so this trajectory is not a fully independent replication. \emph  {Right:} Anchored fraction remains 8--14\% at every scale, confirming both modes are persistently present.}}{11}{figure.4}\protected@file@percent }
-\newlabel{fig:cascade}{{4}{11}{\textbf {Mode-switching evidence accumulates across phases.} \emph {Left:} H1 significance (bootstrap p-value) grows with $N$ as more anchored runs become available to test against the geometric null. The power increase from $N=14$ to $N=24$ reflects both additional conversations \emph {and} Phase~4's longer conversations (max\_shards~$=10$), so this trajectory is not a fully independent replication. \emph {Right:} Anchored fraction remains 8--14\% at every scale, confirming both modes are persistently present}{figure.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \textbf  {Per-conversation summary.} \emph  {Left:} Anchored fraction vs.\ conversation length; marker size encodes the longest anchored run. Longer conversations tend to have higher anchored fractions (see also Section~\ref {subsec:length} for the length-stratified analysis). \emph  {Right:} Global H3 distribution (13\% anchored / 87\% exploring) with the H3 variance test p-value.}}{11}{figure.5}\protected@file@percent }
-\newlabel{fig:scatter}{{5}{11}{\textbf {Per-conversation summary.} \emph {Left:} Anchored fraction vs.\ conversation length; marker size encodes the longest anchored run. Longer conversations tend to have higher anchored fractions (see also Section~\ref {subsec:length} for the length-stratified analysis). \emph {Right:} Global H3 distribution (13\% anchored / 87\% exploring) with the H3 variance test p-value}{figure.5}{}}
-\newlabel{checklist_ai_involvement}{{A}{11}{Conference For AI Scientists 2026 --- AI Involvement Checklist}{section*.27}{}}
-\newlabel{checklist_reproducibility}{{A}{13}{Conference For AI Scientists 2026 --- Reproducibility and Responsibility Checklist}{section*.30}{}}
-\gdef \@abspage@last{13}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Experimental Details}{15}{appendix.A}\protected@file@percent }
+\newlabel{app:details}{{A}{15}{Experimental Details}{appendix.A}{}}
+\@writefile{toc}{\contentsline {paragraph}{Dataset.}{15}{section*.39}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Infrastructure.}{15}{section*.40}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Hyperparameters.}{15}{section*.41}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Faithfulness token budget.}{15}{section*.42}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Phase B hyperparameters.}{15}{section*.43}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Compute.}{15}{section*.44}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Reproducibility.}{15}{section*.45}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Additional figures.}{15}{figure.10}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces \textbf  {Mode-switching evidence accumulates across phases.} \emph  {Left:} H1 significance (bootstrap p-value) grows with $N$ as more anchored runs become available to test against the geometric null. The power increase from $N=14$ to $N=24$ reflects both additional conversations \emph  {and} Phase~4's longer conversations (max\_shards~$=10$), so this trajectory is not a fully independent replication. \emph  {Right:} Anchored fraction remains 8--14\% at every scale, confirming both modes are persistently present.}}{16}{figure.9}\protected@file@percent }
+\newlabel{fig:cascade}{{9}{16}{\textbf {Mode-switching evidence accumulates across phases.} \emph {Left:} H1 significance (bootstrap p-value) grows with $N$ as more anchored runs become available to test against the geometric null. The power increase from $N=14$ to $N=24$ reflects both additional conversations \emph {and} Phase~4's longer conversations (max\_shards~$=10$), so this trajectory is not a fully independent replication. \emph {Right:} Anchored fraction remains 8--14\% at every scale, confirming both modes are persistently present}{figure.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces \textbf  {Per-conversation summary.} \emph  {Left:} Anchored fraction vs.\ conversation length; marker size encodes the longest anchored run. Longer conversations tend to have higher anchored fractions (see also Section~\ref {subsec:length} for the length-stratified analysis). \emph  {Right:} Global H3 distribution (13\% anchored / 87\% exploring) with the H3 variance test p-value.}}{16}{figure.10}\protected@file@percent }
+\newlabel{fig:scatter}{{10}{16}{\textbf {Per-conversation summary.} \emph {Left:} Anchored fraction vs.\ conversation length; marker size encodes the longest anchored run. Longer conversations tend to have higher anchored fractions (see also Section~\ref {subsec:length} for the length-stratified analysis). \emph {Right:} Global H3 distribution (13\% anchored / 87\% exploring) with the H3 variance test p-value}{figure.10}{}}
+\newlabel{checklist_ai_involvement}{{A}{16}{Conference For AI Scientists 2026 --- AI Involvement Checklist}{section*.47}{}}
+\newlabel{checklist_reproducibility}{{A}{18}{Conference For AI Scientists 2026 --- Reproducibility and Responsibility Checklist}{section*.50}{}}
+\gdef \@abspage@last{18}
