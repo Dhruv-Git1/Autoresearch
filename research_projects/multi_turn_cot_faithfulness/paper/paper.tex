@@ -61,7 +61,9 @@ Across 67~conversations and 1,289~total observations
 Crucially, anchoring is not random noise: across our 67~conversations
 some conversations are heavily anchored while others barely anchor
 at all, a pattern confirmed statistically and replicated across
-three independent experimental seeds (anchoring 27--38\% per seed).
+three independent Phase~B seeds (27--38\% anchored per seed;
+higher than the combined 23.3\% because Phase~B used longer
+conversations that anchor more).
 More worrying still, the fraction of anchored turns grows
 \textbf{3.9$\times$} as conversations lengthen---from 7.2\% in
 short conversations to 28.4\% in long ones.
@@ -192,7 +194,8 @@ replicated across three independent experimental seeds.
   \includegraphics[width=\linewidth]{figures/concept_overview.png}
   \caption{%
     \textbf{Turn-level CoT faithfulness classification.}
-    \emph{Top:} Turn-by-turn classification for sample 965 (40 turns shown):
+    \emph{Top:} Turn-by-turn classification for sample 965
+    (first 40 of 44 total turns shown; final 4 are all exploring):
     green = exploring (CoT drives the answer), red = anchored
     (CoT is post-hoc).
     The red burst coincides with premature commitment to the wrong
@@ -542,7 +545,7 @@ The higher anchored fraction in Phase~B (27--38\% per seed vs.\
 Phase~A's 13\%) is fully explained by Phase~B's longer
 conversations, as Section~\ref{subsec:length} shows.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \caption{%
   Cumulative anchoring statistics across phases.
   H3: global anchored fraction (both turn types ``substantially present'').
@@ -554,14 +557,17 @@ conversations, as Section~\ref{subsec:length} shows.
   runs): bootstrap $p=0.521$, non-significant; see
   Section~\ref{subsec:h1}.
   All intermediate H1 p-values computed with scipy's \texttt{kstest}
-  are invalid on discrete data and are omitted here.%
+  are invalid on discrete data and are omitted here.
+  $^\dagger$~Raw JSONL observation count (before the $\geq$3-parseable-regeneration
+  filter); the Anchored (H3) column uses the 1,167~assessable-turn
+  denominator throughout (see Section~\ref{sec:method} footnote~1).%
 }
 \label{tab:cascade}
 \centering
 \setlength{\tabcolsep}{5.5pt}
 \begin{tabular}{lrr S[table-format=1.3] l}
 \toprule
-Dataset       & Conv. & Faith.\ turns &
+Dataset       & Conv. & Faith.\ turns$^\dagger$ &
   \multicolumn{1}{c}{Anchored (H3)} &
   Verdict \\
 \midrule
@@ -775,6 +781,11 @@ within each length stratum}.
 Among short conversations ($\leq$10 turns, $n=25$): $\chi^2=33.2$,
 $df=24$, $p=0.10$ --- borderline; short conversations are too
 uniform for strong clustering to be detected at this sample size.
+(Note: the length-gradient analysis in Section~\ref{subsec:length}
+uses a strict $<$10 boundary for the short bin, placing the
+5 conversations of exactly 10 turns into the medium stratum;
+the within-bin variance test here uses $\leq$10 to balance stratum
+sizes for the chi-square test.)
 Among medium-length conversations (10--20 turns, $n=18$):
 $\chi^2=36.9$, $df=17$, $p=0.0035$ (\textbf{significant}).
 Among long conversations ($>$20 turns, $n=24$): $\chi^2=130.1$,
@@ -814,7 +825,11 @@ Decomposing total variance in per-turn anchoring into
 ($\mathrm{MS}_B = 0.652$, $\mathrm{MS}_W = 0.152$)
 gives $\mathrm{ICC} = 0.152$: 15\% of the variation in whether
 a given turn is anchored is explained purely by knowing
-\emph{which conversation} that turn belongs to.
+\emph{which conversation} that turn belongs to.\footnote{%
+  The ICC was computed on $N{=}66$ conversations; one conversation
+  had no assessable turns after the $\geq\!3$ parseable-regeneration
+  filter and was excluded from the variance decomposition.
+  All other analyses use $N{=}67$.}
 Because this decomposition is the closed-form variance partition
 of a random-intercept model
 $\texttt{anchored} \sim 1 + (1\mid\mathrm{conv})$,
@@ -845,11 +860,10 @@ ICC (does not assume independence) frameworks.
 \label{subsec:logprobs}
 
 \paragraph{Why this test.}
-The repetition-confound analysis (\S\ref{subsec:repetition}) leaves
-open whether the model is \emph{internally} committed on anchored
-turns, or merely lexically copying its prior answer when its current
-CoT is insufficient to override the conversational context.
-Counterfactual deletion alone cannot distinguish these.
+Counterfactual deletion alone cannot determine whether anchoring
+reflects \emph{internal} pre-commitment or the model merely copying
+its prior answer from context (the repetition-inertia alternative
+examined in Section~\ref{subsec:repetition} below).
 The classical mechanistic prediction for \emph{pre-commitment} is
 that the model should be measurably more confident in its emitted
 answer on anchored turns, even at 0\%~CoT, than on exploring turns.
@@ -868,7 +882,9 @@ indicator of internal commitment than the raw chosen log-probability,
 because the latter saturates near zero under greedy decoding.
 We computed margin at 0\%~CoT, at 100\%~CoT, and the difference
 (reasoning impact on commitment).
-$N=719$ turns from $N=48$ conversations across all six datasets
+$N=719$ turns from $N=48$ conversations across the six Phase~A and
+Phase~B~Seed~1--2 datasets (the logprob script ran before Seed~3
+completed; 19 conversations in Seed~3 are therefore absent)
 had both 0\%~and 100\%~regenerations available
 (191 anchored, 528 exploring).
 
@@ -909,7 +925,7 @@ with a fixed placeholder left the mean anchored fraction essentially
 unchanged ($-3.4$~pp, $p=0.625$), ruling out pure lexical copying
 as the mechanism.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \caption{%
   Answer-token confidence on anchored vs.\ exploring turns.
   Margin~$=$~chosen-token logprob~$-$~top-alternative logprob.
@@ -1036,7 +1052,8 @@ At exploring turns it can; at anchored turns it cannot, even with
 all the reasoning visible.
 
 The decisive counter to the inertia objection is the
-\textbf{24.2\% of anchored turns that produce novel answers}
+\textbf{26.1\% of anchored turns that produce novel answers}
+(71 of 272 turns)
 --- answers that do not match the preceding turn.
 If anchoring were purely answer copying, this fraction would be
 exactly zero.
@@ -1086,13 +1103,13 @@ Figure~\ref{fig:repconfound} shows the breakdown.
     \emph{Left:} Repetition rate (answer matches previous turn)
     on anchored vs.\ exploring turns: 75.8\% vs.\ 45.6\% ($1.66\times$
     ratio, below the $2\times$ threshold).
-    \emph{Right:} 24.2\% of anchored turns produce novel (non-repeated)
+    \emph{Right:} 26.1\% of anchored turns (71/272) produce novel (non-repeated)
     answers, showing inertia cannot account for all anchored cases.%
   }
   \label{fig:repconfound}
 \end{figure}
 
-\subsection{Conversation Length Predicts Anchoring: A 3.9$\times$ Gradient}
+\subsection{Conversation Length Predicts Anchoring: A \texorpdfstring{3.9$\times$}{3.9x} Gradient}
 \label{subsec:length}
 
 \paragraph{The finding.}
@@ -1160,9 +1177,11 @@ Three independent Phase~B random seeds (11111, 22222, 33333)
 provide a reproducibility check.
 Anchored fractions were: Phase~A baseline $\approx$13.4\%;
 Seed~1 $\approx$27\%; Seed~2 $\approx$35.9\%; Seed~3 $\approx$38.1\%.
-The Phase~A--Phase~B gap is explained by Phase~B's longer
-conversations (max\_shards~$=20$): after length-stratification
-the three seeds produce consistent rates within each bin.
+(These per-seed rates are higher than the combined 23.3\%
+reported in Section~\ref{sec:results} because Phase~B's longer
+conversations anchor more; Phase~A pulls the combined rate down.
+After length-stratification the three seeds produce consistent
+rates within each bin.)
 The ICC of 0.152 is stable across phases.
 
 \begin{figure}[t]
@@ -1197,7 +1216,8 @@ We fit a logistic regression on the 1{,}162 labelable turns
 from all 63 of our combined-dataset conversations
 (turns~where \texttt{is\_anchored()} returns \texttt{None} due to
 unparseable answers are excluded; this drops 4 conversations
-that had no labelable turns).
+that had no labelable turns, giving a slightly different anchoring
+prevalence of 23.8\% vs.\ the 23.3\% reported in Section~\ref{sec:results}).
 Seven surface features are computed per turn:
 (1)~\texttt{turn\_index} (1-indexed),
 (2)~\texttt{log\_thinking\_chars} (length of the current turn's
@@ -1221,8 +1241,8 @@ Class weights are balanced to handle the 23.8\% anchored prevalence.
 \paragraph{Result.}
 The pooled out-of-fold ROC-AUC is \textbf{0.710}; mean per-fold AUC
 is \textbf{0.703~$\pm$~0.033}.
-The predictor is well above chance (0.50) and above the 0.65 utility
-threshold for runtime monitoring tools.
+The predictor is well above chance (0.50), placing it in the
+practically useful range for a cheap first-pass runtime filter.
 The very low cross-fold standard deviation ($\sigma=0.033$) shows
 the result is stable across different held-out conversation subsets.
 Standardised coefficients (Figure~\ref{fig:predictor}, right panel) rank
@@ -1441,7 +1461,7 @@ The anchored-vs-exploring distinction is therefore robust at the
 4-bit/8-bit boundary; quantization is not a confounding driver
 of the rate (Figure~\ref{fig:quant}).
 
-\begin{figure}[h]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=\linewidth]{figures/quant_robustness.png}
   \caption{%
@@ -1456,7 +1476,7 @@ of the rate (Figure~\ref{fig:quant}).
   \label{fig:quant}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=\linewidth]{figures/ablation_no_prior_answer.png}
   \caption{%
@@ -1546,7 +1566,7 @@ conversation length.
 The anchored-turn repetition rate of 75.8\% (vs.\ 45.6\% on
 exploring turns, ratio $1.66\times$) indicates that answer inertia
 under conversational pressure is a contributing factor, but the
-24.2\% of anchored turns with novel answers rules out pure
+26.1\% of anchored turns with novel answers (71/272) rules out pure
 answer inertia.
 Commitment alignment between anchoring onset and premature
 commitment onset is non-significant across conversations
@@ -1634,25 +1654,27 @@ Phase~B random seeds: 11111, 22222, 33333.
 
 \paragraph{Additional figures.}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=\linewidth]{figures/phase_cascade.png}
   \caption{%
     \textbf{Mode-switching evidence accumulates across phases.}
-    \emph{Left:} H1 significance (bootstrap p-value) grows with $N$
-    as more anchored runs become available to test against the
-    geometric null.
-    The power increase from $N=14$ to $N=24$ reflects both
-    additional conversations \emph{and} Phase~4's longer
-    conversations (max\_shards~$=10$), so this trajectory is not
-    a fully independent replication.
-    \emph{Right:} Anchored fraction remains 8--14\% at every
-    scale, confirming both turn types are persistently present.%
+    \emph{Left:} Trajectory of the (invalid) scipy \texttt{kstest}
+    p-value for H1 as $N$ grows --- shown here only to illustrate
+    how power appeared to build before the test was corrected.
+    The valid parametric bootstrap p-value stayed near 0.52--0.56
+    at all scales; H1 remains inconclusive throughout
+    (Section~\ref{subsec:h1}).
+    The jump at $N=14{\to}24$ reflects both more runs \emph{and}
+    Phase~4's longer conversations (max\_shards~$=10$), confounding
+    the power increase.
+    \emph{Right:} Anchored fraction remains 8--14\% across all
+    Phase~A scales, confirming both turn types are persistently present.%
   }
   \label{fig:cascade}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=0.95\linewidth]{figures/frac_anchored_scatter.png}
   \caption{%
@@ -1669,7 +1691,7 @@ Phase~B random seeds: 11111, 22222, 33333.
   \label{fig:scatter}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=\linewidth]{figures/truncation_sensitivity.png}
   \caption{%
@@ -1688,15 +1710,15 @@ Phase~B random seeds: 11111, 22222, 33333.
   \label{fig:truncsens}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=\linewidth]{figures/inertia_decomposition.png}
   \caption{%
     \textbf{Inertia decomposition (combined $N=67$).}
     \emph{Left:} Three-way turn decomposition: exploring (76.7\%),
-    repetition-anchored (answer matches prior turn, 17.7\%),
-    and novel-anchored (answer does not match prior turn, 5.6\%).
-    The 5.6\% of novel-anchored turns cannot be explained by answer
+    repetition-anchored (answer matches prior turn, 17.2\%),
+    and novel-anchored (answer does not match prior turn, 6.1\%).
+    The 6.1\% of novel-anchored turns cannot be explained by answer
     inertia --- the model generates a fresh number that all five CoT
     levels agree on.
     \emph{Right:} At anchored turns, the 100\%~CoT answer equals the
@@ -1707,12 +1729,13 @@ Phase~B random seeds: 11111, 22222, 33333.
   \label{fig:inertia}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=\linewidth]{figures/h3_caterpillar.png}
   \caption{%
     \textbf{H3 caterpillar plot: between-conversation spread vastly
-    exceeds the Bernoulli null (Phase~A, $N=20$).}
+    exceeds the Bernoulli null (Phase~A, $N=24$; 4~conversations
+    with $<$4~assessable turns omitted for Wilson-CI stability).}
     Each dot is one conversation's empirical anchored fraction
     with a 95\% Wilson confidence interval.
     The grey band shows the expected variation under a
