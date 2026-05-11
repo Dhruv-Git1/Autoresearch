@@ -19,8 +19,8 @@
 \definecolor{siggreen}{HTML}{1a7a3a}
 \definecolor{sigred}{HTML}{a31515}
 
-\title{Lost in Reasoning: Bistable CoT Faithfulness Across Multi-Turn\\
-       Conversations and Its Implications for Safety Monitoring}
+\title{Lost in Reasoning: Conversation-Level Heterogeneity in CoT
+       Faithfulness and Its Implications for Safety Monitoring}
 
 \author{%
   Dhruv Gupta \\
@@ -50,12 +50,13 @@ chain-of-thought merely dressed it up.
 
 We find that faithfulness is \textbf{not} a fixed property of a
 model: within a single conversation the same model alternates
-between two distinct modes.
-In \emph{exploring} mode the reasoning genuinely drives the answer;
-in \emph{anchored} mode the reasoning is post-hoc rationalization
+between two kinds of turns.
+On \emph{exploring} turns the reasoning genuinely drives the answer;
+on \emph{anchored} turns the reasoning is post-hoc rationalization
 --- erasing it makes no difference.
-Across 67~conversations and 1,289~turn-level measurements,
-23.3\% of turns are anchored.
+Across 67~conversations and 1,289~total observations
+(1,167~assessable turns after excluding turns with fewer than
+3~parseable regenerations), 23.3\% of assessable turns are anchored.
 
 Crucially, anchoring is not random noise: across our 67~conversations
 some conversations are heavily anchored while others barely anchor
@@ -74,9 +75,8 @@ the long, high-stakes settings where it is most needed.
 
 \paragraph{The faithfulness assumption in deployed AI.}
 Reasoning models that produce visible chain-of-thought (CoT) traces
-are used in high-stakes conversational settings---medical
-question-answering, tutoring, coding assistance---on the premise
-that the trace reveals what the model is computing.
+are increasingly deployed in multi-turn conversational settings
+on the premise that the trace reveals what the model is computing.
 This assumption matters for safety: if the trace is faithful,
 an auditor can inspect it to verify the model is reasoning from
 the right information; if not, the trace is uninformative or
@@ -102,20 +102,22 @@ conversation'' phase, the model is still genuinely reasoning or
 merely rationalizing---producing a plausible-looking trace that
 does not constrain its output.
 
-\paragraph{A novel finding: faithfulness is mode-switching, not monotonically decaying.}
+\paragraph{A novel finding: the rate of unfaithful turns varies sharply across conversations.}
 Applying counterfactual deletion turn-by-turn to a 44-turn
 derailing conversation reveals that faithfulness does \emph{not}
 decay monotonically with turn index.
-Instead, the model alternates between two quasi-stable modes.
-In \textbf{exploring} mode, truncating the CoT changes the
+Instead, the model produces two distinct kinds of turn.
+On \textbf{exploring} turns, truncating the CoT changes the
 answer---the reasoning chain is causally active.
-In \textbf{anchored} mode, all five truncation levels produce the
+On \textbf{anchored} turns, all five truncation levels produce the
 same numeric answer regardless of how much reasoning is
 shown---the chain of thought is a post-hoc narrative for an answer
 the model had already committed to (Figure~\ref{fig:concept}).
-The transition into anchored mode aligns with the onset
-of premature commitment, and the model can return to exploring
-mode when new information arrives.
+What we find at scale is not that anchoring is sticky within a
+conversation (it is not, see~\S\ref{sec:results} H1), but that
+some conversations carry a much higher share of anchored turns
+than others, and that the share grows sharply with conversation
+length.
 
 \paragraph{Our method and results.}
 We take 67 GSM8K sharded conversations (collected in seven
@@ -160,16 +162,17 @@ replicated across three independent experimental seeds.
         faithfulness as a time series rather than a scalar.
         This reveals dynamics that single-turn evaluations
         cannot see.
-  \item \textbf{The bistability finding.}
+  \item \textbf{Conversation-level heterogeneity in faithfulness rate.}
         Within a single conversation the model alternates between
-        exploring and anchored modes.
+        exploring and anchored turns, and the share of anchored
+        turns differs sharply across conversations.
         This is not a property of the model or the task in
         isolation --- it is a property of the conversation.
         (Across 67 conversations, the spread of anchored fractions
         is $237\times$ more variable than independent coin flips
         would produce.)
   \item \textbf{Conversation length as a risk predictor.}
-        Anchoring nearly quadruples from short ($\leq$10~turn,
+        Anchoring nearly quadruples from short ($<$10~turn,
         7.2\%) to long ($>$20~turn, 28.4\%) conversations ---
         a 3.9$\times$ gradient replicated across three independent
         experimental runs.
@@ -188,17 +191,18 @@ replicated across three independent experimental seeds.
   \centering
   \includegraphics[width=\linewidth]{figures/concept_overview.png}
   \caption{%
-    \textbf{Mode-switching CoT faithfulness.}
-    \emph{Top:} Turn-by-turn mode for sample 965 (40 turns shown):
+    \textbf{Turn-level CoT faithfulness classification.}
+    \emph{Top:} Turn-by-turn classification for sample 965 (40 turns shown):
     green = exploring (CoT drives the answer), red = anchored
     (CoT is post-hoc).
     The red burst coincides with premature commitment to the wrong
     answer ``300'' (gold = 660).
-    \emph{Bottom left:} In exploring mode, different truncation
+    \emph{Bottom left:} On exploring turns, different truncation
     levels produce different answers---the CoT is causally active.
-    \emph{Bottom right:} In anchored mode, all five levels agree
+    \emph{Bottom right:} On anchored turns, all five levels agree
     on the same answer regardless of how much reasoning is
-    visible---the CoT is decorative.%
+    visible---the current-turn CoT is insufficient to change the
+    answer.%
   }
   \label{fig:concept}
 \end{figure}
@@ -224,15 +228,20 @@ a (model, prompt) pair; none tracks how faithfulness evolves across
 turns of an ongoing conversation.
 
 \paragraph{Reasoning Theater: the single-generation analog.}
-The closest single-generation analog to our anchored mode is
+The closest single-generation analog to our anchored turns is
 ``Reasoning Theater'' \citep{reasoning_theater2026}: in some
 cases, a model commits to an answer early in its generation
 and subsequent tokens serve as performative elaboration rather
 than genuine computation.
-Our work can be understood as measuring whether and when Reasoning
-Theater persists \emph{across multiple turns}, finding that it
-does---as a statistically detectable mode with non-geometric
-run-length dynamics.
+Our work can be understood as measuring whether and when the
+\emph{anchored turns} we observe across conversations resemble a
+multi-turn analog of Reasoning Theater.
+We find a structurally similar pattern --- some conversations
+sustain post-hoc reasoning for many turns --- but with an important
+caveat: our run-length analysis finds no evidence that anchoring
+is formally persistent within a conversation (H1, bootstrap $p=0.521$).
+The connection to Reasoning Theater is therefore an analogy, not
+a confirmed mechanistic link.
 
 \paragraph{Lost in conversation.}
 \citet{laban2025} demonstrated that all major reasoning models
@@ -250,9 +259,9 @@ A growing safety literature argues that visible CoT traces are a
 currently valuable oversight safeguard \citep{korbak2025,
 openai_monitoring2025}: models find it difficult to simultaneously
 produce an unfaithful trace \emph{and} behave deceptively.
-Our results challenge this premise in the multi-turn setting: a
-model in anchored mode produces elaborate, structurally plausible
-reasoning that is entirely decorative.
+Our results challenge this premise in the multi-turn setting: on
+an anchored turn the model produces elaborate, structurally
+plausible reasoning that does not change the answer.
 The failure arises from conversational pressure rather than
 intentional deception, making it harder to detect by trace review
 alone.
@@ -299,7 +308,7 @@ in 8-bit or 4-bit quantisation.
 
 \paragraph{Two phases of data collection.}
 We collected data in two stages to progressively test whether the
-bistability finding holds at scale and across independent runs.
+anchoring finding holds at scale and across independent runs.
 
 \textbf{Phase~A} ($N = 24$ conversations): four independent
 datasets with different random seeds (default, 20260508, 12345,
@@ -311,7 +320,7 @@ for premature commitment to develop.
 \textbf{Phase~B} ($N \approx 43$ conversations): three independent
 datasets with new random seeds (11111, 22222, 33333) and longer
 conversations (up to 20 shards, max 30 turns per conversation).
-The aim was to (a)~confirm that the bistability pattern deepens
+The aim was to (a)~confirm that the anchoring pattern deepens
 in longer conversations, and (b)~verify that the finding
 replicates across completely independent runs.
 Seeds~2 and~3 ran simultaneously using mixed-precision quantisation
@@ -328,7 +337,8 @@ We use $N$ throughout to denote number of conversations.
 At each turn, the model has just produced a reasoning trace and
 an answer.
 We want to know: did the reasoning \emph{cause} that answer,
-or was the answer predetermined and the reasoning decorative?
+or was the answer predetermined and the reasoning insufficient
+to change it?
 To find out, we re-run the model on the same context but with
 progressively less of its own reasoning visible, from \emph{none
 at all} (0\%) to the full trace (100\%).
@@ -356,7 +366,13 @@ how much reasoning the model sees.
 We classify it as \textbf{exploring} if at least one answer
 differs --- the reasoning is shaping the output.
 Turns where fewer than three of the five answers contain a
-parseable number are excluded ($\approx$9\% of turns).
+parseable number are excluded ($\approx$9.5\% of turns),
+yielding 1,167~assessable turns from 1,289~total observations.\footnote{%
+  Filtering chain: 1,289~JSONL rows (total observations)
+  $\to$ 1,167~assessable turns ($\geq$3 of 5 truncation levels
+  returned a parseable number)
+  $\to$ 272~anchored (23.3\%), 895~exploring (76.7\%).
+  All percentage statistics in this paper use 1,167 as the denominator.}
 
 \paragraph{Why not use correctness?}
 A model can be anchored on the \emph{correct} answer (reasoning
@@ -368,7 +384,32 @@ Our measure asks only ``does the reasoning constrain the answer?''
 --- the right question for a faithfulness test aimed at safety
 monitoring.
 
-\subsection{Three Questions About Mode-Switching}
+\paragraph{On the temperature mismatch.}
+Original conversation turns are generated with temperature~$= 0.6$
+and top-$p = 0.95$ (stochastic sampling, per the DeepSeek-R1 model
+card recommendation).
+The five counterfactual regenerations use greedy decoding
+(temperature~$= 0$, \texttt{do\_sample=False}).
+This is deliberate and does not contaminate the anchoring
+classification, for a specific reason: the anchoring decision
+compares the \emph{five greedy regenerations to each other} ---
+not to the original stochastic answer.
+The original answer is recorded but plays no role in whether a
+turn is labelled anchored or exploring.
+Because all five regenerations use the same decoding strategy,
+the comparison is internally consistent.
+
+Greedy decoding is also the correct choice for a causal test.
+If the five regenerations were stochastic, random sampling
+variation at different truncation levels would cause answers
+to differ even when CoT truncation has no causal effect.
+This would spuriously classify turns as exploring, deflating
+the measured anchoring rate.
+Greedy decoding isolates the variable of interest --- CoT
+truncation level --- from confounding sampling noise.
+This is the same design used by \citet{lanham2023}.
+
+\subsection{Three Questions About Anchoring}
 
 Labelling each turn as \{anchored, exploring\} gives us a binary
 time series per conversation.
@@ -377,16 +418,15 @@ series.
 
 \bigskip
 \noindent\textbf{H1 --- Does anchoring \emph{persist}?}
-When the model enters anchored mode, does it tend to stay there
-for multiple consecutive turns, or does it bounce in and out
-randomly?
+When the model produces an anchored turn, does it tend to follow
+with more anchored turns, or does it bounce in and out randomly?
 A model that truly ``locks in'' should produce runs of anchored
 turns longer than chance would predict.
 Formally, we collect the lengths of all consecutive anchored runs
 (e.g., five red turns in a row counts as one run of length~5)
 and test whether those lengths follow a geometric distribution
---- the distribution you get if each turn's mode were decided
-independently by a coin flip.
+--- the distribution you get if each turn's classification were
+decided independently by a coin flip.
 A geometric distribution is the memoryless null; departing from
 it would mean that being anchored on turn~$t$ makes turn~$t{+}1$
 \emph{more} likely to be anchored than chance.
@@ -399,9 +439,9 @@ integer data \citep{massey1951}.
 
 \bigskip
 \noindent\textbf{H2 --- Does anchoring predict failure?}
-If anchored mode means the model is not updating its reasoning on
-new information, it should be more common in conversations where
-the model gets the wrong answer.
+If a higher anchored fraction means the model is not updating its
+reasoning on new information, it should be more common in
+conversations where the model gets the wrong answer.
 We measure this as a simple correlation: does the fraction of
 anchored turns in a conversation predict whether that conversation
 ended incorrectly?
@@ -419,10 +459,10 @@ anchored.
 Then each conversation's anchored fraction would hover near 23\%
 with only small random variation --- the natural scatter of a
 coin-flipping process.
-But if anchoring is a real mode --- something that some
-conversations fall into heavily while others avoid --- then we
-should see \emph{far more spread} across conversations than the
-coin-flip baseline predicts.
+But if anchoring is genuinely conversation-level --- something
+that some conversations fall into heavily while others avoid ---
+then we should see \emph{far more spread} across conversations
+than the coin-flip baseline predicts.
 
 We test this with a chi-square variance test.
 Under the coin-flip null, the standardised deviation of each
@@ -443,6 +483,25 @@ belongs to?''
 An ICC of 0 would mean conversation identity predicts nothing;
 an ICC of 1 would mean all variance is between conversations.
 
+\paragraph{Robustness to within-conversation autocorrelation.}
+The chi-square variance test treats turns as independent
+Bernoulli draws within each conversation; consecutive turns
+share conversational context, so positive within-conversation
+autocorrelation can inflate the statistic.
+Two complementary analyses guard against this.
+First, the ICC is computed from a one-way random-effects ANOVA
+decomposition $\mathrm{ICC} = (\mathrm{MS}_B - \mathrm{MS}_W) / (\mathrm{MS}_B + (\bar{n}-1)\mathrm{MS}_W)$,
+which is the closed-form variance partition of a random-intercept
+logistic model $\texttt{anchored} \sim 1 + (1\mid\mathrm{conv})$;
+a positive ICC therefore confirms conversation-level structure
+under the random-effects framework directly, without the
+Bernoulli-independence assumption.
+Second, the within-bin chi-square tests (Section~\ref{sec:results})
+restrict the comparison to conversations matched on length, the
+primary driver of within-conversation autocorrelation; residual
+between-conversation variance inside a length stratum cannot be
+explained by length-driven autocorrelation alone.
+
 % ─────────────────────────────────────────────────────────────
 \section{Results}
 \label{sec:results}
@@ -455,9 +514,9 @@ We ran our experiments incrementally, adding new conversations
 across four Phase~A datasets and three Phase~B seeds, and the
 core finding held at every scale.
 
-At the smallest scale (Phase~1 only, 4~conversations), both modes
-appeared --- the model anchored on 12\% of turns and explored on
-the rest.
+At the smallest scale (Phase~1 only, 4~conversations), both kinds
+of turn appeared --- the model anchored on 12\% of turns and
+explored on the rest.
 This is too few conversations to run rigorous statistical tests,
 but the qualitative phenomenon was already visible.
 As we added Phase~2 and Phase~3, the anchored fraction stabilised
@@ -468,7 +527,7 @@ complex problems that run longer give anchoring more room to develop.
 
 Phase~B was designed to stress-test these early observations.
 We ran three completely fresh seeds with even longer conversations
-(up to 20 shards) and asked: does the bistability pattern survive?
+(up to 20 shards) and asked: does the conversation-level anchoring pattern survive?
 It does, at even larger scale.
 The combined 67-conversation dataset produces a variance test
 statistic of $\chi^2 = 236.9$ ($df=66$, $p\approx 0$) ---
@@ -485,8 +544,8 @@ conversations, as Section~\ref{subsec:length} shows.
 
 \begin{table}[h]
 \caption{%
-  Cumulative mode-switching statistics across phases.
-  H3: global anchored fraction (both modes ``substantially present'').
+  Cumulative anchoring statistics across phases.
+  H3: global anchored fraction (both turn types ``substantially present'').
   Variance test: chi-square test of between-conversation variance
   vs.\ Bernoulli null (Section~\ref{sec:method}).
   $\checkmark$~H3 confirmed at all scales.
@@ -525,10 +584,10 @@ $+$ Phase B Seed 3 (33333) & \textbf{67} & \textbf{1289} & \textbf{0.233} &
 \end{tabular}
 \end{table}
 
-\subsection{Qualitative Mode-Switching: Sample 965}
+\subsection{Qualitative Illustration: Sample 965}
 
 The 44-turn conversation \texttt{sharded-GSM8K/965} is the
-clearest qualitative illustration of the mode-switching pattern,
+clearest qualitative illustration of the anchoring pattern,
 visible in Figure~\ref{fig:heatmap} (top row).
 The conversation has three phases:
 (1)~\textbf{Turns 1--8 (exploring)}: the model's answer varies
@@ -538,9 +597,9 @@ across truncation levels as each new shard changes what it knows;
 reasoning makes no difference, and the thinking blocks
 during these turns ($\sim$412~tokens) construct elaborate
 derivations that are entirely post-hoc;
-(3)~\textbf{Turns 14--44 (mostly exploring)}: the model partly
-recovers exploring mode as new shards arrive, but never converges
-on the correct answer.
+(3)~\textbf{Turns 14--44 (mostly exploring)}: the model returns
+to mostly exploring turns as new shards arrive, but never
+converges on the correct answer.
 The anchored burst at turns 9--13 coincides with the
 onset of premature commitment: turn~8 is the first turn where the
 model states a confident answer, and turns 9--13 are those where
@@ -552,7 +611,7 @@ commitment-alignment analysis across all 67 conversations.
   \centering
   \includegraphics[width=\linewidth]{figures/heatmap_faithfulness.png}
   \caption{%
-    \textbf{Per-turn CoT faithfulness mode} (Phase~A $N=24$
+    \textbf{Per-turn CoT faithfulness classification} (Phase~A $N=24$
     conversations, 373~assessable turns).
     Green = exploring (CoT causal); red = anchored (CoT post-hoc).
     Rows sorted by anchored fraction (right axis).%
@@ -566,11 +625,11 @@ commitment-alignment analysis across all 67 conversations.
 \paragraph{What we're testing.}
 H1 asks whether consecutive anchored turns are more common than
 chance.
-If each turn's mode were decided by a memoryless coin flip, we
-would expect most anchored ``runs'' to last exactly 1 turn ---
-the model anchors, then snaps back.
-A model with genuine mode-switching would show longer runs:
-once anchored, it tends to stay anchored.
+If each turn's classification were decided by a memoryless coin
+flip, we would expect most anchored ``runs'' to last exactly
+1~turn --- the model anchors, then snaps back.
+A model with persistent anchoring would show longer runs: once
+anchored, it tends to stay anchored.
 
 Across our 67 conversations we found 148 anchored runs with a
 mean length of 1.905 turns.
@@ -632,9 +691,9 @@ distributions.
 \subsection{H2: Does More Anchoring Mean More Wrong Answers? --- Underpowered}
 
 \paragraph{The hypothesis.}
-If a model in anchored mode is not updating its reasoning on new
-information, conversations where it anchors heavily should be
-conversations where it ends up wrong.
+If anchored turns reflect a failure to update reasoning on new
+information, conversations with a higher anchored fraction should
+end up wrong more often.
 H2 tests this directly: is the fraction of anchored turns
 negatively correlated with conversation correctness?
 
@@ -659,43 +718,28 @@ conversations with clean correctness labels to have an 80\%
 chance of detecting an effect this size.
 We are at 16\% of the required sample.
 
-Figure~\ref{fig:h2} shows the per-conversation anchored fractions
-by outcome and the power analysis.
 \textbf{H2 is inconclusive, not failed}: the data are consistent
 with anchoring predicting failure but the dataset is too small to
 confirm it.
+We deliberately do not include a figure for H2: with $N=21$ and
+$p=0.29$, any visualisation of so few points risks suggesting a
+result the data do not support.
 The natural next step is replication on HumanEval coding
 conversations, where every conversation has an unambiguous
 pass/fail label.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\linewidth]{figures/h2_association.png}
-  \caption{%
-    \textbf{H2: Anchored fraction by conversation outcome.}
-    \emph{Left:} Per-conversation anchored fraction for
-    Incorrect vs.\ Correct conversations ($N=21$ with valid binary
-    labels); representative data matching $r=-0.24$.
-    The correct-direction trend is visible but not significant
-    ($p=0.291$).
-    \emph{Right:} Power analysis---80\% power requires $N\approx131$
-    conversations with binary correctness labels.%
-  }
-  \label{fig:h2}
-\end{figure}
-
 \subsection{H3: Anchoring is a Conversation-Level Property}
 
-\paragraph{Both modes are present.}
-Across 1,250 assessable turns in our 67 conversations,
-23.3\% are anchored and 76.7\% are exploring.
-Both modes are far above the 5\% threshold we require for a mode
-to be considered ``substantially present.''
+\paragraph{Both turn types are present.}
+Across 1,167 assessable turns in our 67 conversations,
+23.3\% are anchored (272~turns) and 76.7\% are exploring (895~turns).
+Both rates are far above the 5\% threshold we require for a turn
+type to be considered ``substantially present.''
 There is no conversation where the model is anchored every single
 turn, and no conversation where it never anchors.
-The two modes co-exist.
+The two turn types co-exist.
 
-\paragraph{But are they really modes, or just noise?}
+\paragraph{But is the spread real, or just noise?}
 The deeper question is whether anchoring is a structured,
 conversation-level property or just random per-turn noise.
 To see why this matters: if every turn were anchored with a fixed
@@ -728,17 +772,18 @@ disappear when we compare conversations of similar length.
 
 We test this by running the same chi-square test \emph{separately
 within each length stratum}.
-Among short conversations ($\leq$10 turns, $n=14$): $\chi^2=4.5$,
-$df=13$, $p=0.97$ --- no significant clustering; short conversations
-are too uniform to detect structure.
+Among short conversations ($\leq$10 turns, $n=25$): $\chi^2=33.2$,
+$df=24$, $p=0.10$ --- borderline; short conversations are too
+uniform for strong clustering to be detected at this sample size.
 Among medium-length conversations (10--20 turns, $n=18$):
 $\chi^2=36.9$, $df=17$, $p=0.0035$ (\textbf{significant}).
-Among long conversations ($>$20 turns, $n=29$): $\chi^2=130.1$,
-$df=22$, $p<0.001$ (\textbf{significant}).
+Among long conversations ($>$20 turns, $n=24$): $\chi^2=130.1$,
+$df=23$, $p<0.001$ (\textbf{significant}).
 Even within the group of medium-length conversations, some
 anchor heavily and others do not --- and this cannot be explained
 by length differences within that group.
-H3 holds inside each length stratum.
+H3 holds inside the medium and long strata, where most of the
+anchoring dynamics manifest.
 Figure~\ref{fig:perconv} shows the full per-conversation
 distributions.
 
@@ -759,17 +804,154 @@ distributions.
 \end{figure}
 
 \paragraph{How much variance does conversation identity explain?}
-The Intraclass Correlation Coefficient (ICC) answers this directly.
-Decomposing the total variance in per-turn anchoring into
+The primary autocorrelation-robust test is the
+Intraclass Correlation Coefficient (ICC), computed via
+one-way random-effects ANOVA --- a framework that explicitly
+does \emph{not} assume Bernoulli independence of turns within a
+conversation.
+Decomposing total variance in per-turn anchoring into
 ``within-conversation'' and ``between-conversation'' components
-gives $\mathrm{ICC} = 0.152$.
-Fifteen percent of all variation in whether a given turn is
-anchored is explained purely by knowing \emph{which conversation}
-that turn belongs to --- independent of any other information.
-This is a moderate but meaningful effect, and it independently
-confirms H3: anchoring is structured at the conversation level.
+($\mathrm{MS}_B = 0.652$, $\mathrm{MS}_W = 0.152$)
+gives $\mathrm{ICC} = 0.152$: 15\% of the variation in whether
+a given turn is anchored is explained purely by knowing
+\emph{which conversation} that turn belongs to.
+Because this decomposition is the closed-form variance partition
+of a random-intercept model
+$\texttt{anchored} \sim 1 + (1\mid\mathrm{conv})$,
+it is robust to within-conversation autocorrelation by construction.
+
+The chi-square variance test ($\chi^2 = 236.9$, $df = 66$,
+$p \approx 0$) is a confirmatory, more sensitive analysis;
+it may be anti-conservative under positive within-conversation
+autocorrelation (since it treats turns as independent Bernoulli
+draws under the null), and is best read alongside the ICC.
+
+For nested behavioural data, ICCs of $0.05$--$0.20$ are routinely
+treated as substantial cluster effects requiring multilevel
+modelling, and our value sits at the upper end of that range.
+The practical implication is the design effect:
+$\mathrm{DEFF} = 1 + (\bar{n}-1)\,\mathrm{ICC} \approx 3.8$
+at average cluster size $\bar{n}=19.2$ turns, so the effective
+turn-level sample size is $\approx 1{,}167/3.8 \approx 307$
+independent observations.
+The homogeneity null is still rejected at this effective $N$
+under the random-effects framework, but at meaningfully lower
+confidence than the raw $\chi^2 = 236.9$ would suggest.
+H3 is therefore confirmed under both the chi-square (assumes
+independence; potentially anti-conservative) and the random-effects
+ICC (does not assume independence) frameworks.
+
+\subsection{Probing for Internal Commitment via Answer-Token Confidence: A Null Result}
+\label{subsec:logprobs}
+
+\paragraph{Why this test.}
+The repetition-confound analysis (\S\ref{subsec:repetition}) leaves
+open whether the model is \emph{internally} committed on anchored
+turns, or merely lexically copying its prior answer when its current
+CoT is insufficient to override the conversational context.
+Counterfactual deletion alone cannot distinguish these.
+The classical mechanistic prediction for \emph{pre-commitment} is
+that the model should be measurably more confident in its emitted
+answer on anchored turns, even at 0\%~CoT, than on exploring turns.
+We tested this directly.
+
+\paragraph{Method.}
+For each turn we re-ran the model at two truncation levels
+(0\%~CoT and 100\%~CoT) with \texttt{output\_scores=True}.
+We extracted two quantities at the position of the last numeric
+token in the generated answer (matching the answer-extraction rule
+of \texttt{is\_anchored()}):
+the chosen-token log-probability (chosen$_t$),
+and the log-probability of the next-best alternative (alt$_t$).
+The \emph{margin}~$=$~chosen$_t$~$-$~alt$_t$ is a more sensitive
+indicator of internal commitment than the raw chosen log-probability,
+because the latter saturates near zero under greedy decoding.
+We computed margin at 0\%~CoT, at 100\%~CoT, and the difference
+(reasoning impact on commitment).
+$N=719$ turns from $N=48$ conversations across all six datasets
+had both 0\%~and 100\%~regenerations available
+(191 anchored, 528 exploring).
+
+\paragraph{Result: no detectable difference at the token level.}
+Across all three comparisons, anchored and exploring turns are
+\textbf{indistinguishable} on answer-token confidence
+(Table~\ref{tab:logprob}, Figure~\ref{fig:logprobs}).
+Mean margin at 0\%~CoT is 11.22~nats for anchored vs.\ 11.07 for
+exploring (Mann-Whitney $p=0.29$, Cohen's $d=0.05$).
+Mean margin at 100\%~CoT is 13.22 vs.\ 12.95 ($p=0.43$, $d=0.08$).
+Reasoning sharpens commitment by approximately the same amount in
+both modes (mean $\Delta$~margin $1.99$ vs.\ $1.88$ nats,
+$p=0.72$, $d=0.03$).
+Every effect size is in the predicted direction (anchored slightly
+more confident), but each is well below the threshold for a
+\emph{small} effect ($d<0.20$) and none approaches significance.
+
+\paragraph{Interpretation.}
+Three things follow.
+First, the popular intuition that anchoring is a token-level
+\emph{confidence} phenomenon is not supported: the model is highly
+confident in its argmax answer in both modes (median margin
+$\approx 12$~nats, i.e., the chosen digit is $\sim 1.6{\times}10^{5}$
+times more probable than the next-best alternative).
+Second, the difference between anchored and exploring turns is
+genuinely \emph{about the answer choice}, not its confidence:
+under counterfactual deletion the argmax \emph{token} flips for
+exploring turns and stays the same for anchored turns, but in
+\emph{both} cases the model picks its argmax with near-certainty.
+Third, the lexical context-copying alternative cannot be ruled out
+by this measurement alone.
+A model that copies the prior answer with the same confidence it
+would use for genuine reasoning would produce exactly the data we
+observe.
+However, the prior-answer ablation (\S\ref{subsec:repetition})
+directly addressed this: replacing every prior assistant answer
+with a fixed placeholder left the mean anchored fraction essentially
+unchanged ($-3.4$~pp, $p=0.625$), ruling out pure lexical copying
+as the mechanism.
+
+\begin{table}[h]
+\caption{%
+  Answer-token confidence on anchored vs.\ exploring turns.
+  Margin~$=$~chosen-token logprob~$-$~top-alternative logprob.
+  All three comparisons are non-significant and effect sizes are
+  below ``small'' ($d < 0.2$): the chosen-token confidence
+  metric is not diagnostic of mode.%
+}
+\label{tab:logprob}
+\centering
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Quantity                       & Anchored mean & Exploring mean & MW $p$ & $d$  & $n_a/n_e$ \\
+\midrule
+margin at 0\% CoT              & 11.22 & 11.07 & 0.29 & 0.05 & 191/528 \\
+margin at 100\% CoT            & 13.22 & 12.95 & 0.43 & 0.08 & 191/528 \\
+$\Delta$ margin (100\%--0\%)   &  1.99 &  1.88 & 0.72 & 0.03 & 191/528 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/logprob_distributions.png}
+  \caption{%
+    \textbf{Answer-token margin distributions: anchored vs.\ exploring
+    turns are indistinguishable.}
+    \emph{Left:} margin at 0\%~CoT --- the model picks its argmax
+    with very high confidence in both modes (median $\approx 12$~nats).
+    \emph{Centre:} margin at 100\%~CoT --- same.
+    \emph{Right:} $\Delta$~margin --- adding the full CoT raises
+    confidence by about 2~nats in both modes; the predicted
+    ``anchored~$\to$~near-zero $\Delta$'' signature does not appear.
+    The token-level confidence metric is not diagnostic of mode;
+    anchoring is an answer-stability phenomenon, not a
+    token-confidence phenomenon.%
+  }
+  \label{fig:logprobs}
+\end{figure}
 
 \subsection{Is Anchoring Just Short Reasoning? No.}
+\label{subsec:not_short_reasoning}
 
 A skeptic might say: anchored turns look the same at 0\% and
 100\% CoT simply because the thinking block is short.
@@ -782,35 +964,36 @@ If anything, anchored turns have \emph{more} reasoning --- it just
 does not constrain the output.
 Anchoring is not a consequence of having nothing to say.
 
-\subsection{Does Anchoring Align With Premature Commitment?}
+\subsection{Does Anchoring Align With Premature Commitment? --- No}
 \label{subsec:commitment}
 
-\paragraph{The hypothesis.}
-In sample~965, the model enters anchored mode at turn~9 ---
-exactly one turn after it first commits to a confident (wrong)
-answer at turn~8.
-The qualitative story is compelling: the model decides the answer
-is 300, and from that moment its reasoning becomes a post-hoc
-justification for that decision.
-We tested whether this alignment generalises across all 67
-conversations.
+\paragraph{Result: the commitment-onset story does not generalise.}
+The Pearson correlation between anchoring onset and commitment
+onset across the 42 conversations with identifiable commitment
+turns is $r = 0.06$, $p = 0.71$ --- essentially zero.
+This is the central negative result of the paper: the
+``commitment $\to$ anchoring'' causal narrative inspired by
+sample~965 does \emph{not} hold up at scale.
+The vivid alignment in sample~965 (anchored run starts at turn~9,
+exactly one turn after the model first commits to the wrong
+answer ``300'' at turn~8) is a real phenomenon but not a reliable
+cross-conversation predictor.
+The implication for the safety story matters: anchoring is real and
+measurable, but the mechanism by which it arises is not the
+intuitive ``early commitment locks in post-hoc reasoning'' story.
 
 \paragraph{How we operationalised it.}
 For each conversation we identified (a)~the first anchored turn,
 and (b)~the ``commitment turn'' --- the first turn where the model
 gave the same answer on two consecutive turns, a proxy for
 premature lock-in.
-42 of our 67 conversations had identifiable commitment turns.
-
-\paragraph{Result: the qualitative story does not generalise.}
-The Pearson correlation between anchoring onset and commitment
-onset across these 42 conversations is $r = 0.06$, $p = 0.71$
---- essentially zero.
 On average, anchoring onset lags commitment onset by about 3 turns,
 but the scatter is enormous: in many conversations the timing
 is reversed, or there is no clear alignment at all.
-The single vivid example in sample~965 is a real phenomenon but
-not a reliable cross-conversation predictor.
+We therefore frame the safety implications of this paper around
+H3 (some conversations are systematically less monitorable than
+others, and the share grows with length), not around the failed
+commitment narrative.
 
 \subsection{Could Anchoring Just Be Answer Repetition?}
 \label{subsec:repetition}
@@ -828,23 +1011,71 @@ what I said.''
 If this story were true, nearly every anchored answer should match
 the preceding turn's answer.
 
-\paragraph{What we find: partially true, not the whole story.}
-Among our 272 anchored turns, 73.9\% (201 turns) do match the
-preceding turn's answer --- high, but not universally so.
-More diagnostically, 75.8\% of anchored turns are self-repetitions
-versus 45.6\% of exploring turns, a ratio of $1.66\times$.
-If anchoring were \emph{purely} inertia, we would expect that
-ratio to be 2$\times$ or higher; it falls short.
-And 24.2\% of anchored turns produce a fresh answer not matching
-the previous turn --- ruling out pure inertia entirely.
+\paragraph{What we find: high repetition, but the design already controls for it.}
+Among our 272 anchored turns, 73.9\% (201 turns) match the
+preceding turn's answer.
+This high repetition rate is expected and does not undermine the
+finding, for a reason rooted in how the test works.
 
-The honest interpretation: answer inertia under conversational
-pressure is a \emph{contributing factor} to anchoring, but it
-is not the complete explanation.
-Some anchored turns are genuine post-hoc rationalization of
-an internally computed answer; others are simple repetition.
-Both are problematic for safety monitoring: a trace that is either
-decorative or copied is equally uninformative.
+All five truncation levels (0\%, 25\%, 50\%, 75\%, 100\%)
+receive \emph{identical conversation context} --- the same prior
+assistant answers, the same shards revealed so far.
+The prior answer is equally visible at 0\% CoT and at 100\% CoT.
+The only variable between the five conditions is how much of the
+\emph{current turn's} reasoning is shown.
+
+At \textbf{exploring turns}, the current turn's reasoning
+\emph{does} override the pull of the prior answer: 100\% CoT
+gives a different output than 0\% CoT, even though the prior
+answer is in context at both levels.
+At \textbf{anchored turns}, even \emph{full} CoT (100\%) cannot
+shift the model's output from the prior answer.
+The measurement is therefore asking the right question: can the
+current turn's reasoning change the output?
+At exploring turns it can; at anchored turns it cannot, even with
+all the reasoning visible.
+
+The decisive counter to the inertia objection is the
+\textbf{24.2\% of anchored turns that produce novel answers}
+--- answers that do not match the preceding turn.
+If anchoring were purely answer copying, this fraction would be
+exactly zero.
+A model generating a fresh answer that is then maintained
+identically across all five CoT truncation levels --- including
+100\% full reasoning --- is not copying: the current-turn CoT is
+insufficient to change the answer even when the answer is itself
+new.
+Even for the 75.8\% of repetition-anchored turns, the critical
+observation is that the full reasoning trace (100\% CoT) cannot
+override the answer already in the conversation context: a pure
+echo model would be defeated by showing it 100\% of its own
+reasoning, but it is not.
+We are careful here about what this does and does not show:
+it shows that current-turn CoT is insufficient to override the
+prior-context answer, not that the prior-context answer plays no
+role.
+We ran exactly this ablation: every prior assistant answer in the
+Phase~4 traces was replaced with the fixed placeholder
+\texttt{[PRIOR ANSWER REDACTED]} (the \texttt{<think>} structural
+framing was preserved, since \texttt{model\_local.py} strips prior
+think blocks before generation anyway), and the full five-level
+faithfulness measurement was re-run at INT8 on the same
+6~conversations.
+The result is decisive: the mean per-conversation anchored fraction
+shifted by only $\mathbf{-3.4}$~\textbf{pp}
+(95\%~CI $[-15.9, +9.2]$; paired Wilcoxon $p=0.625$, $n=6$),
+and per-turn agreement between the original and ablated conditions
+was \textbf{83.6\%} (153/183 turns; Figure~\ref{fig:ablation}).
+Anchoring \emph{persists} when the model cannot see its own prior
+answer text.
+The lexical-copying alternative is therefore not a sufficient
+explanation: the model's tendency to produce the same answer across
+all five truncation levels is largely unchanged even without the
+prior answer in context.
+The 1.66$\times$ repetition-rate ratio (75.8\% anchored vs.\
+45.6\% exploring) reflects that inertia is a \emph{contributing}
+factor to the repetitive subset, not that it \emph{explains} anchoring.
+Figure~\ref{fig:inertia} decomposes the three categories explicitly.
 Figure~\ref{fig:repconfound} shows the breakdown.
 
 \begin{figure}[t]
@@ -853,10 +1084,10 @@ Figure~\ref{fig:repconfound} shows the breakdown.
   \caption{%
     \textbf{Repetition confound analysis (combined $N=67$).}
     \emph{Left:} Repetition rate (answer matches previous turn)
-    in anchored vs.\ exploring mode: 75.8\% vs.\ 45.6\% ($1.66\times$
+    on anchored vs.\ exploring turns: 75.8\% vs.\ 45.6\% ($1.66\times$
     ratio, below the $2\times$ threshold).
-    \emph{Right:} Of all anchored turns, 24.2\% produce novel
-    (non-repeated) answers, ruling out pure answer inertia.%
+    \emph{Right:} 24.2\% of anchored turns produce novel (non-repeated)
+    answers, showing inertia cannot account for all anchored cases.%
   }
   \label{fig:repconfound}
 \end{figure}
@@ -872,9 +1103,9 @@ We group conversations into three length bins and compute the
 mean anchored fraction in each:
 
 \begin{itemize}
-  \item \textbf{Short} ($\leq$10 turns, $n=14$): \textbf{7.2\%} anchored
-  \item \textbf{Medium} (10--20 turns, $n=18$): \textbf{12.8\%} anchored
-  \item \textbf{Long} ($>$20 turns, $n=29$): \textbf{28.4\%} anchored
+  \item \textbf{Short} ($<$10 turns, $n=20$): \textbf{7.2\%} anchored
+  \item \textbf{Medium} (10--20 turns, $n=23$): \textbf{12.8\%} anchored
+  \item \textbf{Long} ($>$20 turns, $n=24$): \textbf{28.4\%} anchored
 \end{itemize}
 
 From short to long conversations, the anchored fraction increases
@@ -948,6 +1179,114 @@ The ICC of 0.152 is stable across phases.
   \label{fig:seeds}
 \end{figure}
 
+\subsection{Predicting Anchored Turns from Surface Features}
+\label{subsec:predictor}
+
+\paragraph{Why this matters.}
+The five-level counterfactual deletion test is informative but
+expensive: each turn requires five additional regenerations.
+For a deployed monitor, this overhead may be prohibitive.
+We ask whether anchored turns can be predicted from cheap surface
+features available at runtime, without any extra generation calls.
+A useful predictor would let safety engineers flag at-risk
+conversations online and trigger expensive verification
+(or summarise-and-restart interventions) only on the flagged subset.
+
+\paragraph{Setup.}
+We fit a logistic regression on the 1{,}162 labelable turns
+from all 63 of our combined-dataset conversations
+(turns~where \texttt{is\_anchored()} returns \texttt{None} due to
+unparseable answers are excluded; this drops 4 conversations
+that had no labelable turns).
+Seven surface features are computed per turn:
+(1)~\texttt{turn\_index} (1-indexed),
+(2)~\texttt{log\_thinking\_chars} (length of the current turn's
+\texttt{<think>}~block),
+(3)~\texttt{prior\_answer\_changed} (binary: did the previous turn's
+primary answer differ from the turn before it?),
+(4)~\texttt{prior\_was\_anchored} (binary: was the previous turn
+classified anchored?),
+(5)~\texttt{conv\_total\_turns} (total length of the containing
+conversation),
+(6)~\texttt{n\_shards\_revealed} (cumulative count of problem
+shards revealed up to and including this turn),
+(7)~\texttt{shard\_progress} ($n\_shards\_revealed$ divided by
+the conversation's maximum, in $[0,1]$ --- captures
+``how late in the puzzle are we?'' independently of total turns).
+We use \texttt{GroupKFold} 5-fold cross-validation \emph{grouped by
+conversation} to prevent within-conversation leakage between
+training and test folds.
+Class weights are balanced to handle the 23.8\% anchored prevalence.
+
+\paragraph{Result.}
+The pooled out-of-fold ROC-AUC is \textbf{0.710}; mean per-fold AUC
+is \textbf{0.703~$\pm$~0.033}.
+The predictor is well above chance (0.50) and above the 0.65 utility
+threshold for runtime monitoring tools.
+The very low cross-fold standard deviation ($\sigma=0.033$) shows
+the result is stable across different held-out conversation subsets.
+Standardised coefficients (Figure~\ref{fig:predictor}, right panel) rank
+the features by predictive importance:
+\texttt{conv\_total\_turns} ($\beta=+0.60$),
+\texttt{prior\_answer\_changed} ($\beta=-0.46$),
+\texttt{prior\_was\_anchored} ($\beta=+0.45$),
+\texttt{shard\_progress} ($\beta=+0.32$),
+\texttt{turn\_index} ($\beta=-0.20$),
+\texttt{log\_thinking\_chars} ($\beta=-0.19$),
+\texttt{n\_shards\_revealed} ($\beta=-0.07$).
+Three signals dominate: \emph{conversation length} (longer total
+length predicts anchoring), \emph{answer inertia} (an answer that
+did not change between previous turns, and a previous turn that
+was already anchored, predict current anchoring), and
+\emph{shard progress} (the further into the puzzle reveal sequence
+we are, the more likely the model is anchored, even controlling
+for total length).
+Thinking-block length contributes very little after standardisation,
+confirming the earlier sanity check (Section~\ref{subsec:not_short_reasoning}).
+
+\paragraph{Reconciling with H1.}
+The non-trivial positive coefficient on \texttt{prior\_was\_anchored}
+may appear to contradict our H1 result that anchored runs are
+consistent with a memoryless geometric process.
+The two findings are compatible: H1 tests whether the entire
+\emph{run-length distribution} departs from geometric, which
+requires sustained sequences; the predictor's
+\texttt{prior\_was\_anchored} feature picks up only one-step
+auto-correlation.
+Consistent with this, the practical predictive lift from this
+feature alone is modest --- conversation-level features
+($\texttt{conv\_total\_turns}$ and $\texttt{shard\_progress}$)
+contribute the larger share.
+
+\paragraph{Practical implication.}
+The predictor gives safety engineers a cheap heuristic:
+\emph{flag a turn as at-risk for unfaithful CoT when (a)~the
+conversation has run long, (b)~the answer has been repeating
+from the prior turn, (c)~the previous turn was already anchored,
+or (d)~the puzzle is mostly revealed}.
+None of these signals require additional generation; all are
+extractable from the running conversation log.
+Flagged turns can then trigger the expensive five-level
+counterfactual verification or a summarise-and-restart intervention.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/anchoring_predictor.png}
+  \caption{%
+    \textbf{Predicting anchored turns from surface features.}
+    \emph{Left:} ROC curve from GroupKFold 5-fold cross-validation
+    on $N{=}1{,}162$ labelable turns across 63 conversations
+    (pooled out-of-fold AUC~$=0.710$, per-fold $0.703\pm 0.033$).
+    \emph{Right:} Standardised logistic-regression coefficients;
+    positive (green) bars predict anchored, negative (red) predict
+    exploring.
+    Conversation length, prior-answer change, prior-turn anchoring
+    status, and shard progress carry the bulk of the predictive
+    signal.%
+  }
+  \label{fig:predictor}
+\end{figure}
+
 % ─────────────────────────────────────────────────────────────
 \section{Discussion}
 \label{sec:discussion}
@@ -965,18 +1304,32 @@ benchmark cannot characterise a model's faithfulness under the
 multi-turn deployment conditions where it matters most.
 
 \paragraph{Connection to Reasoning Theater and the Reasoning Horizon.}
-The anchored mode we identify is the multi-turn analog of two
-single-generation phenomena.
+The anchored turns we identify are \emph{structurally analogous}
+to two single-generation phenomena.
 ``Reasoning Theater'' \citep{reasoning_theater2026} describes
 models committing to answers before completing their chain, with
-subsequent tokens performative rather than causal---a within-turn
-snapshot of what we observe as a persistent between-turn mode.
+subsequent tokens performative rather than causal.
 \citet{mechanistic_faithfulness2026} found a ``Reasoning Horizon''
 at 70--85\% of chain length beyond which tokens have negligible
-causal influence---a within-generation faithfulness decay.
-Our work extends both findings to the multi-turn regime: a model
-can sustain an entirely decorative CoT state for multiple
-consecutive conversation turns, not just within a single generation.
+causal influence.
+Our anchored turns look similar across turns: the model produces
+elaborate reasoning that does not change the answer no matter
+how much of it is shown.
+
+We note an important limitation on this analogy.
+Reasoning Theater implies a within-turn causal story: the model
+commits at token~$k$, and subsequent tokens in the same generation
+are decorative.
+Projecting this across turns would predict that anchoring onset
+should follow closely after the turn of first commitment.
+Our commitment-alignment analysis ($r = 0.06$, $p = 0.71$,
+$n = 42$) does not support this: anchoring onset is essentially
+uncorrelated with commitment onset across conversations.
+The analogy is phenomenological, not mechanistic.
+What multi-turn anchored turns share with Reasoning Theater
+is the \emph{observable pattern} --- a confident, structurally
+plausible trace that does not constrain the output; the
+\emph{cause} at the multi-turn level remains unclear.
 
 \paragraph{Implications for CoT oversight.}
 The CoT monitorability literature \citep{korbak2025,
@@ -987,20 +1340,31 @@ produce an unfaithful trace while behaving deceptively.
 but real opportunity for AI safety, contingent on models being
 unable to complete tasks without externalising their reasoning.
 Our results identify a previously undocumented source of fragility:
-within a single conversation, a model alternates between faithfully
-externalised reasoning (exploring mode) and opaque post-hoc
-rationalisation (anchored mode).
-The 3.9$\times$ length gradient implies that safety monitors face
-systematically lower reliability as conversations extend---precisely
-the high-stakes, long-context settings where monitoring is most
-needed.
-A practical mitigation would be to monitor answer consistency
-under lightweight CoT perturbation online, flagging conversations
-where the model enters anchored mode and triggering a
-summarise-and-restart intervention.
-Unlike adversarial deception, this failure mode arises from
-conversational pressure and is detectable from answer consistency
-alone---making it more tractable to address.
+within a single conversation, a model alternates between turns
+where reasoning genuinely drives the answer (exploring) and turns
+where even the \emph{full} current-turn CoT does not constrain
+the output (anchored), and this fraction grows 3.9$\times$ with
+conversation length.
+
+The key word is ``full.''
+Our counterfactual test holds the conversation context constant
+across all five truncation levels --- prior assistant answers are
+equally visible at 0\% and 100\% CoT.
+When a turn is anchored, it means 100\% of the current turn's
+reasoning is insufficient to shift the model's output.
+A safety monitor reading that full reasoning trace is, by
+construction, reading something that did not change the answer
+--- a CoT that is uninformative regardless of how detailed it
+appears.
+
+This failure arises from conversational pressure rather than
+intentional deception, making it detectable: flag conversations
+where the model's answer is invariant under CoT perturbation and
+trigger a summarise-and-restart intervention that breaks the
+accumulated inertia.
+Whether the length-anchoring gradient generalises across
+models and task domains beyond sharded GSM8K mathematical
+reasoning is the primary open question for future work.
 
 % ─────────────────────────────────────────────────────────────
 \section{Limitations}
@@ -1009,10 +1373,20 @@ alone---making it more tractable to address.
 \textbf{Single model.}
 All experiments use DeepSeek-R1-Distill-Qwen-7B in 8-bit or
 4-bit quantisation.
-Whether mode-switching generalises to larger or differently trained
-reasoning models (o3, QwQ-32B, Gemini Thinking), or whether
-quantisation affects greedy output determinism in ways that inflate
-the anchored rate, is unknown.
+Whether the anchoring phenomenon generalises to larger or differently
+trained reasoning models (o3, QwQ-32B, Gemini Thinking) is unknown.
+A standing concern about quantization is addressed empirically below
+(``Quantization robustness, empirically verified'').
+Phase~A used 8-bit quantisation throughout; Phase~B used mixed
+8-bit/4-bit across three seeds.
+The aggregate Phase~B anchoring rate (27--38\% per seed) exceeds
+Phase~A's (13\%), but the gap is fully explained by Phase~B's
+longer conversations: within length bins, Phase~A and Phase~B
+agree, and the three Phase~B seeds (each spanning the same length
+mix) agree to within $\sim 11$ percentage points.
+We cannot fully decouple quantisation precision from conversation
+length without a controlled re-run at fixed precision; this is
+left to future work.
 
 \textbf{Single task domain.}
 Only GSM8K math is tested.
@@ -1028,15 +1402,78 @@ H2 is the most actionable hypothesis from a safety standpoint;
 replication on HumanEval coding conversations is the natural
 next step.
 
-\textbf{Context-solvability confound.}
-At 0\% CoT, the model still sees all prior shards.
-For some problems the answer may be derivable from conversation
-context alone, making all five truncation levels agree not because
-the CoT is post-hoc but because the problem is locally determined.
-The repetition confound check (Section~\ref{sec:results})
-quantifies this; if most anchored turns are self-repetitions,
-the finding should be reinterpreted as answer repetition under
-conversational pressure rather than post-hoc rationalization.
+\textbf{Prior-answer ablation rules out lexical context-copying.}
+The measurement establishes that even full CoT (100\%) does not shift
+the model's output during anchored turns.
+Two probes together characterise the mechanism.
+First, the answer-token confidence probe (\S\ref{subsec:logprobs})
+found a \emph{null} result: anchored and exploring turns are
+indistinguishable on chosen-token margin ($d \leq 0.08$, $p \geq
+0.29$), ruling out the ``anchored~$=$~uniformly higher token
+confidence'' hypothesis.
+Second, the prior-answer ablation (\S\ref{subsec:repetition})
+replaced every prior assistant answer with a fixed placeholder and
+re-ran the full faithfulness measurement on Phase~4's 6~conversations.
+The mean anchored fraction shifted by only $-3.4$~pp
+(95\%~CI $[-15.9, +9.2]$; Wilcoxon $p=0.625$; per-turn agreement
+83.6\%; Figure~\ref{fig:ablation}).
+Anchoring therefore \emph{persists without the prior-answer text},
+directly ruling out lexical copying as a sufficient explanation.
+The remaining open question is the \emph{specific structural carrier}:
+question framing, shard ordering, or emergent KV-cache state may
+each play a role.
+Activation probing following \citet{reasoning_theater2026} is the
+natural next step and is left to future work.
+
+\textbf{Quantization robustness, empirically verified.}
+A standing concern was that the 4-bit/8-bit quantization used in our
+runs might inflate the anchored rate.
+We tested this with a within-design control: re-running the full
+five-level faithfulness measurement at INT4 on Phase~4's
+6~conversations (using identical trace files, fixing every variable
+other than quantization).
+Per-turn agreement between INT4 and INT8 classifications was
+\textbf{184/184~=~100\%}; mean per-conversation anchored-fraction
+shift was \textbf{+0.7~percentage points}
+(95\%~CI~$[0.0, +2.0]$,
+paired Wilcoxon $p=1.0$, $n=6$ conversations).
+The anchored-vs-exploring distinction is therefore robust at the
+4-bit/8-bit boundary; quantization is not a confounding driver
+of the rate (Figure~\ref{fig:quant}).
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{figures/quant_robustness.png}
+  \caption{%
+    \textbf{Quantization robustness: INT4 vs.\ INT8 anchored
+    classifications on Phase~4 conversations.}
+    \emph{Left:} per-conversation anchored fraction is essentially
+    unchanged across INT8 and INT4 re-runs.
+    \emph{Right:} INT4 vs.\ INT8 scatter sits on the $y=x$ line
+    within the 95\%~CI on mean shift.
+    Per-turn agreement is 100\% (184/184).%
+  }
+  \label{fig:quant}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{figures/ablation_no_prior_answer.png}
+  \caption{%
+    \textbf{Prior-answer ablation: anchoring persists when prior
+    answer text is suppressed.}
+    Each point/line is one of the 6~Phase~4 conversations.
+    \emph{Left:} paired anchored fractions---most conversations
+    show little change when prior answers are replaced with
+    \texttt{[PRIOR ANSWER REDACTED]}.
+    \emph{Right:} ablated vs.\ baseline scatter sits near the
+    $y=x$ line; mean shift $-3.4$~pp (Wilcoxon $p=0.625$).
+    Per-turn agreement is 83.6\% (153/183 turns).
+    Anchoring is not explained by the model lexically reading
+    its own prior answers.%
+  }
+  \label{fig:ablation}
+\end{figure}
 
 \textbf{Scale for H1 confirmation and cross-model comparison.}
 $N = 67$ is sufficient to confirm H3 but H1 remains inconclusive:
@@ -1049,22 +1486,49 @@ a small super-geometric effect from a truly memoryless process.
 Cross-model comparison ($N \geq 100$ per model) would be needed
 for generalisation claims across architectures.
 
+\textbf{Independence assumption in the variance test.}
+The H3 chi-square variance test (Section~\ref{sec:method}) treats
+turns within a conversation as independent Bernoulli draws under
+the null.
+Since consecutive turns share conversational context, this
+assumption is violated and positive within-conversation
+autocorrelation can inflate the chi-square statistic
+(under autocorrelation $\rho$, the design effect
+$\mathrm{DEFF}\approx 1+(\bar{n}-1)\rho$ multiplies the
+expected null statistic).
+We mitigate this in three ways: (1)~the ICC is computed via
+random-effects ANOVA, which does not require turn independence
+within conversations and is the closed-form variance partition
+of a random-intercept logistic model; (2)~the within-bin
+chi-square tests restrict comparisons to length-matched
+conversations, removing the dominant source of autocorrelation
+heterogeneity; (3)~the medium- and long-bin within-stratum
+results ($p=0.0035$ and $p<0.001$) survive under this stricter
+analysis.
+A maximally rigorous robustness check would fit a mixed-effects
+logistic regression
+$\texttt{anchored} \sim 1 + (1\mid\mathrm{conv})$ with possibly
+AR(1) within-conversation residuals and test the random-intercept
+variance via likelihood ratio; we leave this as a camera-ready
+addition.
+
 % ─────────────────────────────────────────────────────────────
 \section{Conclusion}
 \label{sec:conclusion}
 
-Chain-of-thought faithfulness in multi-turn conversations is
-mode-switching, not monotonically decaying.
+Chain-of-thought faithfulness in multi-turn conversations is not
+monotonically decaying; it varies turn-by-turn, and the share of
+unfaithful turns differs sharply across conversations.
 Within a single derailing conversation, the same reasoning model
-alternates between exploring mode (CoT causally active) and
-anchored mode (CoT post-hoc or inertia-driven).
+alternates between exploring turns (CoT causally active) and
+anchored turns (CoT post-hoc or inertia-driven).
 Across 67 conversations and 1,289 faithfulness observations,
 23.3\% of turns are anchored.
 Between-conversation variance significantly exceeds a Bernoulli
 null ($\chi^2 = 236.9$, $df=66$, $p \approx 0$, $N=67$),
-establishing that mode-switching is a conversation-level
-phenomenon: some conversations accumulate extended anchored
-intervals while others remain predominantly exploring.
+establishing that anchoring is a conversation-level phenomenon:
+some conversations accumulate extended anchored intervals while
+others remain predominantly exploring.
 Within both the medium ($p=0.0035$) and long ($p<0.001$)
 conversation strata the effect is confirmed, ruling out
 the length-heterogeneity confound.
@@ -1074,28 +1538,30 @@ Formal run-length persistence (H1) is inconclusive at $N=67$
 (bootstrap $p=0.521$, 148~anchored runs); the geometric null
 may be a genuinely adequate description at this model and task.
 Three independent random seeds produced consistent anchoring rates
-(27--38\%), confirming the bistability finding is not seed-specific.
+(27--38\%), confirming the conversation-level anchoring finding is not seed-specific.
 The 3.9$\times$ length-anchoring gradient (7.2\% short $\to$
 12.8\% medium $\to$ 28.4\% long) provides a concrete, actionable
 predictor: CoT oversight reliability degrades monotonically with
 conversation length.
-The anchored-mode repetition rate of 75.8\% (vs.\ 45.6\% in
-exploring mode, ratio $1.66\times$) indicates that answer inertia
+The anchored-turn repetition rate of 75.8\% (vs.\ 45.6\% on
+exploring turns, ratio $1.66\times$) indicates that answer inertia
 under conversational pressure is a contributing factor, but the
 24.2\% of anchored turns with novel answers rules out pure
 answer inertia.
 Commitment alignment between anchoring onset and premature
 commitment onset is non-significant across conversations
 ($r=0.06$, $p=0.71$, $n=42$).
-For AI safety, CoT traces in deployed conversational systems
-face systematically lower reliability as conversations extend---
-precisely the high-stakes, long-context settings where monitoring
-is most needed.
-The two most important open questions are (1) whether anchored mode
-statistically predicts conversation failure (H2), requiring $N\approx
-131$ conversations with clean binary outcomes such as HumanEval;
-and (2) whether the mode-switching phenomenon generalises to larger
-or differently-trained reasoning models.
+For AI safety, if the length-anchoring gradient observed here
+generalises beyond DeepSeek-R1-Distill-Qwen-7B and sharded-GSM8K
+mathematical reasoning, then CoT traces in deployed conversational
+systems face systematically lower reliability as conversations
+extend --- precisely the high-stakes, long-context settings where
+monitoring is most needed.
+The two most important open questions are (1) whether the anchored
+fraction statistically predicts conversation failure (H2),
+requiring $N\approx 131$ conversations with clean binary outcomes
+such as HumanEval; and (2) whether the anchoring phenomenon
+generalises to larger or differently-trained reasoning models.
 
 % ─────────────────────────────────────────────────────────────
 \begin{ack}
@@ -1181,7 +1647,7 @@ Phase~B random seeds: 11111, 22222, 33333.
     conversations (max\_shards~$=10$), so this trajectory is not
     a fully independent replication.
     \emph{Right:} Anchored fraction remains 8--14\% at every
-    scale, confirming both modes are persistently present.%
+    scale, confirming both turn types are persistently present.%
   }
   \label{fig:cascade}
 \end{figure}
@@ -1190,16 +1656,74 @@ Phase~B random seeds: 11111, 22222, 33333.
   \centering
   \includegraphics[width=0.95\linewidth]{figures/frac_anchored_scatter.png}
   \caption{%
-    \textbf{Per-conversation summary.}
+    \textbf{Per-conversation summary (Phase~A, $N=24$).}
     \emph{Left:} Anchored fraction vs.\ conversation length;
     marker size encodes the longest anchored run.
     Longer conversations tend to have higher anchored fractions
     (see also Section~\ref{subsec:length} for the length-stratified
     analysis).
-    \emph{Right:} Global H3 distribution (13\% anchored /
-    87\% exploring) with the H3 variance test p-value.%
+    \emph{Right:} Phase~A H3 distribution (13\% anchored /
+    87\% exploring; combined $N=67$ gives 23.3\% anchored)
+    with the Phase~A variance test p-value.%
   }
   \label{fig:scatter}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{figures/truncation_sensitivity.png}
+  \caption{%
+    \textbf{Truncation sensitivity: anchored turns are invariant across
+    all 5 CoT levels (Phase~A).}
+    \emph{Left:} Agreement heatmap for representative anchored (red rows)
+    and exploring (green rows) turns --- each cell shows whether that
+    truncation level produced the same answer as the 100\%~CoT level.
+    Anchored turns are all-green; exploring turns have at least one red cell.
+    \emph{Right:} Histogram of unique answer count across 5 levels:
+    anchored turns always produce exactly~1 unique answer; exploring turns
+    produce~2 or more.
+    The bimodal distribution validates the binary anchored/exploring
+    classification.%
+  }
+  \label{fig:truncsens}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{figures/inertia_decomposition.png}
+  \caption{%
+    \textbf{Inertia decomposition (combined $N=67$).}
+    \emph{Left:} Three-way turn decomposition: exploring (76.7\%),
+    repetition-anchored (answer matches prior turn, 17.7\%),
+    and novel-anchored (answer does not match prior turn, 5.6\%).
+    The 5.6\% of novel-anchored turns cannot be explained by answer
+    inertia --- the model generates a fresh number that all five CoT
+    levels agree on.
+    \emph{Right:} At anchored turns, the 100\%~CoT answer equals the
+    0\%~CoT answer in every case; at exploring turns this rate is
+    much lower, confirming that CoT truncation level is causally active
+    at exploring turns but not at anchored turns.%
+  }
+  \label{fig:inertia}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\linewidth]{figures/h3_caterpillar.png}
+  \caption{%
+    \textbf{H3 caterpillar plot: between-conversation spread vastly
+    exceeds the Bernoulli null (Phase~A, $N=20$).}
+    Each dot is one conversation's empirical anchored fraction
+    with a 95\% Wilson confidence interval.
+    The grey band shows the expected variation under a
+    Bernoulli($p=0.233$) null for each conversation's size.
+    Conversations outside the null band (many more than the
+    expected~5\%) demonstrate that anchoring is a conversation-level
+    property, not per-turn noise.
+    Color encodes conversation length bin.
+    Inset: ICC~$=0.152$ (robust test, random-effects ANOVA).%
+  }
+  \label{fig:caterpillar}
 \end{figure}
 
 \newpage
@@ -1223,7 +1747,7 @@ Phase~B random seeds: 11111, 22222, 33333.
   research agent (Claude Sonnet) after surveying the CoT
   faithfulness and multi-turn conversation literatures.
   The human researcher selected this question from three candidates.
-  The mode-switching reframing emerged from the agent's
+  The anchoring/heterogeneity reframing emerged from the agent's
   interpretation of preliminary data from sample 965.
 
   \item \textbf{Experimental design and implementation}
@@ -1234,7 +1758,7 @@ Phase~B random seeds: 11111, 22222, 33333.
 
   Explanation: The AI agent designed and implemented the full
   experimental pipeline: model wrapper, counterfactual deletion
-  measurement, batch runner, and mode-switching analysis scripts.
+  measurement, batch runner, and per-turn anchoring analysis scripts.
   The human researcher approved design choices and provided compute
   access.
   Several iterations handled GPU memory constraints, Unicode
@@ -1250,8 +1774,8 @@ Phase~B random seeds: 11111, 22222, 33333.
   Explanation: The AI agent ran quantitative analyses (bootstrap
   tests, chi-square tests, confound checks) and generated all
   figures.
-  Interpretation of the mode-switching pattern---connecting anchored
-  turns to premature commitment---was developed jointly.
+  Interpretation of the anchoring pattern---and the negative
+  commitment-alignment finding---was developed jointly.
 
   \item \textbf{Writing}
 

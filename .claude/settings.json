@@ -5,7 +5,10 @@
       "Read(//d/Desktop/Autoresearch/**)",
       "WebSearch",
       "Bash(pdflatex -interaction=nonstopmode paper.tex)",
-      "Bash(bibtex paper *)"
+      "Bash(bibtex paper *)",
+      "WebFetch(domain:arxiv.org)",
+      "Bash(PYTHONIOENCODING=utf-8 python research_projects/multi_turn_cot_faithfulness/code/generate_supplementary_figures.py)",
+      "WebFetch(domain:caisc2026.github.io)"
     ]
   }
 }

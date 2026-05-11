@@ -1,0 +1,36 @@
+{
+  "baseline_per_conv_fraction": {
+    "sharded-GSM8K/1047": 0.41379310344827586,
+    "sharded-GSM8K/14": 0.44,
+    "sharded-GSM8K/201": 0.11428571428571428,
+    "sharded-GSM8K/543": 0.0,
+    "sharded-GSM8K/642": 0.17777777777777778,
+    "sharded-GSM8K/916": 0.05
+  },
+  "ablated_per_conv_fraction": {
+    "sharded-GSM8K/1047": 0.6521739130434783,
+    "sharded-GSM8K/14": 0.16,
+    "sharded-GSM8K/201": 0.02857142857142857,
+    "sharded-GSM8K/543": 0.03333333333333333,
+    "sharded-GSM8K/642": 0.06666666666666667,
+    "sharded-GSM8K/916": 0.05
+  },
+  "paired_stats": {
+    "n_paired_convs": 6,
+    "mean_baseline": 0.19930943258529465,
+    "mean_ablated": 0.1651242236024845,
+    "mean_shift": -0.03418520898281016,
+    "mean_shift_ci95": [
+      -0.15851851851851853,
+      0.09194172754892395
+    ],
+    "wilcoxon_p": 0.625
+  },
+  "per_turn_agreement": {
+    "n_compared_turns": 183,
+    "n_agree": 153,
+    "agreement_rate": 0.8360655737704918,
+    "baseline_only_anchored": 21,
+    "ablated_only_anchored": 9
+  }
+}

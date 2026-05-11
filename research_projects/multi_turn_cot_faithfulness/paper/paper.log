@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.4.5)  10 MAY 2026 14:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.4.5)  11 MAY 2026 13:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -567,162 +567,208 @@ Package microtype Info: Loading generic protrusion settings for font family
 {C:/Users/nisha/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/nish
 a/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}]
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-57.
+59.
 
 (C:\Users\nisha\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-<figures/concept_overview.png, id=115, 566.3559pt x 303.0522pt>
+<figures/concept_overview.png, id=124, 566.3559pt x 303.0522pt>
 File: figures/concept_overview.png Graphic file (type png)
 <use figures/concept_overview.png>
-Package pdftex.def Info: figures/concept_overview.png  used on input line 189.
+Package pdftex.def Info: figures/concept_overview.png  used on input line 192.
 (pdftex.def)             Requested size: 397.48499pt x 212.69461pt.
 
-[2]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+[2] [3 <./figures/concept_overview.png>] [4] [5]
 
- [3 <./figures/concept_overview.png>] [4]
-Underfull \vbox (badness 1584) has occurred while \output is active []
+LaTeX Warning: `h' float specifier changed to `ht'.
 
- [5]
-<figures/heatmap_faithfulness.png, id=198, 1607.7666pt x 678.8562pt>
+[6]
+<figures/heatmap_faithfulness.png, id=221, 1607.7666pt x 678.8562pt>
 File: figures/heatmap_faithfulness.png Graphic file (type png)
 <use figures/heatmap_faithfulness.png>
-Package pdftex.def Info: figures/heatmap_faithfulness.png  used on input line 5
-53.
+Package pdftex.def Info: figures/heatmap_faithfulness.png  used on input line 6
+12.
 (pdftex.def)             Requested size: 397.48499pt x 167.82838pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [6]
-<figures/runlength_dist.png, id=210, 867.24pt x 325.215pt>
+ [7 <./figures/heatmap_faithfulness.png>]
+<figures/runlength_dist.png, id=235, 867.24pt x 325.215pt>
 File: figures/runlength_dist.png Graphic file (type png)
 <use figures/runlength_dist.png>
-Package pdftex.def Info: figures/runlength_dist.png  used on input line 619.
+Package pdftex.def Info: figures/runlength_dist.png  used on input line 678.
 (pdftex.def)             Requested size: 397.48499pt x 149.05981pt.
-
-[7 <./figures/heatmap_faithfulness.png>]
-<figures/h2_association.png, id=223, 675.0018pt x 333.6465pt>
-File: figures/h2_association.png Graphic file (type png)
-<use figures/h2_association.png>
-Package pdftex.def Info: figures/h2_association.png  used on input line 673.
-(pdftex.def)             Requested size: 397.48499pt x 196.4679pt.
  [8 <./figures/runlength_dist.png>]
-<figures/per_conv_frac_by_phase.png, id=235, 638.8668pt x 306.9066pt>
+<figures/per_conv_frac_by_phase.png, id=247, 638.8668pt x 306.9066pt>
 File: figures/per_conv_frac_by_phase.png Graphic file (type png)
 <use figures/per_conv_frac_by_phase.png>
 Package pdftex.def Info: figures/per_conv_frac_by_phase.png  used on input line
- 747.
+ 792.
 (pdftex.def)             Requested size: 397.48499pt x 190.95447pt.
-
-[9 <./figures/h2_association.png>]
-<figures/repetition_confound.png, id=246, 593.0958pt x 294.8616pt>
+[9] [10 <./figures/per_conv_frac_by_phase.png>]
+<figures/logprob_distributions.png, id=272, 967.90178pt x 321.6015pt>
+File: figures/logprob_distributions.png Graphic file (type png)
+<use figures/logprob_distributions.png>
+Package pdftex.def Info: figures/logprob_distributions.png  used on input line 
+936.
+(pdftex.def)             Requested size: 397.48499pt x 132.07338pt.
+ [11 <./figures/logprob_distributions.png>]
+<figures/repetition_confound.png, id=282, 593.0958pt x 294.8616pt>
 File: figures/repetition_confound.png Graphic file (type png)
 <use figures/repetition_confound.png>
-Package pdftex.def Info: figures/repetition_confound.png  used on input line 85
-2.
+Package pdftex.def Info: figures/repetition_confound.png  used on input line 10
+83.
 (pdftex.def)             Requested size: 397.48499pt x 197.61023pt.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 864.
+(hyperref)                removing `math shift' on input line 1095.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `\times' on input line 864.
+(hyperref)                removing `\times' on input line 1095.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 864.
+(hyperref)                removing `math shift' on input line 1095.
 
-[10 <./figures/per_conv_frac_by_phase.png>]
-<figures/length_anchoring_gradient.png, id=258, 580.0872pt x 325.215pt>
+[12]
+<figures/length_anchoring_gradient.png, id=296, 580.0872pt x 325.215pt>
 File: figures/length_anchoring_gradient.png Graphic file (type png)
 <use figures/length_anchoring_gradient.png>
 Package pdftex.def Info: figures/length_anchoring_gradient.png  used on input l
-ine 913.
+ine 1144.
 (pdftex.def)             Requested size: 397.48499pt x 222.85033pt.
-<figures/seed_reproducibility.png, id=259, 600.0819pt x 307.6293pt>
+<figures/seed_reproducibility.png, id=297, 600.0819pt x 307.6293pt>
 File: figures/seed_reproducibility.png Graphic file (type png)
 <use figures/seed_reproducibility.png>
-Package pdftex.def Info: figures/seed_reproducibility.png  used on input line 9
-39.
+Package pdftex.def Info: figures/seed_reproducibility.png  used on input line 1
+170.
 (pdftex.def)             Requested size: 397.48499pt x 203.77292pt.
- [11 <./figures/repetition_confound.png>] [12 <./figures/length_anchoring_gradi
-ent.png> <./figures/seed_reproducibility.png>] [13] (paper.bbl [14]
+ [13 <./figures/repetition_confound.png>] [14 <./figures/length_anchoring_gradi
+ent.png> <./figures/seed_reproducibility.png>]
+<figures/anchoring_predictor.png, id=318, 788.77542pt x 321.6015pt>
+File: figures/anchoring_predictor.png Graphic file (type png)
+<use figures/anchoring_predictor.png>
+Package pdftex.def Info: figures/anchoring_predictor.png  used on input line 12
+74.
+(pdftex.def)             Requested size: 397.48499pt x 162.0664pt.
+ [15 <./figures/anchoring_predictor.png>] [16]
+<figures/quant_robustness.png, id=357, 787.22679pt x 321.6015pt>
+File: figures/quant_robustness.png Graphic file (type png)
+<use figures/quant_robustness.png>
+Package pdftex.def Info: figures/quant_robustness.png  used on input line 1446.
+
+(pdftex.def)             Requested size: 397.48499pt x 162.38048pt.
+<figures/ablation_no_prior_answer.png, id=358, 786.19435pt x 321.6015pt>
+File: figures/ablation_no_prior_answer.png Graphic file (type png)
+<use figures/ablation_no_prior_answer.png>
+Package pdftex.def Info: figures/ablation_no_prior_answer.png  used on input li
+ne 1461.
+(pdftex.def)             Requested size: 397.48499pt x 162.59639pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[17 <./figures/quant_robustness.png>] [18 <./figures/ablation_no_prior_answer.p
+ng>] (paper.bbl
 Underfull \hbox (badness 10000) in paragraph at lines 71--76
 \T1/cmtt/m/n/10 com / pdf / d57827c6-[]10bc-[]47fe-[]91aa-[]0fde55bd3901 / moni
 toring-[]monitorability .
  []
 
 )
-Underfull \hbox (badness 10000) in paragraph at lines 1120--1126
+Underfull \hbox (badness 10000) in paragraph at lines 1586--1592
  []\T1/ptm/b/n/10 (+20) Dataset.[] \T1/ptm/m/n/10 (+20) We use the \T1/cmtt/m/n
 /10 sharded_instructions_600.json \T1/ptm/m/n/10 (+20) file from the
  []
 
 
-Underfull \hbox (badness 1057) in paragraph at lines 1120--1126
+Underfull \hbox (badness 1057) in paragraph at lines 1586--1592
 \T1/cmtt/m/n/10 microsoft/lost-in-conversation \T1/ptm/m/n/10 (+20) repos-i-tor
 y. The math sub-set con-tains 103 prob-lems
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 1138--1144
+[19]
+Underfull \hbox (badness 10000) in paragraph at lines 1604--1610
  []\T1/ptm/b/n/10 (+20) Hyperparameters.[] \T1/ptm/m/n/10 (+20) DeepSeek-R1-Dis
 till-Qwen-7B: tem-per-a-ture 0.6, top-$\OML/cmm/m/it/10 p$ \T1/ptm/m/n/10 (+20)
  0.95,
  []
 
-<figures/phase_cascade.png, id=309, 527.0892pt x 247.4043pt>
+<figures/phase_cascade.png, id=385, 527.0892pt x 247.4043pt>
 File: figures/phase_cascade.png Graphic file (type png)
 <use figures/phase_cascade.png>
-Package pdftex.def Info: figures/phase_cascade.png  used on input line 1173.
+Package pdftex.def Info: figures/phase_cascade.png  used on input line 1639.
 (pdftex.def)             Requested size: 397.48499pt x 186.57957pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<figures/frac_anchored_scatter.png, id=310, 867.24pt x 325.215pt>
+<figures/frac_anchored_scatter.png, id=386, 867.24pt x 325.215pt>
 File: figures/frac_anchored_scatter.png Graphic file (type png)
 <use figures/frac_anchored_scatter.png>
 Package pdftex.def Info: figures/frac_anchored_scatter.png  used on input line 
-1191.
+1657.
 (pdftex.def)             Requested size: 377.60951pt x 141.60632pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[15] [16 <./figures/phase_cascade.png> <./figures/frac_anchored_scatter.png>]
-[17] [18] (paper.aux)
+<figures/truncation_sensitivity.png, id=389, 830.1414pt x 395.7987pt>
+File: figures/truncation_sensitivity.png Graphic file (type png)
+<use figures/truncation_sensitivity.png>
+Package pdftex.def Info: figures/truncation_sensitivity.png  used on input line
+ 1674.
+(pdftex.def)             Requested size: 397.48499pt x 189.51617pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<figures/inertia_decomposition.png, id=390, 782.6841pt x 360.6273pt>
+File: figures/inertia_decomposition.png Graphic file (type png)
+<use figures/inertia_decomposition.png>
+Package pdftex.def Info: figures/inertia_decomposition.png  used on input line 
+1693.
+(pdftex.def)             Requested size: 397.48499pt x 183.14711pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<figures/h3_caterpillar.png, id=391, 711.1368pt x 350.9913pt>
+File: figures/h3_caterpillar.png Graphic file (type png)
+<use figures/h3_caterpillar.png>
+Package pdftex.def Info: figures/h3_caterpillar.png  used on input line 1712.
+(pdftex.def)             Requested size: 397.48499pt x 196.18425pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[20 <./figures/phase_cascade.png>] [21 <./figures/frac_anchored_scatter.png> <.
+/figures/truncation_sensitivity.png>] [22 <./figures/inertia_decomposition.png>
+] [23 <./figures/h3_caterpillar.png>] [24] (paper.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 3CCE5D8D2A8E671A41768DC49E0C77B8;4571.
+(rerunfilecheck)             Checksum: E15F81FF832E78A1B8CBBA534175BD18;5335.
  ) 
 Here is how much of TeX's memory you used:
- 17209 strings out of 467871
- 335893 string characters out of 5418377
- 755264 words of memory out of 5000000
- 45455 multiletter control sequences out of 15000+600000
- 670600 words of font info for 265 fonts, out of 8000000 for 9000
+ 17420 strings out of 467871
+ 339452 string characters out of 5418377
+ 759886 words of memory out of 5000000
+ 45546 multiletter control sequences out of 15000+600000
+ 683615 words of font info for 337 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,14n,79p,1004b,1161s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,14n,79p,1004b,1140s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\nisha\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt
 1000.pk><C:/Users/nisha/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
-ts/cm/cmmi10.pfb><C:/Users/nisha/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmmi7.pfb><C:/Users/nisha/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/amsfonts/cm/cmr10.pfb><C:/Users/nisha/AppData/Local/Programs/MiKTeX/
-fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/nisha/AppData/Local/Programs/
-MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/nisha/AppData/Local/
-Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb><C:/Users/nisha/
-AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/nisha/
-AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Users/nisha
-/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/nisha
-/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (18 pages, 1893332 bytes).
+ts/cm/cmbx10.pfb><C:/Users/nisha/AppData/Local/Programs/MiKTeX/fonts/type1/publ
+ic/amsfonts/cm/cmmi10.pfb><C:/Users/nisha/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/amsfonts/cm/cmmi7.pfb><C:/Users/nisha/AppData/Local/Programs/MiKTeX
+/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/nisha/AppData/Local/Program
+s/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/nisha/AppData/Local/
+Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/nisha/AppDa
+ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><C:/Users/nis
+ha/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msam10.pfb
+><C:/Users/nisha/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb
+><C:/Users/nisha/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmbi8a.pf
+b><C:/Users/nisha/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pf
+b><C:/Users/nisha/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.p
+fb>
+Output written on paper.pdf (24 pages, 2832120 bytes).
 PDF statistics:
- 511 PDF objects out of 1000 (max. 8388607)
- 134 named destinations out of 1000 (max. 500000)
- 41179 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 614 PDF objects out of 1000 (max. 8388607)
+ 160 named destinations out of 1000 (max. 500000)
+ 50953 words of extra memory for PDF output out of 51595 (max. 10000000)
 

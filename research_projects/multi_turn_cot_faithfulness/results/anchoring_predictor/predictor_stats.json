@@ -1,0 +1,36 @@
+{
+  "fold_aucs": [
+    0.6867249602543719,
+    0.6921628407460545,
+    0.6936423054070112,
+    0.6750700280112044,
+    0.7683830171635049
+  ],
+  "fold_auc_mean": 0.7031966303164293,
+  "fold_auc_std": 0.033240686932746094,
+  "pooled_oof_auc": 0.7095233421663887,
+  "feature_cols": [
+    "turn_index",
+    "log_thinking_chars",
+    "prior_answer_changed",
+    "prior_was_anchored",
+    "conv_total_turns",
+    "n_shards_revealed",
+    "shard_progress"
+  ],
+  "coefficients_standardized": [
+    -0.19771390591202206,
+    -0.1874748766993168,
+    -0.4562765531589384,
+    0.44849090788205026,
+    0.6045879564573342,
+    -0.07086526466633081,
+    0.3150782552501737
+  ],
+  "intercept": -0.2094184011557147,
+  "n_total": 1162,
+  "n_anchored": 276,
+  "frac_anchored": 0.23752151462994836,
+  "n_conversations": 63,
+  "n_splits_used": 5
+}

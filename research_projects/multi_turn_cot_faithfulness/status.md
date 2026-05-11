@@ -1,6 +1,104 @@
 # Project Status — multi_turn_cot_faithfulness
 
-Last updated: 2026-05-10 (Phase B complete; combined N=67 analysis done; supplementary figures generated)
+Last updated: 2026-05-10 (Session 4 — Exp 5 + Exp 1 in progress)
+
+---
+
+## Session 4 Update (2026-05-10) — Exp 1 + Exp 5 in flight
+
+### Exp 5 (Full N=63) — COMPLETE
+Logistic-regression predictor for anchored vs exploring turns from
+surface features. Pipeline: `code/predict_anchoring.py`, ROC + coefs
+figure: `paper/figures/anchoring_predictor.png`.
+Trace files for all 6 phases (66 conversations) downloaded from server
+to enable the `n_shards_revealed_so_far` and `shard_progress` features.
+
+| Quantity | Value |
+|---|---|
+| N (turns / conv) | 1,162 / 63 (4 conversations had no labelable turns and were dropped) |
+| Feature set (7) | turn_index, log_thinking_chars, prior_answer_changed, prior_was_anchored, conv_total_turns, n_shards_revealed, shard_progress |
+| CV scheme | GroupKFold 5-fold (grouped by task_id, prevents leakage) |
+| Mean fold AUC | **0.703 ± 0.033** (very stable across folds) |
+| **Pooled OOF AUC** | **0.710** |
+| Top features | conv_total_turns (β=+0.60), prior_answer_changed (β=−0.46), prior_was_anchored (β=+0.45), shard_progress (β=+0.32) |
+| Anchoring rate | 23.8% (276/1162) — matches the H3 combined rate |
+| Output | `results/anchoring_predictor/predictor_stats.json` + `per_turn_features.csv` |
+
+Note: pooled AUC dropped from the Phase-A-only version (0.773) because
+the small Phase A run was overfit; the full N=63 result is more honest
+and the per-fold stability (σ=0.033 vs 0.106) confirms generalisation.
+
+Paper subsection added between §4.7 (length gradient) and §4.8 (cross-seed):
+"Predicting Anchored Turns from Surface Features" (`subsec:predictor`).
+
+### Exp 1 (Logit confidence) — COMPLETE, NULL RESULT
+Server job finished on its own while local network was down.
+Final output: 870 rows in `results/answer_logprobs/answer_logprobs.jsonl`,
+719 turns labelable with both 0% and 100% logprobs (191 anchored,
+528 exploring).
+
+Analysis pivots on the **margin** (chosen logprob − top-alternative
+logprob), which is more sensitive than raw chosen logprob under
+greedy decoding (where chosen tokens saturate near 0~logprob).
+
+| Comparison | Anchored mean | Exploring mean | MW p | Cohen's d |
+|---|---|---|---|---|
+| margin at 0% CoT | 11.22 | 11.07 | 0.29 | 0.05 |
+| margin at 100% CoT | 13.22 | 12.95 | 0.43 | 0.08 |
+| Δ margin (100−0%) | 1.99 | 1.88 | 0.72 | 0.03 |
+
+**All comparisons are non-significant with tiny effect sizes ($d < 0.10$).**
+The token-level confidence metric is not diagnostic of mode. The
+chosen argmax flips between truncation levels for exploring turns
+and stays the same for anchored turns, but in *both* modes the model
+picks its argmax with very high confidence (margin ≈ 12 nats = chosen
+token ~160K× more probable than alternative).
+
+Paper subsection between §4.5 (H3) and §4.6 (short reasoning sanity)
+rewritten as a null result: "Probing for Internal Commitment via
+Answer-Token Confidence: A Null Result" (`subsec:logprobs`). Rules
+out "anchored = high token confidence" hypothesis. Repetition-confound
+critique remains an open mechanistic question — would require
+activation probing (à la Reasoning Theater) to fully resolve.
+
+### Exp 4 (Quantization robustness, INT4 vs INT8) — COMPLETE, STRONG POSITIVE
+Re-ran the full 5-level faithfulness measurement at LOAD_IN_4BIT=1 on
+Phase 4's 6 conversations using the same trace files as the original
+INT8 publication. tmux session `quant4` finished cleanly.
+
+| Quantity | Value |
+|---|---|
+| N (conversations / labelled turns) | 6 / 184 |
+| Per-turn agreement (INT4 vs INT8) | **184/184 = 100%** |
+| Mean per-conv anchored fraction (INT8) | 19.93% |
+| Mean per-conv anchored fraction (INT4) | 20.61% |
+| Mean shift | **+0.7 pp** (95% CI [0.0, +2.0]) |
+| Paired Wilcoxon p | 1.0 |
+| Per-conv max abs shift | 4.1 pp (sharded-GSM8K/1047) |
+
+Output: `results/quant_robustness_int4/quant_analysis.json` +
+`paper/figures/quant_robustness.png`.
+
+**Quantization confound CLOSED.** The anchored-vs-exploring
+distinction is robust at the 4-bit/8-bit boundary. Paragraph added
+to §6 (Limitations) under "Quantization robustness, empirically verified"
+referencing `fig:quant`. The old "Single model" limitation paragraph
+was edited to remove the now-falsified quantization concern.
+
+### Critical infrastructure notes (this session)
+
+- **paramiko `exec_command` returns a tuple, not a Channel** — older
+  call patterns like `ssh.exec_command(...).channel.recv_exit_status()`
+  fail in paramiko 4.0. Use `_, stdout, _ = ssh.exec_command(...)` and
+  `stdout.channel.recv_exit_status()` if you need the exit code.
+- **`output_scores=True` in HF generate adds substantial overhead** —
+  ~2-3× slower than the standard generation path because the full
+  vocabulary distribution is materialised per generated token. This is
+  why Exp 1 throughput is ~50s/turn vs the ~31s/turn baseline for the
+  standard 5-level faithfulness measurement (with 128 tokens).
+- **PYTHONPATH must be set when invoking `extract_answer_logprobs.py`
+  from outside lost_in_conversation/** — the script imports
+  `model_local` which lives in lost_in_conversation/.
 
 ---
 
