@@ -1,0 +1,74 @@
+{
+  "N_labeled": 53,
+  "group_comparison": {
+    "originals": {
+      "n": 16,
+      "accuracy": 1.0,
+      "mean_anchoring_rate": 0.1334,
+      "mean_n_turns": 9.56
+    },
+    "recovered": {
+      "n": 37,
+      "accuracy": 0.0,
+      "mean_anchoring_rate": 0.1676,
+      "mean_n_turns": 19.81
+    }
+  },
+  "bivariate_h2": {
+    "r": -0.0974,
+    "p": 0.4879,
+    "ci_95": [
+      -0.3582,
+      0.1776
+    ]
+  },
+  "within_bin_h2": {
+    "short_leq10": {
+      "n": 21,
+      "r": -0.095,
+      "p": 0.6822
+    },
+    "medium_10_20": {
+      "n": 15,
+      "r": -0.0537,
+      "p": 0.8492
+    },
+    "long_gt20": {
+      "n": 17,
+      "r": 0.369,
+      "p": 0.145
+    }
+  },
+  "pearson_table": {
+    "n_turns_vs_anchoring_rate": {
+      "r": 0.4239,
+      "p": 0.0016
+    },
+    "n_turns_vs_is_correct": {
+      "r": -0.3732,
+      "p": 0.0059
+    },
+    "anchoring_rate_vs_is_correct": {
+      "r": -0.0974,
+      "p": 0.4879
+    }
+  },
+  "logistic_regression": {
+    "intercept": {
+      "beta": 0.6995,
+      "se": 0.6166,
+      "p": 0.2566
+    },
+    "anchor_rate": {
+      "beta": 1.6313,
+      "se": 2.3283,
+      "p": 0.4835
+    },
+    "n_turns": {
+      "beta": -0.131,
+      "se": 0.049,
+      "p": 0.0075
+    }
+  },
+  "interpretation": "Length confound confirmed: n_turns predicts both anchoring_rate (r=0.424) and correctness (r=-0.373). After controlling for length in logistic regression, anchor_rate has no independent association with correctness (beta=1.631, p=0.483). The conversation-level H2 is length-confounded, not orthogonal-by-design."
+}

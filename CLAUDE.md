@@ -34,22 +34,36 @@ Experiments in `code/` are written to run from the working directory of the rele
 
 Investigates CoT faithfulness mode-switching in multi-turn derailing conversations using DeepSeek-R1-Distill-Qwen-7B. All experiment code runs on a remote GPU server (172.24.16.177) via SSH/paramiko, not locally.
 
-**Status (2026-05-10): Session 4 — Exp 5 complete, Exp 1 running on server.**
+**Status (2026-05-12): Session 7 — H2 confound discovered, Bayesian characterization, paper 30 pages.**
 - Phase A: N=24 conversations, 412 faithfulness observations — COMPLETE
 - Phase B: 3 seeds × ~43 conversations (max_shards=20) — COMPLETE
 - Combined: N=67 conversations, 1,289 observations — analysis downloaded locally
-- Paper: `paper/paper.tex` updated to N=67, compiled to 23-page PDF
-- Figures: 12 PNGs in `paper/figures/` (anchoring_predictor.png new; logprob_distributions.png pending)
+- Paper: `paper/paper.tex` — **30-page PDF**, H2 reframed as length-confounded, H2b multivariate check confirms Case A
+- Figures: 15 PNGs in `paper/figures/` (added monitor_simulation.png, h2b_integration.png, h2_confound.png)
+- **Correctness labels**: N=53 recovered (`results/correctness_labels/labels.json`); originals N=16 (100% correct, 9.6 turns), recovered N=37 (0% correct, 19.8 turns)
+- **H2 confound (NEW Session 7)**: After controlling for n_turns, anchor_rate has no independent effect on correctness (β=+1.63, p=0.483); n_turns is the driver (β=−0.131, p=0.008). BF₀₁=4.6 (moderate evidence for null), TOST equivalent to null (|ρ|<0.25)
+- **H2b multivariate (NEW Session 7)**: Case A — H2b survives length control; partial ρ=−0.337, p=0.009; OLS anchor β=−0.412, p=0.019
 - **Exp 5 (anchoring predictor)**: full N=63 (1,162 turns), 7 features incl. shard_progress, GroupKFold AUC=0.710 (per-fold 0.703±0.033), see `subsec:predictor` in paper
-- **Exp 1 (answer-token logprobs)**: 870 rows / 719 labelable turns. **NULL result** — margin (chosen − top alternative) is indistinguishable between anchored and exploring at 0% and 100% CoT (all p>0.29, d<0.10). Paper subsection (`subsec:logprobs`) reports honestly. Token-level confidence is not diagnostic of mode.
-- **Exp 4 (INT4 quant robustness)**: Phase 4 6 convs re-run at LOAD_IN_4BIT=1. **100% per-turn agreement** with INT8 (184/184 turns), mean shift +0.7pp (Wilcoxon p=1.0). Quantization confound closed. Paragraph in §6 Limitations + `fig:quant`.
+- **Exp 1 (answer-token logprobs)**: NULL result — margin indistinguishable between anchored/exploring at all p>0.29, d<0.10. Token-level confidence is not diagnostic of mode.
+- **Exp 4 (INT4 quant robustness)**: 100% per-turn agreement INT4 vs INT8 (184/184). Quantization confound closed.
+- **Cross-model experiments**: Qwen3-14B (seed 44444) + R1-Distill-Llama-8B (seed 55555) queued in tmux session `experiments` on server; auto-launch when ≥30 GB GPU free. Scripts: `~/run_qwen3_experiment.sh`, `~/run_llama_r1_experiment.sh`, orchestrator: `~/wait_and_run.sh`.
+
+**Session 5 paper additions (2026-05-11):**
+- **6 new citations**: `chua2025` (DeepSeek-R1 single-turn faithfulness, 59% cue identification), `cot_necessity2025` (task-level CoT necessity theory), `thought_anchors2026` (sentence-level thought anchors — terminology sibling), `conv_inertia2026` (conversational inertia literature), `context_length_hurts2025` (context length degrades reasoning 14–85%), `meek2025` (CoT monitorability via faithfulness+verbosity)
+- **New §2 paragraph**: "Thought Anchors at the sentence level" — distinguishes our turn-level "anchored" from Thought Anchors' sentence-level measure (critical: same term, different grain)
+- **New §5 paragraph**: "Candidate Mechanisms" — three testable hypotheses: (1) KV-cache context accumulation, (2) RL training pressure toward consistency, (3) information saturation ("rational anchoring")
+- **New Limitations entry**: "Interpretation of answer invariance" — pre-empts Hydra Effect / multiple-pathways reviewer objection; argues length gradient rules out pure architectural explanation
+- **Laban 2025** flagged as ICLR 2026 Best Paper at first mention
+- **Single-model limitation** updated to mention cross-model experiments running at submission
+- **Conclusion** updated to flag cross-model experiments as in-progress
 
 **Combined N=67 key stats:**
 - H3: χ²=236.9, df=66, p≈0 — conversation-level anchoring confirmed
 - H3 within-bin: medium p=0.0035, long p<0.001 — holds within each length stratum
 - ICC: 0.152 — 15% of anchoring variance is between conversations
 - H1: bootstrap p=0.521 — **inconclusive** (148 anchored runs; geometric null fits)
-- H2: r=−0.242, p=0.291, N=21 — correct direction, underpowered (needs N≈131)
+- H2: r=−0.097, p=0.489, N=53 — **length-confounded** (BF₀₁=4.6, TOST equivalent, logit anchor p=0.483)
+- H2b: Spearman ρ=−0.426, p=0.001, N=59 — SIGNIFICANT; partial ρ=−0.337, p=0.009 after length control
 - Length gradient: short 7.2% → medium 12.8% → long 28.4% (3.9× ratio)
 - Repetition confound: anchored 75.8%, exploring 45.6%, ratio 1.66×
 

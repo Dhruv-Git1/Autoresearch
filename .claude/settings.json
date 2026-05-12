@@ -8,7 +8,11 @@
       "Bash(bibtex paper *)",
       "WebFetch(domain:arxiv.org)",
       "Bash(PYTHONIOENCODING=utf-8 python research_projects/multi_turn_cot_faithfulness/code/generate_supplementary_figures.py)",
-      "WebFetch(domain:caisc2026.github.io)"
+      "WebFetch(domain:caisc2026.github.io)",
+      "Bash(ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no vasudev_majhi_2021@172.24.16.177 \"tmux list-sessions 2>/dev/null && echo '---' && cat ~/wait_and_run.log 2>/dev/null | tail -20\")",
+      "Bash(ssh -o ConnectTimeout=10 vasudev_majhi_2021@172.24.16.177 \"tmux capture-pane -t experiments -p 2>/dev/null | tail -30 && echo '---GPU---' && nvidia-smi --query-gpu=memory.free,memory.used,memory.total --format=csv,noheader\")",
+      "Bash(ssh -o ConnectTimeout=10 vasudev_majhi_2021@172.24.16.177 \"cat ~/wait_and_run.log | tail -5 && echo '---' && ls -la ~/multi_turn_cot/multi_turn_cot_faithfulness/results/ 2>/dev/null\")",
+      "Bash(ssh -o ConnectTimeout=10 vasudev_majhi_2021@172.24.16.177 \"ls -la ~/multi_turn_cot/multi_turn_cot_faithfulness/results/qwen3_14b_s1/ | tail -5 && echo '---traces---' && ls ~/multi_turn_cot/multi_turn_cot_faithfulness/results/qwen3_14b_s1/ | grep trace | wc -l && echo '---faith---' && wc -l ~/multi_turn_cot/multi_turn_cot_faithfulness/results/qwen3_14b_s1/faithfulness.jsonl 2>/dev/null && echo '---r1llama---' && ls ~/multi_turn_cot/multi_turn_cot_faithfulness/results/r1_llama_s1/ | wc -l\")"
     ]
   }
 }

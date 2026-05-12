@@ -1,0 +1,577 @@
+{
+  "n_total": 63,
+  "n_with_label": 53,
+  "n_correct": 16,
+  "n_wrong": 37,
+  "n_unrecoverable": 10,
+  "accuracy": 0.302,
+  "labels": {
+    "sharded-GSM8K/1197": {
+      "task_id": "sharded-GSM8K/1197",
+      "gold_answer_raw": "$<<90*20=1800>>1800 on the cognac\nSo he spent a total of $600+$1800=$<<600+1800=2400>>2400\n#### 2400",
+      "gold_val": 2400,
+      "model_answer_raw": "2520",
+      "model_val": 2520,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/214": {
+      "task_id": "sharded-GSM8K/214",
+      "gold_answer_raw": "\nSubtracting 16 from both sides, we get 2s = 16\nDividing both sides by 2, we get s = <<8=8>>8\n#### 8",
+      "gold_val": 8,
+      "model_answer_raw": "8",
+      "model_val": 8,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/401": {
+      "task_id": "sharded-GSM8K/401",
+      "gold_answer_raw": "o 12 months so every year he earns $1200/month * 12 months/year = $<<1200*12=14400>>14400\n#### 14400",
+      "gold_val": 14400,
+      "model_answer_raw": "",
+      "model_val": null,
+      "is_correct": null,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/953": {
+      "task_id": "sharded-GSM8K/953",
+      "gold_answer_raw": "28>>28 minutes.\nOn that day, Kim slept in her bed for 480 - 28 = <<480-28=452>>452 minutes.\n#### 452",
+      "gold_val": 452,
+      "model_answer_raw": "480",
+      "model_val": 480,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/1027": {
+      "task_id": "sharded-GSM8K/1027",
+      "gold_answer_raw": "ce for the package with 8 sandwiches would be $1.5/sandwich * 8 sandwiches = $<<1.5*8=12>>12\n#### 12",
+      "gold_val": 12,
+      "model_answer_raw": "12",
+      "model_val": 12,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/1058": {
+      "task_id": "sharded-GSM8K/1058",
+      "gold_answer_raw": "*50=100>>100.\nTherefore, Leo had 150 + 100 = <<150+100=250>>250 stickers in his collection.\n#### 250",
+      "gold_val": 250,
+      "model_answer_raw": "150",
+      "model_val": 150,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/1059": {
+      "task_id": "sharded-GSM8K/1059",
+      "gold_answer_raw": "day.\nSo, 720 grams of cat food only last for 720 grams / 360 grams/day = <<720/360=2>>2 days.\n#### 2",
+      "gold_val": 2,
+      "model_answer_raw": "2",
+      "model_val": 2,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/1124": {
+      "task_id": "sharded-GSM8K/1124",
+      "gold_answer_raw": "means that he had 16 x 2 = <<16*2=32>>32 stickers.\nSeth had 32 x 2 = <<32*2=64>>64 stickers.\n#### 64",
+      "gold_val": 64,
+      "model_answer_raw": "36",
+      "model_val": 36,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/1207": {
+      "task_id": "sharded-GSM8K/1207",
+      "gold_answer_raw": "ore, the total amount he will earn for all the tunas is $28 + $23 + $13= $<<28+23+13=64>>64.\n#### 64",
+      "gold_val": 64,
+      "model_answer_raw": "64",
+      "model_val": 64,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/2": {
+      "task_id": "sharded-GSM8K/2",
+      "gold_answer_raw": "000=200000>>200,000\nSo he made a profit of 200,000-130,000=$<<200000-130000=70000>>70,000\n#### 70000",
+      "gold_val": 70000,
+      "model_answer_raw": "0",
+      "model_val": 0,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/378": {
+      "task_id": "sharded-GSM8K/378",
+      "gold_answer_raw": "= <<20+15=35>>35 socks.\nShe has therefore missed 50 socks \u2013 35 socks = <<50-35=15>>15 socks.\n#### 15",
+      "gold_val": 15,
+      "model_answer_raw": "6",
+      "model_val": 6,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/44": {
+      "task_id": "sharded-GSM8K/44",
+      "gold_answer_raw": "ng candles and his supplies cost $20.00 then his net profit is 40-20 = $<<40-20=20.00>>20.00\n#### 20",
+      "gold_val": 20,
+      "model_answer_raw": "",
+      "model_val": null,
+      "is_correct": null,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/510": {
+      "task_id": "sharded-GSM8K/510",
+      "gold_answer_raw": "105,000 calories / 200 days = <<105000/200=525>>525 calories per day more than he consumes.\n#### 525",
+      "gold_val": 525,
+      "model_answer_raw": "574",
+      "model_val": 574,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/728": {
+      "task_id": "sharded-GSM8K/728",
+      "gold_answer_raw": " multiply by 100% to express the answer as a percentage: 60 spools / 150 spools * 100% = 40%\n#### 40",
+      "gold_val": 40,
+      "model_answer_raw": "60",
+      "model_val": 60,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/1047": {
+      "task_id": "sharded-GSM8K/1047",
+      "gold_answer_raw": "nd set, he retrieved 2B = 3 * 2 = 6 balls.\nIn the first set he retrieved 2(3) + 4 balls = 10\n#### 10",
+      "gold_val": 10,
+      "model_answer_raw": "10",
+      "model_val": 10,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/14": {
+      "task_id": "sharded-GSM8K/14",
+      "gold_answer_raw": "2>>12 students enrolled in hip-hop dance.\nThis is 12/20 x 100% = 60% of the entire students.\n#### 60",
+      "gold_val": 60,
+      "model_answer_raw": "60",
+      "model_val": 60,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/201": {
+      "task_id": "sharded-GSM8K/201",
+      "gold_answer_raw": "09,200 from his salary\nSo in total he made 109,200+5,000=$<<109200+5000=114200>>114,200\n#### 114,200",
+      "gold_val": 114200,
+      "model_answer_raw": "$109,000",
+      "model_val": 109000,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/543": {
+      "task_id": "sharded-GSM8K/543",
+      "gold_answer_raw": "0.5=0.3>>0.3/task.\nSo, Jairus will get $0.3/task x 20 tasks = $<<0.3*20=6>>6 more than Jenny.\n#### 6",
+      "gold_val": 6,
+      "model_answer_raw": "11",
+      "model_val": 11,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/642": {
+      "task_id": "sharded-GSM8K/642",
+      "gold_answer_raw": "00 on dress shirts\nThus the total cost is 7500+1500+1800=$<<7500+1500+1800=10800>>10,800\n#### 10,800",
+      "gold_val": 10800,
+      "model_answer_raw": "",
+      "model_val": null,
+      "is_correct": null,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/916": {
+      "task_id": "sharded-GSM8K/916",
+      "gold_answer_raw": "$11 + $3 +$14 = $<<11+3+14=28>>28.\nSo their mother gave each of them $28/2 = $<<28/2=14>>14.\n#### 14",
+      "gold_val": 14,
+      "model_answer_raw": "$7",
+      "model_val": 7,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/1011": {
+      "task_id": "sharded-GSM8K/1011",
+      "gold_answer_raw": "or the tank to be full is 18000 gallons - 12000 gallons = <<18000-12000=6000>>6000 gallons\n#### 6000",
+      "gold_val": 6000,
+      "model_answer_raw": "12,000",
+      "model_val": 12000,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/1260": {
+      "task_id": "sharded-GSM8K/1260",
+      "gold_answer_raw": "oads 6 batches, so she will need 30 \u00f7 6 = <<30/6=5>>5 days in total to upload all the photos.\n#### 5",
+      "gold_val": 5,
+      "model_answer_raw": "7",
+      "model_val": 7,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/140": {
+      "task_id": "sharded-GSM8K/140",
+      "gold_answer_raw": "s are semi-automatic.\nTherefore, the percentage of semi-automatic cars is 4/20 x 100% = 20%.\n#### 20",
+      "gold_val": 20,
+      "model_answer_raw": "20",
+      "model_val": 20,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/237": {
+      "task_id": "sharded-GSM8K/237",
+      "gold_answer_raw": "rs invested\nJohnny tripled this amount of money over the year, for a total of 30*=90 dollars\n#### 90",
+      "gold_val": 90,
+      "model_answer_raw": "30",
+      "model_val": 30,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/369": {
+      "task_id": "sharded-GSM8K/369",
+      "gold_answer_raw": "32.\nThe total cost of gifts for seniors is $1056 + $10 + $132 = $<<1056+10+132=1198>>1198.\n#### 1198",
+      "gold_val": 1198,
+      "model_answer_raw": "880",
+      "model_val": 880,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/416": {
+      "task_id": "sharded-GSM8K/416",
+      "gold_answer_raw": "s.\nx = 304 \u2013 180\nx = <<124=124>>124\nSo, there are 124 camels and 180 \u2013 124 = 56 dromedaries.\n#### 56",
+      "gold_val": 56,
+      "model_answer_raw": "180",
+      "model_val": 180,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/420": {
+      "task_id": "sharded-GSM8K/420",
+      "gold_answer_raw": "2000>>12000\nIf he initially had capital of $5000, his capital now is $12000+$5000= $17000\n#### 17000",
+      "gold_val": 17000,
+      "model_answer_raw": "5000",
+      "model_val": 5000,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/534": {
+      "task_id": "sharded-GSM8K/534",
+      "gold_answer_raw": ">3000\nIf there were 10 girls, then each girl brought 3000/10 = <<3000/10=300>>300 seashells\n#### 300",
+      "gold_val": 300,
+      "model_answer_raw": "60",
+      "model_val": 60,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/646": {
+      "task_id": "sharded-GSM8K/646",
+      "gold_answer_raw": "=25>>25 miles\n54 + 25 = <<54+25=79>>79 miles\nTogether, Alisa and Stanley biked for 79 miles.\n#### 79",
+      "gold_val": 79,
+      "model_answer_raw": "136.904",
+      "model_val": 136.904,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/739": {
+      "task_id": "sharded-GSM8K/739",
+      "gold_answer_raw": "jars = $<<3*16=48>>48\nThe total amount she spent at the store is $48 + $50 = $<<48+50=98>>98\n#### 98",
+      "gold_val": 98,
+      "model_answer_raw": "98",
+      "model_val": 98,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/740": {
+      "task_id": "sharded-GSM8K/740",
+      "gold_answer_raw": "video games is 50 total students - 10 baking - 5 basketball - 10 music = <<50-10-5-10=25>>25\n#### 25",
+      "gold_val": 25,
+      "model_answer_raw": "300",
+      "model_val": 300,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/871": {
+      "task_id": "sharded-GSM8K/871",
+      "gold_answer_raw": " pieces of pizza.\nSo far, he has eaten 14+34 = <<14+34=48>>48 pieces of the pizza he bought.\n#### 48",
+      "gold_val": 48,
+      "model_answer_raw": "44",
+      "model_val": 44,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/913": {
+      "task_id": "sharded-GSM8K/913",
+      "gold_answer_raw": "three pieces of bologna at each yellow balloon, then he had 18/3=<<18/3=6>>6 yellow balloons.\n#### 6",
+      "gold_val": 6,
+      "model_answer_raw": "40",
+      "model_val": 40,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/941": {
+      "task_id": "sharded-GSM8K/941",
+      "gold_answer_raw": "cher.\nThus the teacher has 900 - 58 = <<900-58=842>>842 bottles of apple juice for herself.\n#### 842",
+      "gold_val": 842,
+      "model_answer_raw": "900",
+      "model_val": 900,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/968": {
+      "task_id": "sharded-GSM8K/968",
+      "gold_answer_raw": "g all the racquets in 45 minutes + 110 minutes + 72 minutes = <<45+110+72=227>>227 minutes.\n#### 227",
+      "gold_val": 227,
+      "model_answer_raw": "227",
+      "model_val": 227,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/1131": {
+      "task_id": "sharded-GSM8K/1131",
+      "gold_answer_raw": "4=16>>16 logs.\nThat gives him16*5=<<16*5=80>>80 planks.\nSo he makes 80*1.2=$<<80*1.2=96>>96.\n#### 96",
+      "gold_val": 96,
+      "model_answer_raw": "80",
+      "model_val": 80,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/122": {
+      "task_id": "sharded-GSM8K/122",
+      "gold_answer_raw": "The total number of hours slept for the whole week will be 8+12+28 = <<8+12+28=48>>48 hours.\n#### 48",
+      "gold_val": 48,
+      "model_answer_raw": "48",
+      "model_val": 48,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/1247": {
+      "task_id": "sharded-GSM8K/1247",
+      "gold_answer_raw": "<<5+3=8>>8 marbles.\nHe went home and removed a bead, leaving him with 8-1=<<8-1=7>>7 marbles.\n#### 7",
+      "gold_val": 7,
+      "model_answer_raw": "10",
+      "model_val": 10,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/1269": {
+      "task_id": "sharded-GSM8K/1269",
+      "gold_answer_raw": "s the difference between his east and west movements which is 144-90 = <<144-90=54>>54 miles\n#### 54",
+      "gold_val": 54,
+      "model_answer_raw": "3v",
+      "model_val": null,
+      "is_correct": null,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/1287": {
+      "task_id": "sharded-GSM8K/1287",
+      "gold_answer_raw": "24 years old.\nSo all family members in total are 48 + 12 + 24 = <<48+12+24=84>>84 years old.\n#### 84",
+      "gold_val": 84,
+      "model_answer_raw": "18 + 16s",
+      "model_val": null,
+      "is_correct": null,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/1303": {
+      "task_id": "sharded-GSM8K/1303",
+      "gold_answer_raw": "er of days per week to convert the answer to weeks: 28 days / 7 days/week = <<28/7=4>>4 weeks\n#### 4",
+      "gold_val": 4,
+      "model_answer_raw": "84",
+      "model_val": 84,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/234": {
+      "task_id": "sharded-GSM8K/234",
+      "gold_answer_raw": "t means they eat 9*7=<<9*7=63>>63 tomatoes a day\nSo he needs 63/3=<<63/3=21>>21 tomato vines\n#### 21",
+      "gold_val": 21,
+      "model_answer_raw": "241 to 482",
+      "model_val": null,
+      "is_correct": null,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/427": {
+      "task_id": "sharded-GSM8K/427",
+      "gold_answer_raw": "ecause 1 - (1/3) = 2/3\nHe started with 150 cards because 100 / (2/3) = <<100/(2/3)=150>>150\n#### 150",
+      "gold_val": 150,
+      "model_answer_raw": "34",
+      "model_val": 34,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/435": {
+      "task_id": "sharded-GSM8K/435",
+      "gold_answer_raw": "<25-5=20>>20 lollipops.\nTherefore, each of his friends received 20/4 = <<20/4=5>>5 lollipops.\n#### 5",
+      "gold_val": 5,
+      "model_answer_raw": "20",
+      "model_val": 20,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/535": {
+      "task_id": "sharded-GSM8K/535",
+      "gold_answer_raw": "Nick had twice as many candies as George, so he had 2 * 8 = <<2*8=16>>16 candies originally.\n#### 16",
+      "gold_val": 16,
+      "model_answer_raw": "8",
+      "model_val": 8,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/784": {
+      "task_id": "sharded-GSM8K/784",
+      "gold_answer_raw": "lon of gas costs $3, then his car is consuming 5 * $3 = $<<5*3=15>>15 worth of gas each week\n#### 15",
+      "gold_val": 15,
+      "model_answer_raw": "7.00",
+      "model_val": 7,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/825": {
+      "task_id": "sharded-GSM8K/825",
+      "gold_answer_raw": "ca:3x+12\nTotal:x+3x+3x+12=341\n7x+12=341\n7x=329\nx=<<47=47>>47 cards\nBecca:3(47)+12=153 cards\n#### 153",
+      "gold_val": 153,
+      "model_answer_raw": null,
+      "model_val": null,
+      "is_correct": null,
+      "original_is_correct": false
+    },
+    "sharded-GSM8K/875": {
+      "task_id": "sharded-GSM8K/875",
+      "gold_answer_raw": "t 1/4 x 80 = <<80/4=20>>20 marbles.\nTherefore, he has 80 - 20 = <<80-20=60>>60 marbles left.\n#### 60",
+      "gold_val": 60,
+      "model_answer_raw": "60",
+      "model_val": 60,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/927": {
+      "task_id": "sharded-GSM8K/927",
+      "gold_answer_raw": "number of calories: 45000 calories + 40000 calories = <<45000+40000=85000>>85000 calories\n#### 85000",
+      "gold_val": 85000,
+      "model_answer_raw": "85,000",
+      "model_val": 85000,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/961": {
+      "task_id": "sharded-GSM8K/961",
+      "gold_answer_raw": " = <<70+15=85>>85 corn chips.\nAltogether, there were 85+140 = <<85+140=225>>225 corn chips.\n#### 225",
+      "gold_val": 225,
+      "model_answer_raw": "140",
+      "model_val": 140,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/107": {
+      "task_id": "sharded-GSM8K/107",
+      "gold_answer_raw": "1/2 hours of TV left.\nEach 30-minute episode is 1/2 hour.\nThus, W = 1 1/2 / 1/2 = 3 episodes.\n#### 3",
+      "gold_val": 3,
+      "model_answer_raw": null,
+      "model_val": null,
+      "is_correct": null,
+      "original_is_correct": false
+    },
+    "sharded-GSM8K/117": {
+      "task_id": "sharded-GSM8K/117",
+      "gold_answer_raw": "He bought 3*2=<<3*2=6>>6 pairs of shoes\nSo he spent 60*6=$<<60*6=360>>360\n#### 360",
+      "gold_val": 360,
+      "model_answer_raw": "17.50",
+      "model_val": 17.5,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/158": {
+      "task_id": "sharded-GSM8K/158",
+      "gold_answer_raw": "herefore, Raphael spent a total of $6 + $8 + $20 = $<<6+8+20=34>>34 for the school supplies.\n#### 34",
+      "gold_val": 34,
+      "model_answer_raw": "245",
+      "model_val": 245,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/178": {
+      "task_id": "sharded-GSM8K/178",
+      "gold_answer_raw": " crabs is 36+ 10 = <<36+10=46>>46.\nTogether, the three have 76+46 = <<76+46=122>>122 crabs.\n#### 122",
+      "gold_val": 122,
+      "model_answer_raw": "112",
+      "model_val": 112,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/189": {
+      "task_id": "sharded-GSM8K/189",
+      "gold_answer_raw": "pent a total of $20.25 + $15.75 + $66 = $102.\nSo each of them paid $102/3 = $<<102/3=34>>34.\n#### 34",
+      "gold_val": 34,
+      "model_answer_raw": "6.75",
+      "model_val": 6.75,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/315": {
+      "task_id": "sharded-GSM8K/315",
+      "gold_answer_raw": "l to find the number who showed up: 24 people - 2 people - 8 people = <<24-2-8=14>>14 people\n#### 14",
+      "gold_val": 14,
+      "model_answer_raw": "14",
+      "model_val": 14,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/576": {
+      "task_id": "sharded-GSM8K/576",
+      "gold_answer_raw": " = $<<34*216=7344>>7,344.\nThe total cost will be $864\u00a0+ $2,592\u00a0+ $432\u00a0+ $7,344 = $11,232.\n#### 11232",
+      "gold_val": 11232,
+      "model_answer_raw": "",
+      "model_val": null,
+      "is_correct": null,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/584": {
+      "task_id": "sharded-GSM8K/584",
+      "gold_answer_raw": "have 90 pairs of contacts so each pair of contacts costs 180/90 = $<<180/90=2.00>>2.00 a pair\n#### 2",
+      "gold_val": 2,
+      "model_answer_raw": "2",
+      "model_val": 2,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/698": {
+      "task_id": "sharded-GSM8K/698",
+      "gold_answer_raw": " payment which leaves her with 1200-480 = $<<1200-480=720.00>>720.00 remaining for spending\n#### 720",
+      "gold_val": 720,
+      "model_answer_raw": "720",
+      "model_val": 720,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/829": {
+      "task_id": "sharded-GSM8K/829",
+      "gold_answer_raw": "urth week, Boris produces 50,000-36,000 = <<50000-36000=14000>>14,000 bars of chocolate.\n#### 14,000",
+      "gold_val": 14000,
+      "model_answer_raw": "",
+      "model_val": null,
+      "is_correct": null,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/856": {
+      "task_id": "sharded-GSM8K/856",
+      "gold_answer_raw": "und 6.75 up to the next highest whole number, 7.\nMr. Jackson must buy 7 packs of glue sticks.\n#### 7",
+      "gold_val": 7,
+      "model_answer_raw": "7",
+      "model_val": 7,
+      "is_correct": true,
+      "original_is_correct": true
+    },
+    "sharded-GSM8K/929": {
+      "task_id": "sharded-GSM8K/929",
+      "gold_answer_raw": "*8=240>>240 miles.\nSo, the bus went 300 - 240 = <<300-240=60>>60 miles farther than the car.\n#### 60",
+      "gold_val": 60,
+      "model_answer_raw": "150",
+      "model_val": 150,
+      "is_correct": false,
+      "original_is_correct": null
+    },
+    "sharded-GSM8K/991": {
+      "task_id": "sharded-GSM8K/991",
+      "gold_answer_raw": "saw the comet for the first time when he was 90 years - 75 years = <<90-75=15>>15 years old.\n#### 15",
+      "gold_val": 15,
+      "model_answer_raw": "20",
+      "model_val": 20,
+      "is_correct": false,
+      "original_is_correct": null
+    }
+  }
+}

@@ -1,0 +1,421 @@
+{
+  "n_conversations": 59,
+  "spearman_rho": -0.4255,
+  "spearman_p": 0.0008,
+  "verdict": "Significant negative correlation (rho=-0.426, p=0.001): high anchoring predicts low answer update rate (belief-updating failure)",
+  "per_conv_data": [
+    {
+      "conv_id": "sharded-GSM8K/1011",
+      "anchoring_rate": 0.1538,
+      "answer_update_rate": 0.4783,
+      "n_turns": 26,
+      "n_valid_zero_answers": 24
+    },
+    {
+      "conv_id": "sharded-GSM8K/1047",
+      "anchoring_rate": 0.4138,
+      "answer_update_rate": 0.3529,
+      "n_turns": 29,
+      "n_valid_zero_answers": 35
+    },
+    {
+      "conv_id": "sharded-GSM8K/1058",
+      "anchoring_rate": 0.1818,
+      "answer_update_rate": 0.7778,
+      "n_turns": 11,
+      "n_valid_zero_answers": 10
+    },
+    {
+      "conv_id": "sharded-GSM8K/107",
+      "anchoring_rate": 0.3158,
+      "answer_update_rate": 0.1538,
+      "n_turns": 19,
+      "n_valid_zero_answers": 14
+    },
+    {
+      "conv_id": "sharded-GSM8K/1124",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.3333,
+      "n_turns": 16,
+      "n_valid_zero_answers": 13
+    },
+    {
+      "conv_id": "sharded-GSM8K/1131",
+      "anchoring_rate": 0.2667,
+      "answer_update_rate": 0.2759,
+      "n_turns": 30,
+      "n_valid_zero_answers": 30
+    },
+    {
+      "conv_id": "sharded-GSM8K/117",
+      "anchoring_rate": 0.3,
+      "answer_update_rate": 0.7,
+      "n_turns": 10,
+      "n_valid_zero_answers": 11
+    },
+    {
+      "conv_id": "sharded-GSM8K/1197",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.5,
+      "n_turns": 8,
+      "n_valid_zero_answers": 7
+    },
+    {
+      "conv_id": "sharded-GSM8K/1207",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 1.0,
+      "n_turns": 3,
+      "n_valid_zero_answers": 3
+    },
+    {
+      "conv_id": "sharded-GSM8K/122",
+      "anchoring_rate": 0.3333,
+      "answer_update_rate": 0.4,
+      "n_turns": 6,
+      "n_valid_zero_answers": 6
+    },
+    {
+      "conv_id": "sharded-GSM8K/1247",
+      "anchoring_rate": 0.5172,
+      "answer_update_rate": 0.3448,
+      "n_turns": 29,
+      "n_valid_zero_answers": 30
+    },
+    {
+      "conv_id": "sharded-GSM8K/1260",
+      "anchoring_rate": 0.2308,
+      "answer_update_rate": 0.4583,
+      "n_turns": 26,
+      "n_valid_zero_answers": 25
+    },
+    {
+      "conv_id": "sharded-GSM8K/1269",
+      "anchoring_rate": 0.5893,
+      "answer_update_rate": 0.8824,
+      "n_turns": 56,
+      "n_valid_zero_answers": 52
+    },
+    {
+      "conv_id": "sharded-GSM8K/1287",
+      "anchoring_rate": 0.1333,
+      "answer_update_rate": 0.7143,
+      "n_turns": 30,
+      "n_valid_zero_answers": 29
+    },
+    {
+      "conv_id": "sharded-GSM8K/1303",
+      "anchoring_rate": 0.2,
+      "answer_update_rate": 0.5714,
+      "n_turns": 10,
+      "n_valid_zero_answers": 8
+    },
+    {
+      "conv_id": "sharded-GSM8K/14",
+      "anchoring_rate": 0.44,
+      "answer_update_rate": 0.2174,
+      "n_turns": 25,
+      "n_valid_zero_answers": 24
+    },
+    {
+      "conv_id": "sharded-GSM8K/140",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.5,
+      "n_turns": 3,
+      "n_valid_zero_answers": 3
+    },
+    {
+      "conv_id": "sharded-GSM8K/158",
+      "anchoring_rate": 0.1176,
+      "answer_update_rate": 0.75,
+      "n_turns": 17,
+      "n_valid_zero_answers": 17
+    },
+    {
+      "conv_id": "sharded-GSM8K/178",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.5714,
+      "n_turns": 9,
+      "n_valid_zero_answers": 8
+    },
+    {
+      "conv_id": "sharded-GSM8K/189",
+      "anchoring_rate": 0.2333,
+      "answer_update_rate": 0.2143,
+      "n_turns": 30,
+      "n_valid_zero_answers": 29
+    },
+    {
+      "conv_id": "sharded-GSM8K/2",
+      "anchoring_rate": 0.1667,
+      "answer_update_rate": 0.5,
+      "n_turns": 6,
+      "n_valid_zero_answers": 5
+    },
+    {
+      "conv_id": "sharded-GSM8K/201",
+      "anchoring_rate": 0.1143,
+      "answer_update_rate": 0.7879,
+      "n_turns": 35,
+      "n_valid_zero_answers": 34
+    },
+    {
+      "conv_id": "sharded-GSM8K/234",
+      "anchoring_rate": 0.2667,
+      "answer_update_rate": 0.5172,
+      "n_turns": 30,
+      "n_valid_zero_answers": 30
+    },
+    {
+      "conv_id": "sharded-GSM8K/237",
+      "anchoring_rate": 0.5652,
+      "answer_update_rate": 0.3043,
+      "n_turns": 23,
+      "n_valid_zero_answers": 24
+    },
+    {
+      "conv_id": "sharded-GSM8K/315",
+      "anchoring_rate": 0.0909,
+      "answer_update_rate": 0.4444,
+      "n_turns": 11,
+      "n_valid_zero_answers": 10
+    },
+    {
+      "conv_id": "sharded-GSM8K/369",
+      "anchoring_rate": 0.1333,
+      "answer_update_rate": 0.5357,
+      "n_turns": 30,
+      "n_valid_zero_answers": 29
+    },
+    {
+      "conv_id": "sharded-GSM8K/378",
+      "anchoring_rate": 0.1,
+      "answer_update_rate": 0.875,
+      "n_turns": 10,
+      "n_valid_zero_answers": 9
+    },
+    {
+      "conv_id": "sharded-GSM8K/401",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.3636,
+      "n_turns": 12,
+      "n_valid_zero_answers": 12
+    },
+    {
+      "conv_id": "sharded-GSM8K/416",
+      "anchoring_rate": 0.3103,
+      "answer_update_rate": 0.3214,
+      "n_turns": 29,
+      "n_valid_zero_answers": 29
+    },
+    {
+      "conv_id": "sharded-GSM8K/420",
+      "anchoring_rate": 0.1818,
+      "answer_update_rate": 0.4167,
+      "n_turns": 11,
+      "n_valid_zero_answers": 13
+    },
+    {
+      "conv_id": "sharded-GSM8K/427",
+      "anchoring_rate": 0.2632,
+      "answer_update_rate": 0.5882,
+      "n_turns": 19,
+      "n_valid_zero_answers": 18
+    },
+    {
+      "conv_id": "sharded-GSM8K/435",
+      "anchoring_rate": 0.3636,
+      "answer_update_rate": 0.6,
+      "n_turns": 11,
+      "n_valid_zero_answers": 11
+    },
+    {
+      "conv_id": "sharded-GSM8K/44",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.7143,
+      "n_turns": 8,
+      "n_valid_zero_answers": 8
+    },
+    {
+      "conv_id": "sharded-GSM8K/510",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 1.0,
+      "n_turns": 5,
+      "n_valid_zero_answers": 5
+    },
+    {
+      "conv_id": "sharded-GSM8K/534",
+      "anchoring_rate": 0.12,
+      "answer_update_rate": 0.381,
+      "n_turns": 25,
+      "n_valid_zero_answers": 22
+    },
+    {
+      "conv_id": "sharded-GSM8K/535",
+      "anchoring_rate": 0.4444,
+      "answer_update_rate": 0.375,
+      "n_turns": 9,
+      "n_valid_zero_answers": 9
+    },
+    {
+      "conv_id": "sharded-GSM8K/543",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.5862,
+      "n_turns": 30,
+      "n_valid_zero_answers": 30
+    },
+    {
+      "conv_id": "sharded-GSM8K/576",
+      "anchoring_rate": 0.4,
+      "answer_update_rate": 0.4828,
+      "n_turns": 30,
+      "n_valid_zero_answers": 30
+    },
+    {
+      "conv_id": "sharded-GSM8K/584",
+      "anchoring_rate": 0.3571,
+      "answer_update_rate": 0.3333,
+      "n_turns": 14,
+      "n_valid_zero_answers": 13
+    },
+    {
+      "conv_id": "sharded-GSM8K/642",
+      "anchoring_rate": 0.1778,
+      "answer_update_rate": 0.3953,
+      "n_turns": 45,
+      "n_valid_zero_answers": 44
+    },
+    {
+      "conv_id": "sharded-GSM8K/646",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 1.0,
+      "n_turns": 9,
+      "n_valid_zero_answers": 9
+    },
+    {
+      "conv_id": "sharded-GSM8K/698",
+      "anchoring_rate": 0.1667,
+      "answer_update_rate": 0.75,
+      "n_turns": 6,
+      "n_valid_zero_answers": 5
+    },
+    {
+      "conv_id": "sharded-GSM8K/728",
+      "anchoring_rate": 0.0789,
+      "answer_update_rate": 0.5135,
+      "n_turns": 38,
+      "n_valid_zero_answers": 38
+    },
+    {
+      "conv_id": "sharded-GSM8K/739",
+      "anchoring_rate": 0.3333,
+      "answer_update_rate": 0.4,
+      "n_turns": 6,
+      "n_valid_zero_answers": 6
+    },
+    {
+      "conv_id": "sharded-GSM8K/740",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.8333,
+      "n_turns": 7,
+      "n_valid_zero_answers": 7
+    },
+    {
+      "conv_id": "sharded-GSM8K/784",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.4444,
+      "n_turns": 10,
+      "n_valid_zero_answers": 10
+    },
+    {
+      "conv_id": "sharded-GSM8K/825",
+      "anchoring_rate": 0.1765,
+      "answer_update_rate": 0.6,
+      "n_turns": 17,
+      "n_valid_zero_answers": 16
+    },
+    {
+      "conv_id": "sharded-GSM8K/829",
+      "anchoring_rate": 0.5862,
+      "answer_update_rate": 0.2308,
+      "n_turns": 29,
+      "n_valid_zero_answers": 27
+    },
+    {
+      "conv_id": "sharded-GSM8K/856",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.5,
+      "n_turns": 16,
+      "n_valid_zero_answers": 15
+    },
+    {
+      "conv_id": "sharded-GSM8K/871",
+      "anchoring_rate": 0.3077,
+      "answer_update_rate": 0.6,
+      "n_turns": 26,
+      "n_valid_zero_answers": 26
+    },
+    {
+      "conv_id": "sharded-GSM8K/875",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.3571,
+      "n_turns": 16,
+      "n_valid_zero_answers": 15
+    },
+    {
+      "conv_id": "sharded-GSM8K/913",
+      "anchoring_rate": 0.4595,
+      "answer_update_rate": 0.2676,
+      "n_turns": 74,
+      "n_valid_zero_answers": 72
+    },
+    {
+      "conv_id": "sharded-GSM8K/916",
+      "anchoring_rate": 0.05,
+      "answer_update_rate": 0.4211,
+      "n_turns": 20,
+      "n_valid_zero_answers": 20
+    },
+    {
+      "conv_id": "sharded-GSM8K/929",
+      "anchoring_rate": 0.1667,
+      "answer_update_rate": 0.3636,
+      "n_turns": 12,
+      "n_valid_zero_answers": 12
+    },
+    {
+      "conv_id": "sharded-GSM8K/941",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.8462,
+      "n_turns": 14,
+      "n_valid_zero_answers": 14
+    },
+    {
+      "conv_id": "sharded-GSM8K/953",
+      "anchoring_rate": 0.0714,
+      "answer_update_rate": 0.5385,
+      "n_turns": 14,
+      "n_valid_zero_answers": 14
+    },
+    {
+      "conv_id": "sharded-GSM8K/961",
+      "anchoring_rate": 0.1034,
+      "answer_update_rate": 0.0714,
+      "n_turns": 29,
+      "n_valid_zero_answers": 29
+    },
+    {
+      "conv_id": "sharded-GSM8K/968",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.6667,
+      "n_turns": 10,
+      "n_valid_zero_answers": 10
+    },
+    {
+      "conv_id": "sharded-GSM8K/991",
+      "anchoring_rate": 0.0,
+      "answer_update_rate": 0.6923,
+      "n_turns": 15,
+      "n_valid_zero_answers": 14
+    }
+  ]
+}

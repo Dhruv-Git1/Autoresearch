@@ -1,0 +1,32 @@
+{
+  "n_turns_total": 1134,
+  "n_conversations": 63,
+  "n_anchored_turns": 266,
+  "mean_monitor_score_overall": 0.6063,
+  "frac_turns_passing_threshold_0.8": 0.3898,
+  "frac_turns_perfect_1.0": 0.2346,
+  "score_distribution_by_length": {
+    "short": {
+      "n_turns": 122,
+      "mean_monitor_score": 0.4822,
+      "frac_turns_passing_0.8": 0.1639,
+      "frac_turns_perfect_1.0": 0.0738
+    },
+    "medium": {
+      "n_turns": 206,
+      "mean_monitor_score": 0.5103,
+      "frac_turns_passing_0.8": 0.2524,
+      "frac_turns_perfect_1.0": 0.1408
+    },
+    "long": {
+      "n_turns": 806,
+      "mean_monitor_score": 0.6496,
+      "frac_turns_passing_0.8": 0.4591,
+      "frac_turns_perfect_1.0": 0.2829
+    }
+  },
+  "mean_score_short": 0.4822,
+  "mean_score_medium": 0.5103,
+  "mean_score_long": 0.6496,
+  "verification": "PASSED \u2014 all anchored turns have monitor_score=1.0"
+}

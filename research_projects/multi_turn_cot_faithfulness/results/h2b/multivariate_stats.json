@@ -1,0 +1,39 @@
+{
+  "N": 59,
+  "bivariate_spearman": {
+    "rho": -0.4255,
+    "p": 0.0008
+  },
+  "length_vs_anchoring": {
+    "spearman_rho": 0.3926,
+    "p": 0.0021
+  },
+  "length_vs_update_rate": {
+    "spearman_rho": -0.3421,
+    "p": 0.008
+  },
+  "ols_regression": {
+    "formula": "answer_update_rate ~ 1 + anchor_rate + n_turns",
+    "intercept": {
+      "beta": 0.6443,
+      "se": 0.0484,
+      "p": 0.0
+    },
+    "anchor_rate": {
+      "beta": -0.4124,
+      "se": 0.1713,
+      "p": 0.0194
+    },
+    "n_turns": {
+      "beta": -0.0023,
+      "se": 0.0022,
+      "p": 0.3058
+    }
+  },
+  "partial_spearman_given_length": {
+    "rho_partial": -0.337,
+    "p": 0.0091
+  },
+  "verdict": "A",
+  "interpretation": "Case A: H2b SURVIVES length control. Bivariate rho=-0.426 (p=0.001); Partial rho=-0.337 (p=0.009); OLS anchor_rate beta=-0.412 (p=0.019), n_turns beta=-0.0023 (p=0.306)"
+}

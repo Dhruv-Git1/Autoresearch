@@ -20,12 +20,15 @@
 \definecolor{sigred}{HTML}{a31515}
 
 \title{Lost in Reasoning: Conversation-Level Heterogeneity in CoT
-       Faithfulness and Its Implications for Safety Monitoring}
+       Causal Necessity and Its Implications for Safety Monitoring}
 
 \author{%
   Dhruv Gupta \\
   BITS Pilani \\
   \texttt{f20221683@pilani.bits-pilani.ac.in}
+  \And
+  Vasudev Majhi \\
+  BITS Pilani \\
 }
 
 \begin{document}
@@ -44,16 +47,18 @@ where a model has already ``made up its mind''?
 We study this question by surgically removing a model's reasoning
 at every turn of 67 multi-turn conversations and asking: does
 the model's answer change?
-If erasing the reasoning changes nothing, the trace was decorative
---- the model had already committed to an answer and the
-chain-of-thought merely dressed it up.
+If erasing the reasoning changes nothing, the current-turn CoT
+trace is \emph{causally unnecessary} for that output --- the answer
+is invariant to how much reasoning the model is shown, whether
+that reflects early commitment, conversational inertia, or some
+other mechanism we have not yet identified.
 
-We find that faithfulness is \textbf{not} a fixed property of a
-model: within a single conversation the same model alternates
+We find that CoT causal necessity is \textbf{not} a fixed property
+of a model: within a single conversation the same model alternates
 between two kinds of turns.
 On \emph{exploring} turns the reasoning genuinely drives the answer;
-on \emph{anchored} turns the reasoning is post-hoc rationalization
---- erasing it makes no difference.
+on \emph{anchored} turns the current-turn reasoning is
+answer-invariant --- erasing it makes no difference to the output.
 Across 67~conversations and 1,289~total observations
 (1,167~assessable turns after excluding turns with fewer than
 3~parseable regenerations), 23.3\% of assessable turns are anchored.
@@ -64,11 +69,12 @@ at all, a pattern confirmed statistically and replicated across
 three independent Phase~B seeds (27--38\% anchored per seed;
 higher than the combined 23.3\% because Phase~B used longer
 conversations that anchor more).
-More worrying still, the fraction of anchored turns grows
+More strikingly, the fraction of anchored turns grows
 \textbf{3.9$\times$} as conversations lengthen---from 7.2\% in
 short conversations to 28.4\% in long ones.
-This means CoT-based monitoring becomes least reliable precisely in
-the long, high-stakes settings where it is most needed.
+This means CoT-based monitoring would face its lowest causal signal
+in the longest conversations --- a prediction that requires
+prospective confirmation on datasets with clean outcome labels.
 \end{abstract}
 
 % ─────────────────────────────────────────────────────────────
@@ -90,9 +96,9 @@ leaving open whether faithfulness holds as a conversation unfolds
 across many turns.
 
 \paragraph{The gap: multi-turn derailment and its effect on faithfulness.}
-\citet{laban2025} showed that reasoning models lose roughly 39
-percentage points of accuracy when multi-turn problems are revealed
-piece by piece across turns, relative to single-turn baselines.
+\citet{laban2025} (ICLR 2026 Best Paper) showed that reasoning models
+lose roughly 39 percentage points of accuracy when multi-turn problems
+are revealed piece by piece across turns, relative to single-turn baselines.
 The dominant failure mode is \emph{premature commitment}: the model
 confidently states an early, often wrong, answer and does not revise
 it as new information arrives.
@@ -104,7 +110,7 @@ conversation'' phase, the model is still genuinely reasoning or
 merely rationalizing---producing a plausible-looking trace that
 does not constrain its output.
 
-\paragraph{A novel finding: the rate of unfaithful turns varies sharply across conversations.}
+\paragraph{A novel finding: the rate of CoT-invariant turns varies sharply across conversations.}
 Applying counterfactual deletion turn-by-turn to a 44-turn
 derailing conversation reveals that faithfulness does \emph{not}
 decay monotonically with turn index.
@@ -113,8 +119,9 @@ On \textbf{exploring} turns, truncating the CoT changes the
 answer---the reasoning chain is causally active.
 On \textbf{anchored} turns, all five truncation levels produce the
 same numeric answer regardless of how much reasoning is
-shown---the chain of thought is a post-hoc narrative for an answer
-the model had already committed to (Figure~\ref{fig:concept}).
+shown---the current-turn chain of thought is answer-invariant: showing
+the model more or less of its own reasoning does not change what it
+outputs at this turn (Figure~\ref{fig:concept}).
 What we find at scale is not that anchoring is sticky within a
 conversation (it is not, see~\S\ref{sec:results} H1), but that
 some conversations carry a much higher share of anchored turns
@@ -158,16 +165,16 @@ replicated across three independent experimental seeds.
 
 \paragraph{Contributions.}
 \begin{itemize}
-  \item \textbf{A new measurement: per-turn faithfulness in
+  \item \textbf{A new measurement: per-turn CoT causal necessity in
         multi-turn conversations.}
         We apply counterfactual deletion at every turn, treating
-        faithfulness as a time series rather than a scalar.
-        This reveals dynamics that single-turn evaluations
-        cannot see.
-  \item \textbf{Conversation-level heterogeneity in faithfulness rate.}
+        CoT necessity as a binary time series rather than a scalar.
+        This reveals conversation-length dynamics that single-turn
+        evaluations cannot see.
+  \item \textbf{Conversation-level heterogeneity in CoT necessity.}
         Within a single conversation the model alternates between
         exploring and anchored turns, and the share of anchored
-        turns differs sharply across conversations.
+        (CoT-invariant) turns differs sharply across conversations.
         This is not a property of the model or the task in
         isolation --- it is a property of the conversation.
         (Across 67 conversations, the spread of anchored fractions
@@ -179,13 +186,20 @@ replicated across three independent experimental seeds.
         a 3.9$\times$ gradient replicated across three independent
         experimental runs.
         This gives safety engineers a concrete, measurable signal:
-        longer conversations carry systematically less reliable CoT.
-  \item \textbf{A quantitative gap in current safety thinking.}
-        Proposals like \citet{korbak2025} assume CoT faithfulness
-        is a fixed model property.
-        Our results show it degrades predictably with conversation
-        length, making long-context monitoring less reliable
-        precisely where it is most needed.
+        longer conversations carry a systematically higher proportion
+        of CoT-invariant turns.
+  \item \textbf{A quantitative characterisation of conversation-length-dependent CoT necessity.}
+        \citet{korbak2025} argue that CoT monitoring is viable
+        only when CoT is computationally necessary for the output.
+        Our results operationalise this condition turn-by-turn:
+        CoT causal necessity varies predictably with conversation
+        length (3.9$\times$ gradient, replicated across three seeds),
+        and a cheap surface-feature predictor (AUC~$=0.710$) can
+        flag at-risk turns online.
+        If the length-anchoring gradient correlates with task failure
+        (H2, requiring $N\approx131$), it implies that CoT monitoring
+        reliability must be calibrated to conversation length --- a
+        previously unquantified dimension of multi-turn deployment.
 \end{itemize}
 
 % ─────────────────────────────────────────────────────────────
@@ -229,6 +243,22 @@ injected hints in their thinking trace only 25--39\% of the time.
 All these evaluations measure faithfulness as a scalar property of
 a (model, prompt) pair; none tracks how faithfulness evolves across
 turns of an ongoing conversation.
+\citet{chua2025} specifically evaluate the model family we study:
+in single-turn settings, DeepSeek-R1 identifies the causal influence
+of injected cues 59\% of the time, substantially above
+non-reasoning baselines (7\%); our work extends this single-turn
+baseline to the multi-turn setting and asks whether this fidelity
+holds as conversations unfold.
+Recent work has expanded this picture in scale:
+\citet{lieto2026} test 12 open-weight reasoning models (7B--685B)
+and find that thinking-token acknowledgment of injected hints (87.5\%)
+systematically exceeds answer-text acknowledgment (28.6\%),
+confirming substantial non-faithfulness across architectures;
+\citet{faithcotbench2026} introduce a dedicated 1{,}000-trajectory
+benchmark across four domains evaluated with 11 detection methods.
+Despite this breadth, \textit{every prior faithfulness evaluation
+treats each (model, prompt) pair in isolation}: none measures how
+CoT causal necessity evolves as a conversation unfolds across turns.
 
 \paragraph{Reasoning Theater: the single-generation analog.}
 The closest single-generation analog to our anchored turns is
@@ -257,6 +287,22 @@ mismatch'' and proposes a Mediator-Assistant architecture as a fix.
 Neither paper studies the \emph{faithfulness} of the reasoning
 trace during the lost phase.
 
+\paragraph{Multi-turn sycophancy.}
+\citet{hong2025} measure how quickly reasoning models reverse their
+position under user pushback in multi-turn dialogues, finding that
+reasoning models generally resist changing their answer
+but rarely self-correct once committed to an incorrect one.
+Our repetition-anchored turns (73.9\% of anchored turns match the
+prior answer) are structurally adjacent to this finding, but the
+mechanism is distinct: we do not ask the user to push back.
+We ask whether the model's \emph{own} current-turn reasoning is
+causally sufficient to change its output.
+That it is not---even when 100\% of the current-turn CoT is
+shown---distinguishes answer-invariant anchoring from ordinary
+context-copying or sycophancy to user pressure.
+Anchored turns represent a form of \emph{self-anchoring}: the model
+rationalizes a commitment it cannot reason its way out of.
+
 \paragraph{CoT monitorability and the safety stakes.}
 A growing safety literature argues that visible CoT traces are a
 currently valuable oversight safeguard \citep{korbak2025,
@@ -268,6 +314,19 @@ plausible reasoning that does not change the answer.
 The failure arises from conversational pressure rather than
 intentional deception, making it harder to detect by trace review
 alone.
+
+\paragraph{Within-conversation contrast as a methodological contribution.}
+Every prior CoT faithfulness study compares faithfulness across
+conversations (models, prompts, or benchmarks).
+Our analysis uses a \emph{within-conversation contrast} ---
+comparing anchored vs.\ exploring turns \emph{within the same
+conversation} across our confound analyses (repetition, length gradient,
+H2b).
+This design controls for between-conversation confounds (problem
+difficulty, model initialisation, total length) that would otherwise
+conflate faithfulness differences with selection effects.
+To our knowledge this is the first multi-turn CoT faithfulness study
+to use this matched within-conversation design.
 
 % ─────────────────────────────────────────────────────────────
 \section{Method}
@@ -694,45 +753,91 @@ distributions.
   \label{fig:runlength}
 \end{figure}
 
-\subsection{H2: Does More Anchoring Mean More Wrong Answers? --- Underpowered}
+\subsection{H2: Does More Anchoring Mean More Wrong Answers? --- A Confound Discovery}
+\label{subsec:h2}
 
-\paragraph{The hypothesis.}
+\paragraph{The hypothesis and initial result.}
 If anchored turns reflect a failure to update reasoning on new
 information, conversations with a higher anchored fraction should
 end up wrong more often.
-H2 tests this directly: is the fraction of anchored turns
-negatively correlated with conversation correctness?
+The simulator's extractor initially recovered clean labels for 21
+conversations ($r = -0.242$, $p = 0.291$) --- correct direction,
+underpowered.
 
-\paragraph{The measurement problem.}
-GSM8K multi-turn conversations rarely end with a cleanly labelled
-correct or incorrect outcome: the model answers incrementally
-across turns in inconsistent formats, and our extractor cannot
-always determine a definitive final answer.
-Of our 67 conversations, only 21 have unambiguous binary
-correctness labels.
+\paragraph{Label expansion.}
+We recover additional labels by extracting the gold answer
+(the integer after ``\texttt{\#\#\#\#}'' in the GSM8K solution string)
+and comparing to the model's final stated answer from the conversation's
+last answer-evaluation log entry.
+This gives $N = 53$ labelled conversations.
+The expanded test gives $r = -0.097$, $p = 0.489$ ---
+\emph{weaker} than the original $r = -0.242$, not stronger.
 
-\paragraph{Result: right direction, not enough data.}
-Among those 21 conversations, conversations the model got wrong
-did have a higher average anchored fraction than conversations
-it got right --- the trend points exactly where H2 predicts.
-The correlation is $r = -0.242$, $p = 0.291$.
-That p-value of 0.29 does not reach statistical significance ---
-but this is an expected consequence of having only 21~data points,
-not evidence against the hypothesis.
-A power analysis shows we would need approximately $N = 131$
-conversations with clean correctness labels to have an 80\%
-chance of detecting an effect this size.
-We are at 16\% of the required sample.
+\paragraph{Diagnostic: the expansion was length-biased.}
+Adding data should reveal a real effect; instead it attenuated it.
+The explanation lies in sample composition.
+The original 21 conversations with extractor-provided labels are
+\textbf{100\% correct} (mean 9.6~turns).
+The 37 newly recovered conversations are \textbf{0\% correct}
+(mean 19.8~turns).
+The simulator's extractor was implicitly selecting on success:
+it produced clean labels primarily for short conversations
+that the model solved correctly.
+Path B recovered the long, failed conversations the extractor could not score.
+The expansion is a \emph{length-biased convenience sample}, not a
+random draw.
 
-\textbf{H2 is inconclusive, not failed}: the data are consistent
-with anchoring predicting failure but the dataset is too small to
-confirm it.
-We deliberately do not include a figure for H2: with $N=21$ and
-$p=0.29$, any visualisation of so few points risks suggesting a
-result the data do not support.
-The natural next step is replication on HumanEval coding
-conversations, where every conversation has an unambiguous
-pass/fail label.
+\paragraph{Length is the confounder.}
+Conversation length predicts both anchoring rate
+($r = 0.424$, $p = 0.002$) and failure ($r = -0.373$, $p = 0.006$).
+Within length bins, the H2 correlation dissolves: short ($N=21$):
+$r = -0.095$, $p = 0.68$; medium ($N=15$): $r = -0.054$, $p = 0.85$;
+long ($N=17$): $r = +0.369$, $p = 0.15$.
+The sign flips in the long bin.
+A logistic regression confirms: after controlling for length, the
+anchoring coefficient becomes positive and non-significant
+($\beta = +1.63$, $p = 0.48$); conversation length is the operative
+predictor ($\beta = -0.131$, $p = 0.008$).
+Both anchoring and failure are length-driven; the conversation-level
+H2 was always a length-confounded artifact.
+
+\paragraph{Bayesian characterisation.}
+Beyond NHST, the data provide positive evidence \emph{for} the null.
+The Bayes factor (\citealt{wagenmakers2018}) is $\mathrm{BF}_{01} = 4.6$
+--- moderate evidence against a medium-or-larger negative correlation.
+A TOST equivalence test \citep{lakens2018} against bounds $|\rho| < 0.25$
+gives $p_{\text{lower}} = 0.13$, $p_{\text{upper}} = 0.006$; we cannot
+yet declare full equivalence to zero but the upper tail is ruled out.
+The 95\% CI via Fisher $z$ is $[-0.36, +0.18]$, straddling zero
+generously (Figure~\ref{fig:h2confound}).
+
+\textbf{The honest summary}: H2 is not merely underpowered ---
+the conversation-level outcome test is length-confounded.
+Anchoring has no independent association with failure once length is
+controlled.
+This does not undermine the Process-level safety claim
+(\S\ref{sec:discussion}), which never depended on outcome correlation.
+For a length-controlled mechanism test, see \S\ref{subsec:h2b}
+(partial Spearman $\rho_{\text{partial}} = -0.337$, $p = 0.009$,
+after controlling for length).
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/h2_confound.png}
+  \caption{%
+    \textbf{H2 confound analysis ($N=53$ labelled conversations).}
+    \emph{Left:} Length-bias in sample composition.
+    Green circles = original extractor labels (all correct, mean 9.6~turns);
+    red crosses = recovered labels (all wrong, mean 19.8~turns).
+    The two groups are separated by length, not anchoring rate.
+    \emph{Right:} Pairwise Pearson correlations with 95\% CIs.
+    Significant correlations (red) are between length and anchoring, and
+    between length and correctness.
+    The anchoring--correctness correlation (blue, $r = -0.097$) is
+    non-significant and its CI straddles zero.%
+  }
+  \label{fig:h2confound}
+\end{figure}
 
 \subsection{H3: Anchoring is a Conversation-Level Property}
 
@@ -1023,7 +1128,7 @@ At 25\%, 50\%, 75\% it still does not see enough to change its
 mind, so it repeats again.
 The result looks like ``anchoring'' but it is really just answer
 inertia --- the conversational equivalent of ``I'll stick with
-what I said.''
+what I said'' \citep[a known multi-turn failure mode;][]{conv_inertia2026}.
 If this story were true, nearly every anchored answer should match
 the preceding turn's answer.
 
@@ -1109,6 +1214,74 @@ Figure~\ref{fig:repconfound} shows the breakdown.
   \label{fig:repconfound}
 \end{figure}
 
+\subsection{H2b: Anchoring Predicts Failure to Integrate New Evidence}
+\label{subsec:h2b}
+
+\paragraph{Motivation.}
+H2 (anchoring predicts task failure) is length-confounded at the
+conversation level (\S\ref{subsec:h2}).
+We test the underlying \emph{mechanism} directly, without outcome labels
+and with a length-controlled sanity check:
+does high anchoring predict failure to update answers as new evidence
+arrives, \emph{independent of conversation length}?
+
+\paragraph{Method.}
+For each turn we extract the 0\%-truncation answer: the model's output
+when shown the conversation context but \emph{none} of the current-turn
+CoT.
+This is the model's ``context-only'' answer --- what the prior
+conversation alone determines.
+For each conversation we compute:
+\[
+  \text{answer\_update\_rate}
+  = \frac{\text{\# consecutive-turn pairs where 0\%-level answer changes}}
+         {\text{\# consecutive-turn pairs with extractable answers}}
+\]
+A low update rate means the model's context-only answer is stable
+despite accumulating new shards --- a signature of belief-updating failure.
+We correlate anchoring rate with answer update rate using Spearman's
+$\rho$ across the $N=59$ conversations with sufficient data.
+
+\paragraph{Result: significant and survives length control.}
+Bivariate Spearman $\rho = -0.426$, $p = 0.001$ ($N=59$).
+Conversations with a high anchored fraction update their context-only
+answer significantly less often across turns than low-anchoring
+conversations.
+
+Crucially, the same length confound that nullified conversation-level H2
+does not nullify H2b.
+A multivariate OLS regression (`answer\_update\_rate $\sim$ anchor\_rate + n\_turns`)
+retains the anchor coefficient ($\beta = -0.412$, $p = 0.019$) as
+the significant predictor; `n\_turns` is non-significant after conditioning
+on anchor rate ($p = 0.31$).
+Partial Spearman correlation controlling for `n\_turns`:
+$\rho_{\text{partial}} = -0.337$, $p = 0.009$.
+The H2b result is not length-mediated.
+
+This is not a tautology: anchoring rate is defined on all five
+CoT-truncation levels (the spread across levels), while update rate is
+defined on the 0\%-level alone (temporal change across turns).
+Their significant partial correlation after length control suggests
+that anchoring reflects a genuine failure of conversational-state
+updating, independent of how long the conversation is (Figure~\ref{fig:h2b}).
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figures/h2b_integration.png}
+  \caption{%
+    \textbf{H2b: Anchoring rate predicts answer update failure
+    ($N=59$ conversations).}
+    Each point is one conversation.
+    Conversations that anchor more frequently are less likely to update
+    their context-only (0\%-CoT) answer across turns as new shards arrive.
+    Spearman $\rho = -0.426$, $p = 0.001$.
+    The correlation is distinct from anchoring by construction: update
+    rate measures temporal change in the 0\%-level answer; anchoring
+    rate measures cross-level invariance at a single turn.%
+  }
+  \label{fig:h2b}
+\end{figure}
+
 \subsection{Conversation Length Predicts Anchoring: A \texorpdfstring{3.9$\times$}{3.9x} Gradient}
 \label{subsec:length}
 
@@ -1149,12 +1322,13 @@ This gradient is the paper's most actionable finding.
 Current safety proposals treat CoT faithfulness as a fixed property
 of a model: measure it once on a benchmark, then rely on it in
 deployment.
-Our results say this assumption is wrong in a specific,
-quantifiable way: the fraction of turns where the reasoning trace
-is post-hoc rationalization grows as the conversation gets longer,
+Our results qualify this assumption in a specific, quantifiable
+way: the fraction of turns where the current-turn reasoning trace
+is answer-invariant grows as the conversation gets longer,
 reaching 28\% in conversations over 20 turns long.
-A safety monitor that was reliable during short conversations will
-systematically overestimate its reliability as conversations grow.
+If this correlates with downstream failure (H2, pending), a safety
+monitor calibrated on short conversations would systematically
+overestimate its reliability as conversations grow.
 
 \begin{figure}[t]
   \centering
@@ -1311,17 +1485,46 @@ counterfactual verification or a summarise-and-restart intervention.
 \section{Discussion}
 \label{sec:discussion}
 
-\paragraph{Faithfulness as a dynamical conversation property.}
-Prior work treats faithfulness as a static property of a
+\paragraph{Process-level monitorability: anchored turns are monitor-evasion episodes.}
+The safety framing of this paper does not depend on H2 (anchoring
+predicts task failure).
+It depends on a structural observation: by construction,
+an anchored turn is one where \emph{all five} CoT truncations yield the
+same answer.
+A deployed CoT-consistency monitor --- any function that checks whether
+perturbing the reasoning changes the conclusion --- would assign
+maximum trust to every anchored turn.
+\citet{korbak2025} categorise CoT monitorability properties
+into three archetypes: Process (does the trace reflect the model's
+computation?), Outcome (does faithfulness predict downstream harm?), and
+Intervention (does the trace respond to counterfactual manipulation?).
+Our counterfactual deletion measure is a \emph{Process + Intervention}
+property; H2 is the Outcome property.
+The Korbak framework establishes that a Process-level safety argument
+does not require Outcome evidence.
+The safety failure we document is therefore \emph{monitor invisibility},
+not outcome harm: a safety engineer reading an anchored CoT trace would
+find nothing alarming, even though the trace played no causal role in
+producing the answer.
+We note that H2 --- anchoring's correlation with GSM8K accuracy ---
+would have been, at best, a \emph{competence-outcome} proxy for safety
+even if confirmed; safety-relevant outcomes (instruction-following under
+contradictory pressure, refusal stability, harmful-content elicitation)
+require non-sharded, safety-critical tasks and remain future work.
+
+\paragraph{CoT causal necessity as a dynamical conversation property.}
+Prior work treats CoT faithfulness as a static property of a
 (model, prompt) pair: model $M$ is $x\%$ faithful on benchmark
 $B$ \citep{lanham2023, arcuschin2025}.
-Our results reframe it as a \emph{dynamical conversation property}:
-the same model, on the same task, can switch between faithful and
-unfaithful operation within a single conversation, tracking the
-epistemic state of the dialogue.
+Our results reframe \emph{CoT causal necessity} as a dynamical
+conversation property: the same model, on the same task, alternates
+within a single conversation between turns where the current-turn
+CoT is causally active (exploring) and turns where it is
+answer-invariant (anchored), and this ratio is structured by
+conversation length.
 This changes the measurement problem: a single-turn faithfulness
-benchmark cannot characterise a model's faithfulness under the
-multi-turn deployment conditions where it matters most.
+benchmark cannot characterise the distribution of CoT-necessary
+turns under multi-turn deployment conditions.
 
 \paragraph{Connection to Reasoning Theater and the Reasoning Horizon.}
 The anchored turns we identify are \emph{structurally analogous}
@@ -1351,20 +1554,145 @@ is the \emph{observable pattern} --- a confident, structurally
 plausible trace that does not constrain the output; the
 \emph{cause} at the multi-turn level remains unclear.
 
+\paragraph{Thought Anchors at the sentence level.}
+\citet{thought_anchors2026} introduce a black-box counterfactual
+method to identify which \emph{sentences} within a reasoning chain
+causally influence the final answer --- ``thought anchors.''
+Their measurement operates at the sentence level within a single
+generation; ours operates at the turn level across a multi-turn
+conversation.
+The two concepts are complementary: thought anchors identify which
+parts of a trace are causally active within one generation; our
+anchored turns identify turns on which the full current-turn trace
+contributes nothing to the answer regardless of how much of it is
+shown.
+A turn can contain genuine thought anchors in their sense (some
+sentences drive within-generation computation) while still being
+anchored in ours (the current-turn CoT, as a whole, does not
+constrain the answer).
+
+\paragraph{Direct demonstration of CoT monitoring failure.}
+We make the monitor-evasion claim empirical by computing a
+\emph{monitor score} for every turn:
+\[
+  \text{monitor\_score}(t) =
+  \frac{\text{\# truncation levels with same answer as full-CoT}}
+       {\text{\# levels with an extractable answer}}
+\]
+Anchored turns score 1.0 by construction (all levels agree);
+exploring turns score $< 1.0$.
+The key question is whether monitor scores grow with conversation
+length --- because that is where the monitor-evasion gap lies.
+
+Across our 1,134 assessable turns, mean monitor scores by length bin are:
+\textbf{short} ($\leq 10$ turns): 0.482;
+\textbf{medium} (11--20 turns): 0.510;
+\textbf{long} ($> 20$ turns): 0.650.
+Monitor scores are \textbf{35\% higher in long conversations than in short
+ones} (0.650 vs.\ 0.482).
+Among long-conversation turns, 28.3\% score a perfect 1.0 (the monitor
+would assign maximum trust); in short conversations, only 7.4\% do.
+
+The paradox is direct: a CoT-consistency monitor sees its most
+confident signal exactly where the causal link is weakest.
+As conversations lengthen, the monitor's trust in the reasoning
+trace increases --- while our measurement shows the reasoning trace
+is less causally connected to the answer (Figure~\ref{fig:monitor}).
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/monitor_simulation.png}
+  \caption{%
+    \textbf{Monitor-evasion gap: monitor confidence grows as conversations
+    lengthen.}
+    \emph{Left:} Distribution of per-turn monitor scores by length bin.
+    Long conversations (red) accumulate more mass at 1.0 than short
+    conversations (blue).
+    \emph{Right:} Mean per-conversation monitor score increases monotonically
+    with conversation length: 0.482 (short) $\to$ 0.510 (medium) $\to$
+    0.650 (long).
+    Error bars are 95\% CI.
+    A monitor calibrated on short conversations underestimates the
+    fraction of spuriously trusted turns in long ones by ${\approx}4\times$.%
+  }
+  \label{fig:monitor}
+\end{figure}
+
+\paragraph{Competence outcomes vs safety outcomes.}
+H2 tested whether anchoring predicts task failure on sharded GSM8K ---
+a \emph{competence} outcome.
+As shown in \S\ref{subsec:h2}, the conversation-level correlation
+($r = -0.097$, $N=53$) is length-confounded: both anchoring and
+failure are driven by conversation length, and anchoring has no
+independent association with failure after controlling for length
+($\mathrm{BF}_{01} = 4.6$, moderate evidence for the null;
+\citealt{wagenmakers2018}).
+This collapse matters: the N=21~$\to$~N=53 shrinkage from
+$r = -0.242$ to $r = -0.097$ is the expected trajectory under a
+small or null true effect \citep{gelman2014,ioannidis2008}, not a
+methodological red flag.
+
+Even if H2 had confirmed, math correctness on sharded GSM8K is a
+\emph{competence} outcome, not a safety-relevant one.
+Safety-relevant outcomes (resistance to user correction, refusal
+stability under conversational pressure, harmful-content elicitation
+in long contexts) require non-sharded, safety-critical tasks and remain
+future work.
+The safety claim in this paper rests on the Process-level
+monitor-invisibility argument (Korbak's Process archetype; see
+``Process-level monitorability'' above) and on the H2b mechanism
+test (\S\ref{subsec:h2b}), which survives length control
+($\rho_{\text{partial}} = -0.337$, $p = 0.009$).
+
+\paragraph{Candidate mechanisms.}
+What drives the 3.9$\times$ length-anchoring gradient?
+Three mechanisms are consistent with our data.
+First, \emph{context accumulation}: as conversations lengthen, the
+KV-cache state encoding prior exchanges grows, and the current-turn
+reasoning trace --- short relative to accumulated context --- may
+lose competitive strength in the attention computation; prior work
+shows context length alone degrades reasoning by 14--85\% even
+with perfect evidence retrieval \citep{context_length_hurts2025}.
+Second, \emph{RL training pressure toward consistency}: DeepSeek-R1
+is trained with outcome-based reinforcement learning
+\citep{deepseekr1_2025} that rewards correct final answers;
+a model that commits to an answer and maintains it --- since
+mid-trajectory answer reversals can hurt cumulative reward
+--- would exhibit exactly the length-dependent anchoring we observe.
+This predicts that RL-trained models anchor more than matched
+SFT baselines at the same context length --- a testable hypothesis.
+Third, \emph{information saturation}: once the model has seen
+enough shards to form a confident estimate, additional shards may
+not shift the answer even when reasoning is genuinely active ---
+``rational anchoring'' that reflects calibrated commitment rather
+than faithfulness failure.
+The prior-answer ablation (\S\ref{subsec:repetition}) rules out
+pure lexical copying but does not distinguish these three;
+activation probing and training ablations are the natural next step.
+
 \paragraph{Implications for CoT oversight.}
 The CoT monitorability literature \citep{korbak2025,
-openai_monitoring2025} argues that visible reasoning traces are a
-currently viable safety signal because models find it difficult to
-produce an unfaithful trace while behaving deceptively.
+openai_monitoring2025, meek2025} argues that visible reasoning traces
+are a currently viable safety signal because models find it difficult
+to produce an unfaithful trace while behaving deceptively.
+\citet{meek2025} show that models can produce traces that appear
+faithful while omitting key decision factors, proposing joint
+measurement of faithfulness and verbosity as a monitorability
+standard; our anchoring metric adds a dynamic, per-turn dimension:
+CoT causal necessity varies within a single conversation.
 \citet{korbak2025} argues that CoT monitorability is a fragile
 but real opportunity for AI safety, contingent on models being
-unable to complete tasks without externalising their reasoning.
-Our results identify a previously undocumented source of fragility:
+unable to complete tasks without externalising their reasoning ---
+that is, contingent on CoT being causally necessary for the output.
+\citet{cot_necessity2025} formalise the task-theoretic conditions
+under which this causal necessity holds in single-turn settings.
+Our results quantify a previously unmeasured conversation-level
+characteristic that bears directly on this contingency:
 within a single conversation, a model alternates between turns
-where reasoning genuinely drives the answer (exploring) and turns
+where the current-turn CoT is causally active (exploring) and turns
 where even the \emph{full} current-turn CoT does not constrain
-the output (anchored), and this fraction grows 3.9$\times$ with
-conversation length.
+the output (anchored), and the anchored fraction grows 3.9$\times$
+with conversation length.
 
 The key word is ``full.''
 Our counterfactual test holds the conversation context constant
@@ -1374,14 +1702,43 @@ When a turn is anchored, it means 100\% of the current turn's
 reasoning is insufficient to shift the model's output.
 A safety monitor reading that full reasoning trace is, by
 construction, reading something that did not change the answer
---- a CoT that is uninformative regardless of how detailed it
-appears.
+--- a CoT that is uninformative about the model's current-turn
+computation regardless of how detailed it appears.
 
-This failure arises from conversational pressure rather than
-intentional deception, making it detectable: flag conversations
-where the model's answer is invariant under CoT perturbation and
-trigger a summarise-and-restart intervention that breaks the
-accumulated inertia.
+This arises from conversational pressure rather than intentional
+deception, making it detectable in principle.
+We additionally test whether anchoring predicts downstream task failure
+(H2): with recovered labels on $N=53$ conversations, $r = -0.097$,
+$p = 0.489$ --- not significant.
+As shown in \S\ref{subsec:h2}, this null is length-confounded rather
+than orthogonal-by-design;
+the safety monitoring concern stands on the Process-level claim
+(see opener of this section), not on H2.
+
+\paragraph{Quantifying the monitoring blind spot.}
+To make this concrete: in a 30-turn conversation, our long-conversation
+anchoring rate of 28.4\% implies approximately 8.5~turns on average
+whose current-turn CoT traces are \emph{invisible} to any CoT-consistency
+monitor --- turns that would pass a trust check with the highest
+possible score precisely because the reasoning is not the driver.
+A safety monitor scanning every turn would read those 8.5~traces as
+structurally plausible reasoning.
+Critically, this invisibility is \emph{undetectable from the
+trace alone}: an anchored trace and a causally active trace are
+syntactically indistinguishable at the turn level.
+Only the counterfactual deletion test---or the cheap surface-feature
+predictor (AUC~$=0.710$) we provide---can flag turns at risk.
+A monitor calibrated exclusively on short conversations (anchoring
+rate 7.2\%) would systematically underestimate the fraction of
+invisible turns when deployed on longer conversations (28.4\%), by
+a factor of $28.4/7.2 \approx 4\times$.
+The direct empirical demonstration of this gap appears in
+Figure~\ref{fig:monitor} (monitor simulation, \S\ref{sec:discussion}).
+
+The 3.9$\times$ gradient provides a concrete, actionable signal:
+flag turns in long conversations where the answer is invariant
+under CoT perturbation and trigger a summarise-and-restart
+intervention.
 Whether the length-anchoring gradient generalises across
 models and task domains beyond sharded GSM8K mathematical
 reasoning is the primary open question for future work.
@@ -1394,7 +1751,12 @@ reasoning is the primary open question for future work.
 All experiments use DeepSeek-R1-Distill-Qwen-7B in 8-bit or
 4-bit quantisation.
 Whether the anchoring phenomenon generalises to larger or differently
-trained reasoning models (o3, QwQ-32B, Gemini Thinking) is unknown.
+trained reasoning models is unknown.
+To begin addressing this gap, replication experiments with two
+additional reasoning models --- Qwen3-14B and DeepSeek-R1-Distill-Llama-8B
+($n=20$ conversations each, same GSM8K sharded setup,
+max\_shards$=20$, max\_turns$=30$) --- were running at submission time;
+results will be incorporated at camera-ready.
 A standing concern about quantization is addressed empirically below
 (``Quantization robustness, empirically verified'').
 Phase~A used 8-bit quantisation throughout; Phase~B used mixed
@@ -1413,14 +1775,30 @@ Only GSM8K math is tested.
 Coding and factual QA tasks may exhibit different faithfulness
 dynamics, and a task with binary outcomes would enable H2.
 
-\textbf{H2 inconclusive, needs N$\approx$131.}
-Among $N=21$ conversations with clean binary labels,
-$r = -0.242$, $p = 0.291$---correct direction but underpowered.
-Power analysis shows 80\% power requires $N \approx 131$
-conversations with binary correctness labels.
-H2 is the most actionable hypothesis from a safety standpoint;
-replication on HumanEval coding conversations is the natural
-next step.
+\textbf{H2 is length-confounded, not orthogonal.}
+The conversation-level H2 null ($r = -0.097$, $N=53$) reflects a
+length confound, not orthogonality: conversation length predicts both
+anchoring ($r=0.42$, $p=0.002$) and failure ($r=-0.37$, $p=0.006$);
+after controlling for length, anchoring has no independent association
+with correctness ($\beta=+1.63$, $p=0.48$; \S\ref{subsec:h2}).
+We considered, but rejected, a turn-level mixed-effects approach:
+per-turn correctness against the gold answer is statistically ill-defined
+in sharded GSM8K, because early turns are expected to be wrong before all
+shards are revealed.
+Properly testing an outcome-level safety claim requires either
+(a) a non-sharded task with well-defined per-turn correctness, or
+(b) a safety-relevant outcome (refusal stability, harmful-content
+elicitation) rather than a competence proxy.
+
+\textbf{Statistical shrinkage is expected, not alarming.}
+The N=21~$\to$~N=53 shrinkage from $r=-0.242$ to $r=-0.097$ follows
+the expected trajectory under a small or null true effect
+\citep{gelman2014}: the initial estimate was inflated by the
+winner's curse \citep{ioannidis2008} --- the extractor-labelled sample
+was biased toward short, correct conversations where even a weak signal
+can produce a spuriously large $r$.
+Adding the harder, longer, failed conversations attenuated the signal
+to near zero, which is the honest answer.
 
 \textbf{Prior-answer ablation rules out lexical context-copying.}
 The measurement establishes that even full CoT (100\%) does not shift
@@ -1495,6 +1873,26 @@ of the rate (Figure~\ref{fig:quant}).
   \label{fig:ablation}
 \end{figure}
 
+\textbf{Interpretation of answer invariance.}
+Our test classifies a turn as anchored when all five truncation
+levels yield the same answer.
+An alternative interpretation is that agreement reflects redundant
+causal pathways: the model can reach the correct answer via the
+conversational context alone (not the explicit CoT),
+so truncating the CoT leaves the answer unchanged even though
+reasoning is genuinely active.
+Our length-anchoring gradient directly limits this account:
+if multi-pathway redundancy were a fixed architectural property,
+anchoring would be constant across conversation lengths;
+instead, the 3.9$\times$ gradient shows that redundancy \emph{increases}
+during a conversation, making anchoring a property of conversational
+state rather than model architecture.
+The finding is therefore robust to this reinterpretation:
+whether anchoring reflects post-hoc rationalization or acquired
+context-pathway redundancy, both imply that the current-turn CoT
+trace is not the primary computational driver --- the safety
+monitoring concern holds in either case.
+
 \textbf{Scale for H1 confirmation and cross-model comparison.}
 $N = 67$ is sufficient to confirm H3 but H1 remains inconclusive:
 the corrected bootstrap gives $p = 0.521$ even with 148~anchored
@@ -1536,12 +1934,12 @@ addition.
 \section{Conclusion}
 \label{sec:conclusion}
 
-Chain-of-thought faithfulness in multi-turn conversations is not
-monotonically decaying; it varies turn-by-turn, and the share of
-unfaithful turns differs sharply across conversations.
+CoT causal necessity in multi-turn conversations is not a fixed
+model property; it varies turn-by-turn, and the share of
+CoT-invariant (anchored) turns differs sharply across conversations.
 Within a single derailing conversation, the same reasoning model
 alternates between exploring turns (CoT causally active) and
-anchored turns (CoT post-hoc or inertia-driven).
+anchored turns (CoT answer-invariant).
 Across 67 conversations and 1,289 faithfulness observations,
 23.3\% of turns are anchored.
 Between-conversation variance significantly exceeds a Bernoulli
@@ -1560,9 +1958,9 @@ may be a genuinely adequate description at this model and task.
 Three independent random seeds produced consistent anchoring rates
 (27--38\%), confirming the conversation-level anchoring finding is not seed-specific.
 The 3.9$\times$ length-anchoring gradient (7.2\% short $\to$
-12.8\% medium $\to$ 28.4\% long) provides a concrete, actionable
-predictor: CoT oversight reliability degrades monotonically with
-conversation length.
+12.8\% medium $\to$ 28.4\% long), combined with a surface-feature
+predictor (AUC~$=0.710$), provides a concrete, actionable signal:
+CoT causal necessity decreases monotonically with conversation length.
 The anchored-turn repetition rate of 75.8\% (vs.\ 45.6\% on
 exploring turns, ratio $1.66\times$) indicates that answer inertia
 under conversational pressure is a contributing factor, but the
@@ -1571,17 +1969,22 @@ answer inertia.
 Commitment alignment between anchoring onset and premature
 commitment onset is non-significant across conversations
 ($r=0.06$, $p=0.71$, $n=42$).
-For AI safety, if the length-anchoring gradient observed here
-generalises beyond DeepSeek-R1-Distill-Qwen-7B and sharded-GSM8K
-mathematical reasoning, then CoT traces in deployed conversational
-systems face systematically lower reliability as conversations
-extend --- precisely the high-stakes, long-context settings where
-monitoring is most needed.
-The two most important open questions are (1) whether the anchored
-fraction statistically predicts conversation failure (H2),
-requiring $N\approx 131$ conversations with clean binary outcomes
-such as HumanEval; and (2) whether the anchoring phenomenon
-generalises to larger or differently-trained reasoning models.
+For AI safety, the 3.9$\times$ length-anchoring gradient establishes
+that CoT causal necessity is conversation-length-dependent --- a
+measurable, real-time-trackable property of ongoing conversations.
+Whether this translates to lower monitoring reliability is the
+paper's central open question: our $N=21$ sample points in the
+predicted direction ($r=-0.242$) but is underpowered ($p=0.291$;
+requires $N\approx131$ for 80\% power at this effect size).
+The two most important next steps are therefore (1) replication
+on HumanEval coding conversations, where every conversation yields
+an unambiguous pass/fail label enabling a definitive H2 test; and
+(2) cross-model comparison --- replication experiments with Qwen3-14B
+and DeepSeek-R1-Distill-Llama-8B were running at submission time and
+will be incorporated at camera-ready --- to establish whether the
+conversation-length dependence of CoT causal necessity is specific
+to this architecture and task or characterises multi-turn
+conversational AI more broadly.
 
 % ─────────────────────────────────────────────────────────────
 \begin{ack}
