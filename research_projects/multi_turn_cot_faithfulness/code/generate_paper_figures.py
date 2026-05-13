@@ -14,7 +14,6 @@ from pathlib import Path
 
 import matplotlib
 matplotlib.use("Agg")
-import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.colors as mcolors
@@ -365,7 +364,7 @@ def fig_heatmap(records):
         seq = r["anchored_seq"]
         heat[i, :len(seq)] = seq
 
-    fig_h = max(4.5, n_conv * 0.28 + 1.5)
+    fig_h = max(4.5, n_conv * 0.38 + 1.5)
     fig_w = max(8.5, max_turns * 0.38 + 2.2)
     fig, ax = plt.subplots(figsize=(min(fig_w, 11), min(fig_h, 9)))
     fig.patch.set_facecolor("white")
@@ -378,7 +377,7 @@ def fig_heatmap(records):
     # Y-axis: conversation IDs
     short_ids = [r["task_id"].split("/")[-1] for r in records_sorted]
     ax.set_yticks(range(n_conv))
-    ax.set_yticklabels(short_ids, fontsize=6.5)
+    ax.set_yticklabels(short_ids, fontsize=8)
     ax.set_xlabel("Turn index", fontsize=9)
     ax.set_ylabel("Conversation (GSM8K sample ID)", fontsize=9)
 
@@ -387,7 +386,7 @@ def fig_heatmap(records):
     ax2.set_ylim(ax.get_ylim())
     ax2.set_yticks(range(n_conv))
     fa_labels = [f"{r['frac_anchored']:.0%}" for r in records_sorted]
-    ax2.set_yticklabels(fa_labels, fontsize=6.5)
+    ax2.set_yticklabels(fa_labels, fontsize=8)
     for tick, r in zip(ax2.get_yticklabels(), records_sorted):
         tick.set_color(RED if r["frac_anchored"] > 0 else GREEN)
     ax2.set_ylabel("Anchored fraction", fontsize=8, color=DARK)
@@ -398,7 +397,7 @@ def fig_heatmap(records):
     # Colorbar
     cbar = fig.colorbar(im, ax=ax, fraction=0.018, pad=0.12)
     cbar.set_ticks([0.25, 0.75])
-    cbar.set_ticklabels(["exploring\n(CoT causal)", "anchored\n(CoT post-hoc)"], fontsize=7.5)
+    cbar.set_ticklabels(["exploring\n(CoT causal)", "anchored\n(CoT post-hoc)"], fontsize=9)
     cbar.ax.tick_params(length=0)
 
     n_total = sum(len(r["anchored_seq"]) for r in records_sorted)
@@ -517,173 +516,6 @@ def fig_runlength(all_anchored_rl, all_exploring_rl):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# Figure 4 — Fraction anchored × conversation length scatter (H2/H3)
-# ══════════════════════════════════════════════════════════════════════════════
-
-def fig_frac_scatter(records):
-    if len(records) < 3:
-        print("  Skipping scatter (< 3 conversations)")
-        return
-
-    fig, axes = plt.subplots(1, 2, figsize=(8.0, 3.8))
-    fig.patch.set_facecolor("white")
-
-    # ── Panel A: scatter frac_anchored vs conversation length ──────────────────
-    ax = axes[0]
-    ax.set_facecolor("white")
-
-    xs = [r["frac_anchored"] for r in records]
-    ys = [r["n_turns"] for r in records]
-    sizes = [max(30, r["max_anchored_run"] * 25) for r in records]
-    colors = [RED if r["frac_anchored"] > 0.05 else GREEN for r in records]
-
-    sc = ax.scatter(xs, ys, c=colors, s=sizes, alpha=0.75, zorder=3,
-                    edgecolors="white", linewidths=0.8)
-
-    # Annotate top-anchored conversations
-    top = sorted(records, key=lambda r: r["frac_anchored"], reverse=True)[:5]
-    for r in top:
-        ax.annotate(r["task_id"].split("/")[-1],
-                    (r["frac_anchored"], r["n_turns"]),
-                    textcoords="offset points", xytext=(5, 3),
-                    fontsize=6.5, color=DARK, alpha=0.8)
-
-    ax.set_xlabel("Fraction of turns in anchored mode")
-    ax.set_ylabel("Conversation length (# turns)")
-    ax.set_title("Anchored fraction vs. conversation length\n(size ∝ max anchored run length)",
-                 fontsize=8.5)
-    ax.axvline(0.05, color=GREY, lw=0.8, ls=":", label="5% threshold")
-    ax.legend(fontsize=7.5)
-
-    # Summary annotation
-    n_any_anchored = sum(1 for r in records if r["frac_anchored"] > 0)
-    ax.text(0.97, 0.03,
-            f"{n_any_anchored}/{len(records)} conversations\nhave ≥1 anchored turn",
-            ha="right", va="bottom", transform=ax.transAxes, fontsize=7.5,
-            bbox=dict(boxstyle="round,pad=0.3", facecolor="white",
-                      edgecolor=GREY, alpha=0.9))
-
-    # ── Panel B: H3 bimodality bar chart ──────────────────────────────────────
-    ax = axes[1]
-    ax.set_facecolor("white")
-    ax.spines["left"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
-    ax.set_xticks([])
-    ax.set_yticks([])
-
-    all_vals = []
-    for r in records:
-        all_vals.extend(r["anchored_seq"])
-    frac_anc = sum(all_vals) / len(all_vals) if all_vals else 0
-    frac_exp = 1.0 - frac_anc
-
-    # Draw a large donut-style split showing H3
-    theta_exp = frac_exp * 360
-    theta_anc = frac_anc * 360
-
-    wedges, texts = ax.pie(
-        [frac_exp, frac_anc],
-        colors=[GREEN, RED],
-        startangle=90,
-        wedgeprops=dict(width=0.45, edgecolor="white", linewidth=2.0),
-        labels=None,
-    )
-
-    # Center text
-    ax.text(0, 0.15, f"{frac_anc:.0%}", ha="center", va="center",
-            fontsize=16, fontweight="bold", color=RED)
-    ax.text(0, -0.18, "anchored", ha="center", va="center",
-            fontsize=8, color=RED)
-
-    # Legend patches
-    leg_patches = [
-        mpatches.Patch(facecolor=GREEN, label=f"Exploring ({frac_exp:.0%})"),
-        mpatches.Patch(facecolor=RED, label=f"Anchored ({frac_anc:.0%})"),
-    ]
-    ax.legend(handles=leg_patches, loc="lower center",
-              bbox_to_anchor=(0.5, -0.08), ncol=2, fontsize=8, framealpha=0.9)
-    ax.set_title(f"H3: Both modes present\n(N={len(records)} conversations, {len(all_vals)} turns)",
-                 fontsize=8.5)
-
-    fig.suptitle("Mode-switching in CoT faithfulness: both modes are present",
-                 fontsize=9.5, fontweight="bold", y=1.02)
-    fig.tight_layout()
-    out = OUT / "frac_anchored_scatter.png"
-    fig.savefig(out)
-    plt.close(fig)
-    print(f"  Saved {out.name}")
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-# Figure 5 — Phase cascade (N accumulation showing H1 becoming significant)
-# ══════════════════════════════════════════════════════════════════════════════
-
-def fig_cascade():
-    """Shows how the anchored-mode evidence accumulated as N grew across phases.
-    Panel A: cumulative anchored vs exploring turn counts.
-    Panel B: anchored fraction trajectory (H3 stability).
-    H1 run-length persistence is shown as inconclusive in the run-length figure.
-    """
-    phases      = ["Phase 1\n(N=4)", "P1+P2\n(N=8)", "P1+P2+P3\n(N=14)", "P1+P2+P3+P4\n(N=24)"]
-    faith_turns = [53, 92, 177, 412]
-    frac_anc    = [0.12, 0.08, 0.08, 0.13]
-    # Cumulative anchored and exploring turn counts
-    anch_turns  = [round(fa * ft) for fa, ft in zip(frac_anc, faith_turns)]
-    expl_turns  = [ft - at for ft, at in zip(faith_turns, anch_turns)]
-
-    fig, axes = plt.subplots(1, 2, figsize=(7.5, 3.4))
-    fig.patch.set_facecolor("white")
-    x = np.arange(len(phases))
-
-    # ── Panel A: cumulative turn breakdown ───────────────────────────────────
-    ax = axes[0]
-    ax.set_facecolor("white")
-    bars_exp = ax.bar(x, expl_turns, color=GREEN, alpha=0.75,
-                      edgecolor="white", linewidth=0.8, width=0.55,
-                      label="Exploring turns")
-    bars_anc = ax.bar(x, anch_turns, bottom=expl_turns,
-                      color=RED, alpha=0.85, edgecolor="white", linewidth=0.8,
-                      width=0.55, label="Anchored turns")
-    ax.set_xticks(x)
-    ax.set_xticklabels(phases, fontsize=7.5)
-    ax.set_ylabel("Cumulative assessable turns", fontsize=8)
-    ax.set_title("Data accumulation across phases\n(green=exploring, red=anchored)", fontsize=8.5)
-    ax.legend(fontsize=7.5)
-    for i, (at, ft) in enumerate(zip(anch_turns, faith_turns)):
-        ax.text(i, ft + 4, f"{at}/{ft}", ha="center", va="bottom",
-                fontsize=6.5, color=DARK)
-
-    # ── Panel B: frac_anchored trajectory ───────────────────────────────────
-    ax = axes[1]
-    ax.set_facecolor("white")
-    ax.bar(x, [fa * 100 for fa in frac_anc],
-           color=[RED if fa > 0.10 else ORANGE for fa in frac_anc],
-           alpha=0.80, edgecolor="white", linewidth=0.8, width=0.55)
-    ax.set_xticks(x)
-    ax.set_xticklabels(phases, fontsize=7.5)
-    ax.set_ylabel("% turns in anchored mode", fontsize=8)
-    ax.set_title("H3: Anchored fraction stable across phases\n"
-                 r"(variance test: $\chi^2$=90.2, df=19, $p$$<$0.001 at N=20)",
-                 fontsize=8.5)
-    for i, fa in enumerate(frac_anc):
-        ax.text(i, fa * 100 + 0.3, f"{fa:.0%}", ha="center", va="bottom",
-                fontsize=7.5, fontweight="bold", color=DARK)
-    # Note about length confound on Phase 4
-    ax.annotate("Phase 4 uses\nmax_shards=10\n(longer convs.)",
-                xy=(3, frac_anc[3] * 100), xytext=(2.55, frac_anc[3] * 100 + 4),
-                fontsize=6.0, color=GREY, style="italic",
-                arrowprops=dict(arrowstyle="->", color=GREY, lw=0.7))
-
-    fig.suptitle("Mode-switching cascade: both modes present at every scale",
-                 fontsize=9.5, fontweight="bold", y=1.02)
-    fig.tight_layout()
-    out = OUT / "phase_cascade.png"
-    fig.savefig(out)
-    plt.close(fig)
-    print(f"  Saved {out.name}")
-
-
-# ══════════════════════════════════════════════════════════════════════════════
 # main
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -699,7 +531,5 @@ if __name__ == "__main__":
     fig_concept()
     fig_heatmap(records)
     fig_runlength(all_anchored_rl, all_exploring_rl)
-    fig_frac_scatter(records)
-    fig_cascade()
 
     print(f"\nDone. {len(list(OUT.iterdir()))} files in {OUT}")

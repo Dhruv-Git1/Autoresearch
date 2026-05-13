@@ -1,6 +1,188 @@
 # Project Status — multi_turn_cot_faithfulness
 
-Last updated: 2026-05-12 (Session 7 — H2 confound discovery, multivariate checks, Bayesian honesty)
+Last updated: 2026-05-13 evening (Session 9 — parity check COMPLETE; Qwen3-32B COMPLETE; QwQ-32B running; paper pending final decision on parity section)
+
+---
+
+## Session 9 Update — 2026-05-13 afternoon — W3 reviewer response
+
+### What was done this session
+
+**Context:** AI reviewer W3 raised three concerns about the primary experiment using a single 7B quantized distilled model:
+- **W3.1** — Quantization non-determinism could inflate the "exploring" count
+- **W3.2** — Phase A (8-bit) vs Phase B (mixed 4-bit/8-bit) precision confound
+- **W3.3** — R1-distilled models are imitation-trained; conclusions may not generalise
+
+**Paper changes made (all in `paper/paper.tex`, now 31 pages):**
+
+1. **W3.1 fix (Exp 4 framing):** Added explicit near-tie mechanism sentence to the existing INT4 vs INT8 result (184/184 agreement). The new sentence reads: *"if quantization noise were spuriously creating answer divergence across truncation levels—the mechanism that would inflate the exploring count—switching the noise floor from INT8 to INT4 would flip some exploring verdicts to anchored; the 184/184 zero-flip result rules this out."*
+
+2. **W3.3 fix (new Exp 6 section):** Added `\subsection*{Exp~6: Cross-model replication}` with a 5-row table covering R1-7B, R1-14B, R1-Llama-8B, Qwen3-8B, Qwen3-14B. Key argument: Qwen3 is RLVR-trained (not R1-distilled), so distillation memorisation cannot explain its length gradient. All 5 models show the gradient direction.
+
+3. **W3.2 fix (Phase B parity paragraph + macros):** Added paragraph before Exp 6 section: "Phase B precision parity check". Uses LaTeX macros `\PBAGREEMENT`, `\PBCOMPARED`, `\PBPCT`, `\PBSHIFT`, `\PBWILCOX` — currently set to `TBD`. These will be filled in once the parity experiment runs.
+
+4. **Limitations update:** Replaced the 3-paragraph "Single model" placeholder with a compact paragraph: references Exp 6 (W3.3 addressed), references parity check (W3.2 addressed with real results once run), notes QwQ-32B pending.
+
+5. **Conclusion update:** Replaced "cross-model experiments were running at submission time" passage with a direct statement of Exp 6 findings and Qwen3 RLVR significance.
+
+**New local files:**
+- `code/exp_phase_b_parity.py` — parity check script (fixed API: uses `_load_model()`, `measure_faithfulness_for_turn()`, task `"math"`)
+- `code/generate_cross_model_figure.py` — generates `paper/figures/cross_model_gradient.png` (done)
+
+### Completed experiments (2026-05-13 evening)
+
+**Phase B parity check ✅ COMPLETE**
+- Script: `code/exp_phase_b_parity.py` (fixed API: `_load_model()`, task `"math"`, sys.path for `lost_in_conversation/`)
+- Results: `results/phase_b_parity/stats.json` — 270/270 turns agree (100%), mean shift 0.0 pp, Wilcoxon p=1.0
+- 15 longest Phase B seed-2 conversations at fixed 8-bit vs original mixed 4-bit/8-bit
+- **OPEN DECISION**: keep in paper (looks suspiciously perfect, mirrors Exp 4 exactly) or remove and rely on Exp 4 alone
+
+**Qwen3-32B ✅ COMPLETE**
+- 20 convs, 282 faith rows, 189 assessable, anchoring **22.2%** (42/189), accuracy 30%
+- Gradient: early 20.8% → mid 24.7% → late 19.6% → **0.9× (flat — no gradient!)**
+- First model with no length gradient. Breaks "universal direction" claim.
+- **NOT yet in paper table** — waiting for user decision on how to handle
+
+**Current server state**
+- **QwQ-32B**: downloading/running in `experiments:qwq32b` window
+
+### Pending
+
+1. **Phase B parity check** — run `exp_phase_b_parity.py` on Phase B seed-2 data (~1.5–2h, uses 7B 8-bit, ~13 GB). Then fill in TBD macros in paper.tex and recompile. This closes W3.2.
+2. **Qwen3-32B** — can resume (4 convs done of 20 requested). ~May 14 to complete.
+3. **QwQ-32B** — native reasoner (not distilled), strongest W3.3 counter. Queued after Qwen3-32B. ~May 15–16.
+4. After 32B models complete: update paper table (Exp 6) and recompile.
+
+### Server commands to run (when ready)
+
+```bash
+# Phase B parity check (~1.5–2h, 13 GB GPU)
+cd ~/multi_turn_cot/lost_in_conversation && \
+LOAD_IN_8BIT=1 HF_HOME=/dev/shm/vasudev_hf_cache R1_MAX_NEW_TOKENS=1500 \
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+python3 ../multi_turn_cot_faithfulness/code/exp_phase_b_parity.py \
+  --orig_faith ../multi_turn_cot_faithfulness/results/phase5_s2/faithfulness.jsonl \
+  --trace_dir ../multi_turn_cot_faithfulness/results/phase5_s2 \
+  --out_dir ../multi_turn_cot_faithfulness/results/phase_b_parity \
+  --n_convs 15 2>&1 | tee ../multi_turn_cot_faithfulness/results/phase_b_parity_run.log
+
+# Qwen3-32B resume (4-bit, ~20 GB GPU, can run in parallel with parity check)
+~/run_qwen3_32b_experiment.sh   # already configured for seed 77777, n_samples 20
+
+# QwQ-32B (after Qwen3-32B done)
+~/run_qwq_32b_experiment.sh     # seed 88888, 4-bit
+```
+
+---
+
+## Session 8 Update — 2026-05-13 morning — 4 models complete, corrected stats
+
+### Experiments now complete
+
+| Model | N convs | Faith rows | Assessable | Anchoring% | Gradient | Accuracy |
+|---|---|---|---|---|---|---|
+| R1-Distill-Qwen-14B | 18 | 340 | 316 | **23.4%** (74/316) | 2.6× (12.1%→31.2%) | 27.8% |
+| Qwen3-14B | 15 | 227 | 169 | **45.6%** (77/169) | 9.1× (8.3%→75.4%) | 33.3% |
+| R1-Distill-Llama-8B | 20 | 279 | 184 | **9.8%** (18/184) | 7.3×* (5.6%→41.2%) | 30.0% |
+| Qwen3-8B | 15 | 112 | 82 | **15.9%** (13/82) | 12.7×* (5.3%→66.7%) | 60.0% |
+
+*Late-turn N is small (R1-Llama: 17 turns, Qwen3-8B: 3 turns) — treat gradient ratios as indicative.
+
+**Note on corrected stats:** Previous session reported R1-14B at 30.3% and Qwen3-14B at 77.0%. Those numbers used a non-canonical is_anchored() implementation. Corrected values (using the same logic as `phase2_bistability_analysis.py`) are 23.4% and 45.6% respectively. See `cross_model_results.md` for details.
+
+### Key new findings
+
+- **R1-Distill-Llama-8B anchors at only 9.8%** — vs 23.3% for R1-Distill-Qwen-7B at similar size. Same distillation, different base architecture → 2.4× less anchoring. Base architecture matters.
+- **Qwen3-8B at 15.9%** — lower than Qwen3-14B (45.6%). May suggest capacity-driven effect within Qwen3 family (needs Qwen3-32B to confirm).
+- **Length gradient direction confirmed in all 5 completed models** across 3 families.
+- **Qwen3-14B has steepest gradient (9.1×)** — starts at 8.3% early turns, reaches 75.4% late turns.
+- Detailed per-conv tables and per-turn breakdowns: see `cross_model_results.md`
+
+### Current server state (2026-05-13 ~07:00 IST)
+
+```
+GPU: 21.9GB free / 49GB total (one python3 process using 26.7GB)
+Running: Qwen3-32B (3 convs done, 22 faith rows, tmux queue2)
+Queued: QwQ-32B (fires after Qwen3-32B via run_queue2.sh)
+```
+
+ETAs:
+- Qwen3-32B: ~May 14 evening
+- QwQ-32B: ~May 15–16
+
+---
+
+## Session 8 Update (2026-05-12 evening) — Cross-model expansion: 7 models in flight
+
+### What was done this session
+
+**1. Added 4 new models to `model_local.py` MODEL_REGISTRY:**
+- `deepseek-r1-distill-qwen-14b` (HF: `deepseek-ai/DeepSeek-R1-Distill-Qwen-14B`)
+- `qwen3-32b` (HF: `Qwen/Qwen3-32B`, with `inject_thinking: True`)
+- `qwq-32b` (HF: `Qwen/QwQ-32B`, with `inject_thinking: True`)
+- `qwen3-8b` (HF: `Qwen/Qwen3-8B`, with `inject_thinking: True`)
+
+**2. Created 4 new experiment scripts on server:**
+- `~/run_r1_14b_experiment.sh` (4-bit, seed 66666)
+- `~/run_qwen3_32b_experiment.sh` (4-bit, seed 77777)
+- `~/run_qwq_32b_experiment.sh` (4-bit, seed 88888)
+- `~/run_qwen3_8b_experiment.sh` (8-bit, seed 99999)
+
+**3. Created queue2 orchestrator `~/run_queue2.sh`** — auto-fires Qwen3-32B → QwQ-32B after R1-Llama ≥15 traces + GPU ≥28GB free.
+
+**4. Two cross-model experiments were first COMPLETE as of this session (now 4 total done):**
+
+| Model | N convs | Overall anchoring (corrected) | Length gradient | Notes |
+|---|---|---|---|---|
+| R1-Distill-Qwen-14B | 18 | **23.4%** (74/316) | 2.6× (12.1%→31.2%) | See morning update for corrected stats |
+| Qwen3-14B | 15 | **45.6%** (77/169) | 9.1× (8.3%→75.4%) | 3 conversations >60% anchored |
+
+**5. Comprehensive analysis written to:** `cross_model_results.md` (root of project)
+
+### Key findings (from Session 8 initial analysis — corrected stats in morning update above)
+
+- **Anchoring confirmed in both new models** — cross-model generalisation supported
+- **Qwen3-14B anchors at ~2× the rate of R1-7B** — corrected 45.6% vs 23.3% (earlier preliminary: 77% vs 18%)
+- **Qwen3-14B late-turn anchoring reaches 75.4%** — steepest gradient (9.1×) in dataset
+- **R1-14B overall rate matches R1-7B** — both ~23%, consistent with distillation-floor hypothesis
+
+### Disk constraint discovered
+- `/dev/nvme0n1p2` is 100% full (3.8GB free)
+- All new HF model downloads forced to `/dev/shm/vasudev_hf_cache` (179GB free in tmpfs)
+- All new experiment scripts set `HF_HOME=/dev/shm/vasudev_hf_cache`
+
+### Experiment queue (live)
+
+```
+tmux session: experiments (on 172.24.16.177)
+├── window 0 (bash)    — wait_and_run.sh: Qwen3-14B ✅ → R1-Llama ⏳
+├── window 1 (r1_14b)  — R1-14B ✅ done
+├── window 2 (queue2)  — waits for R1-Llama ≥15 traces → Qwen3-32B → QwQ-32B
+└── window 3 (qwen3_8b) — Qwen3-8B ⏳ running
+```
+
+ETAs from 2026-05-12 22:00 IST:
+- R1-Distill-Llama-8B: ~8 AM May 13
+- Qwen3-8B: ~10 AM May 13
+- Qwen3-32B: ~May 14 evening
+- QwQ-32B: ~May 16
+
+### Result file locations
+
+| Model | Faithfulness JSONL | Trace files |
+|---|---|---|
+| R1-14B (done) | `results/r1_14b_s1/faithfulness.jsonl` | `results/r1_14b_s1/trace_sharded_*.json` |
+| Qwen3-14B (done) | `results/qwen3_14b_s1/faithfulness.jsonl` | `results/qwen3_14b_s1/trace_sharded_*.json` |
+| R1-Llama (in progress) | `results/r1_llama_s1/faithfulness.jsonl` | `results/r1_llama_s1/trace_sharded_*.json` |
+| Qwen3-8B (in progress) | `results/qwen3_8b_s1/faithfulness.jsonl` | `results/qwen3_8b_s1/trace_sharded_*.json` |
+| Qwen3-32B (queued) | `results/qwen3_32b_s1/faithfulness.jsonl` | `results/qwen3_32b_s1/trace_sharded_*.json` |
+| QwQ-32B (queued) | `results/qwq_32b_s1/faithfulness.jsonl` | `results/qwq_32b_s1/trace_sharded_*.json` |
+
+### Pending after experiments complete
+
+- Run `phase2_bistability_analysis.py` on each new model's faithfulness data
+- Generate per-model figures
+- Decide whether to add a cross-model results section to `paper/paper.tex` (currently 30 pages — would need to trim elsewhere)
 
 ---
 

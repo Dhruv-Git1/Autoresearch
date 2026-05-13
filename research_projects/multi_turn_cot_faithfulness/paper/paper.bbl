@@ -1,4 +1,4 @@
-\begin{thebibliography}{25}
+\begin{thebibliography}{26}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -9,6 +9,13 @@
 Ben Arcuschin et~al.
 \newblock Chain-of-thought reasoning in the wild is not always faithful.
 \newblock \emph{arXiv preprint}, arXiv:2503.08679, 2025.
+
+\bibitem[Bogdan et~al.(2026)Bogdan, Macar, Nanda, and
+  Conmy]{thought_anchors2026}
+Paul~C. Bogdan, Uzay Macar, Neel Nanda, and Arthur Conmy.
+\newblock Thought anchors: Which {LLM} reasoning sentences are anchoring model
+  behavior?
+\newblock \emph{arXiv preprint}, arXiv:2506.19143, 2026.
 
 \bibitem[Boppana et~al.(2026)Boppana, Ma, Loeffler, Sarfati, Bigelow, Geiger,
   Lewis, and Merullo]{reasoning_theater2026}
@@ -27,6 +34,14 @@ James Chua and Owain Evans.
 \newblock Are {DeepSeek} {R1} and other reasoning models more faithful?
 \newblock In \emph{ICLR Workshop on Foundation Models in the Wild}, volume
   arXiv:2501.08156, 2025.
+
+\bibitem[Du et~al.(2025)Du, Tian, Ronanki, Rongali, Bodapati, Galstyan, Wells,
+  Schwartz, Huerta, and Peng]{context_length_hurts2025}
+Yufeng Du, Minyang Tian, Srikanth Ronanki, Subendhu Rongali, Sravan Bodapati,
+  Aram Galstyan, Azton Wells, Roy Schwartz, Eliu~A. Huerta, and Hao Peng.
+\newblock Context length alone hurts {LLM} performance despite perfect
+  retrieval.
+\newblock \emph{arXiv preprint}, arXiv:2510.05381, 2025.
 
 \bibitem[Gelman and Carlin(2014)]{gelman2014}
 Andrew Gelman and John Carlin.
@@ -109,6 +124,11 @@ William Merrill, Nikolaos Tsilivis, Nicholas Goldowsky-Dill, Max Petrov, and
 \newblock When chain of thought is necessary.
 \newblock \emph{arXiv preprint}, arXiv:2507.05246, 2025.
 
+\bibitem[{Microsoft Research}(2025)]{lost_in_conversation_repo}
+{Microsoft Research}.
+\newblock lost-in-conversation: Benchmark for multi-turn {LLM} evaluation.
+\newblock \url{https://github.com/microsoft/lost-in-conversation}, 2025.
+
 \bibitem[{OpenAI}(2025)]{openai_monitoring2025}
 {OpenAI}.
 \newblock Monitoring monitorability.
@@ -116,29 +136,14 @@ William Merrill, Nikolaos Tsilivis, Nicholas Goldowsky-Dill, Max Petrov, and
 \newblock URL
   \url{https://cdn.openai.com/pdf/d57827c6-10bc-47fe-91aa-0fde55bd3901/monitoring-monitorability.pdf}.
 
-\bibitem[others(2025)]{context_length_hurts2025}
-others.
-\newblock Context length alone hurts {LLM} performance despite perfect
-  retrieval.
-\newblock \emph{arXiv preprint}, arXiv:2510.05381, 2025.
-
-\bibitem[others(2026{\natexlab{a}})]{conv_inertia2026}
-others.
-\newblock Mitigating conversational inertia in multi-turn agents.
-\newblock \emph{arXiv preprint}, arXiv:2602.03664, 2026{\natexlab{a}}.
-
-\bibitem[others(2026{\natexlab{b}})]{faithcotbench2026}
-others.
+\bibitem[Shen et~al.(2026)Shen, Wang, Tan, Yao, Zhao, Xu, Wang, and
+  Chen]{faithcotbench2026}
+Xu~Shen, Song Wang, Zhen Tan, Laura Yao, Xinyu Zhao, Kaidi Xu, Xin Wang, and
+  Tianlong Chen.
 \newblock {FaithCoT-Bench}: Benchmarking instance-level faithfulness of
   chain-of-thought reasoning.
 \newblock In \emph{International Conference on Learning Representations
-  (ICLR)}, 2026{\natexlab{b}}.
-
-\bibitem[others(2026{\natexlab{c}})]{thought_anchors2026}
-others.
-\newblock Thought anchors: Which {LLM} reasoning sentences are anchoring model
-  behavior?
-\newblock \emph{arXiv preprint}, arXiv:2506.19143, 2026{\natexlab{c}}.
+  (ICLR)}, volume arXiv:2510.04040, 2026.
 
 \bibitem[Tschannen et~al.(2026)]{lieto2026}
 Michael Tschannen et~al.
@@ -162,6 +167,13 @@ Eric-Jan Wagenmakers, Maarten Marsman, Tahira Jamil, Alexander Ly, Josine
   and practical ramifications.
 \newblock \emph{Psychonomic Bulletin \& Review}, 25\penalty0 (1):\penalty0
   35--57, 2018.
+
+\bibitem[Wan et~al.(2026)Wan, Cao, Zhang, Zeng, Shen, Meng, and
+  Zhu]{conv_inertia2026}
+Yang Wan, Zheng Cao, Zhenhao Zhang, Zhengwen Zeng, Shuheng Shen, Changhua Meng,
+  and Linchao Zhu.
+\newblock Mitigating conversational inertia in multi-turn agents.
+\newblock \emph{arXiv preprint}, arXiv:2602.03664, 2026.
 
 \bibitem[Ye et~al.(2026)Ye, Loffgren, Kotadia, and
   Wong]{mechanistic_faithfulness2026}

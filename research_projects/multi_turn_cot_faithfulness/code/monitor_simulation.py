@@ -215,8 +215,9 @@ def main():
     ax.set_xlabel("Monitor score (fraction of truncations agreeing with full CoT)", fontsize=10)
     ax.set_ylabel("Density", fontsize=10)
     ax.set_title("CoT-consistency monitor score\nby conversation length", fontsize=11)
-    ax.legend(fontsize=8)
     ax.axvline(0.8, color="k", ls="--", lw=1, alpha=0.5, label="0.8 threshold")
+    ax.legend(fontsize=8, loc="upper center", bbox_to_anchor=(0.5, -0.18),
+              ncol=2, framealpha=0.9)
     ax.grid(alpha=0.3)
 
     # Right: mean monitor score vs length bin with 95% CI
@@ -253,7 +254,7 @@ def main():
             ax.text(bar.get_x() + bar.get_width() / 2, m + 0.01, f"{m:.3f}",
                     ha="center", va="bottom", fontsize=9, fontweight="bold")
 
-    fig.tight_layout()
+    fig.tight_layout(rect=[0, 0.10, 1, 1])
     fig.savefig(FIG_PATH, dpi=150, bbox_inches="tight")
     plt.close(fig)
     print(f"Figure saved to {FIG_PATH}")

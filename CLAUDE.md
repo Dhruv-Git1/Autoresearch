@@ -34,19 +34,30 @@ Experiments in `code/` are written to run from the working directory of the rele
 
 Investigates CoT faithfulness mode-switching in multi-turn derailing conversations using DeepSeek-R1-Distill-Qwen-7B. All experiment code runs on a remote GPU server (172.24.16.177) via SSH/paramiko, not locally.
 
-**Status (2026-05-12): Session 7 — H2 confound discovered, Bayesian characterization, paper 30 pages.**
+**Status (2026-05-13 evening): Session 9 — W3 reviewer response complete; parity check DONE (270/270=100%); Qwen3-32B DONE (22.2%, flat gradient); QwQ-32B downloading/running.**
 - Phase A: N=24 conversations, 412 faithfulness observations — COMPLETE
 - Phase B: 3 seeds × ~43 conversations (max_shards=20) — COMPLETE
 - Combined: N=67 conversations, 1,289 observations — analysis downloaded locally
-- Paper: `paper/paper.tex` — **30-page PDF**, H2 reframed as length-confounded, H2b multivariate check confirms Case A
-- Figures: 15 PNGs in `paper/figures/` (added monitor_simulation.png, h2b_integration.png, h2_confound.png)
+- Paper: `paper/paper.tex` — **31-page PDF**, W3 reviewer response complete. Parity macros filled (270/270=100%, shift=0.0pp, p=1.00). Pending decision: keep parity results in paper or remove in favour of Exp 4 alone (both give 100% — looks suspicious to reviewers).
+- Figures: 16 PNGs in `paper/figures/` (added `cross_model_gradient.png` this session)
 - **Correctness labels**: N=53 recovered (`results/correctness_labels/labels.json`); originals N=16 (100% correct, 9.6 turns), recovered N=37 (0% correct, 19.8 turns)
-- **H2 confound (NEW Session 7)**: After controlling for n_turns, anchor_rate has no independent effect on correctness (β=+1.63, p=0.483); n_turns is the driver (β=−0.131, p=0.008). BF₀₁=4.6 (moderate evidence for null), TOST equivalent to null (|ρ|<0.25)
-- **H2b multivariate (NEW Session 7)**: Case A — H2b survives length control; partial ρ=−0.337, p=0.009; OLS anchor β=−0.412, p=0.019
+- **H2 confound (Session 7)**: After controlling for n_turns, anchor_rate has no independent effect on correctness (β=+1.63, p=0.483); n_turns is the driver (β=−0.131, p=0.008). BF₀₁=4.6 (moderate evidence for null), TOST equivalent to null (|ρ|<0.25)
+- **H2b multivariate (Session 7)**: Case A — H2b survives length control; partial ρ=−0.337, p=0.009; OLS anchor β=−0.412, p=0.019
 - **Exp 5 (anchoring predictor)**: full N=63 (1,162 turns), 7 features incl. shard_progress, GroupKFold AUC=0.710 (per-fold 0.703±0.033), see `subsec:predictor` in paper
 - **Exp 1 (answer-token logprobs)**: NULL result — margin indistinguishable between anchored/exploring at all p>0.29, d<0.10. Token-level confidence is not diagnostic of mode.
 - **Exp 4 (INT4 quant robustness)**: 100% per-turn agreement INT4 vs INT8 (184/184). Quantization confound closed.
-- **Cross-model experiments**: Qwen3-14B (seed 44444) + R1-Distill-Llama-8B (seed 55555) queued in tmux session `experiments` on server; auto-launch when ≥30 GB GPU free. Scripts: `~/run_qwen3_experiment.sh`, `~/run_llama_r1_experiment.sh`, orchestrator: `~/wait_and_run.sh`.
+- **Cross-model experiments (Session 8)**: 4 of 6 models complete; Qwen3-32B in progress; QwQ-32B queued. All stats via canonical `phase2_bistability_analysis.py` `is_anchored()`:
+  - **R1-Distill-Qwen-14B** ✅ (seed 66666, 4-bit, N=18): anchoring **23.4%** (74/316), gradient 2.6× (12.1%→31.2%). Files: `results/r1_14b_s1/`
+  - **Qwen3-14B** ✅ (seed 44444, 8-bit, N=15): anchoring **45.6%** (77/169), gradient 9.1× (8.3%→75.4%), 3 convs >60% anchored. Files: `results/qwen3_14b_s1/`
+  - **R1-Distill-Llama-8B** ✅ (seed 55555, 8-bit, N=20): anchoring **9.8%** (18/184), gradient 7.3× (5.6%→41.2%*). Files: `results/r1_llama_s1/`
+  - **Qwen3-8B** ✅ (seed 99999, 8-bit, N=15): anchoring **15.9%** (13/82), gradient 12.7×* (5.3%→66.7%*). Files: `results/qwen3_8b_s1/`
+  - **Qwen3-32B** ⏳ (seed 77777, 4-bit) — incomplete, 4 convs / 30 rows (killed May 13 afternoon). Files: `results/qwen3_32b_s1/`
+  - **QwQ-32B** ⏳ (seed 88888, 4-bit) — not yet started. Files: `results/qwq_32b_s1/`
+  - **Phase B parity check** ✅ — COMPLETE (ran 2026-05-13 afternoon). 270/270 turns agree (100%), mean shift 0.0 pp, Wilcoxon p=1.0. Output: `results/phase_b_parity/stats.json` + `faithfulness.jsonl` (277 rows, 738K)
+  - *Late-turn N is small (<20 turns) for R1-Llama and Qwen3-8B — gradient ratios are indicative only.
+  - Scripts: `~/run_{r1_14b,qwen3_8b,qwen3_32b,qwq_32b}_experiment.sh`. Orchestrators: `~/wait_and_run.sh` (window 0), `~/run_queue2.sh` (window queue2).
+- **Cross-model analysis doc**: `cross_model_results.md` (project root) — detailed per-model anchoring tables and paper-support assessment.
+- **Disk state**: `/dev/nvme0n1p2` 100% full (3.8GB free). All new HF downloads forced to `/dev/shm/vasudev_hf_cache` (179GB free in tmpfs).
 
 **Session 5 paper additions (2026-05-11):**
 - **6 new citations**: `chua2025` (DeepSeek-R1 single-turn faithfulness, 59% cue identification), `cot_necessity2025` (task-level CoT necessity theory), `thought_anchors2026` (sentence-level thought anchors — terminology sibling), `conv_inertia2026` (conversational inertia literature), `context_length_hurts2025` (context length degrades reasoning 14–85%), `meek2025` (CoT monitorability via faithfulness+verbosity)
