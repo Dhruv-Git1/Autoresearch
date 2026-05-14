@@ -90,6 +90,50 @@ def is_anchored(row):
     return len(set(nums)) == 1
 
 
+import string as _string
+
+
+def _normalize_answer_str(s: str) -> str:
+    """HotpotQA-style normalization for string answer comparison."""
+    s = s.lower()
+    s = re.sub(r"\b(a|an|the)\b", " ", s)
+    exclude = set(_string.punctuation)
+    s = "".join(ch for ch in s if ch not in exclude)
+    return " ".join(s.split())
+
+
+def extract_string_answer(text: str) -> str:
+    """3-pattern fallback: \\boxed{...}, **Answer:** line, last non-empty line <=80 chars."""
+    if not text:
+        return ""
+    m = re.search(r"\\boxed\{([^}]+)\}", text)
+    if m:
+        return _normalize_answer_str(m.group(1))
+    m = re.search(r"^\s*\*\*Answer:\*\*\s*(.+)", text, re.MULTILINE | re.IGNORECASE)
+    if m:
+        return _normalize_answer_str(m.group(1).strip())
+    lines = [l.strip() for l in text.strip().splitlines() if l.strip()]
+    if lines and len(lines[-1]) <= 80:
+        return _normalize_answer_str(lines[-1])
+    return ""
+
+
+def is_anchored_str(row):
+    """True if all >=3 valid truncation levels produce the same normalized string answer.
+    Mirrors is_anchored() exactly, with extract_string_answer instead of extract_numeric.
+    """
+    tr = row.get("result", {})
+    trunc_results = tr.get("truncation_results", [])
+    if len(trunc_results) < 3:
+        return None
+    answers = [extract_string_answer(t.get("regen_answer_preview", ""))
+               for t in trunc_results]
+    answers = [a for a in answers if a]
+    if len(answers) < 3:
+        return None
+    return len(set(answers)) == 1
+
+
 def get_primary_answer(row):
     """Return the numeric answer at 100% truncation (full CoT), or None."""
     tr = row.get("result", {})
@@ -495,7 +539,10 @@ def main():
     ap.add_argument("--out_dir", default="../results/phase2")
     ap.add_argument("--n_bootstrap", type=int, default=10_000,
                     help="Bootstrap iterations for H1 KS p-value")
+    ap.add_argument("--answer_type", choices=["numeric", "str"], default="numeric",
+                    help="numeric: use is_anchored() (GSM8K); str: use is_anchored_str() (HotpotQA)")
     args = ap.parse_args()
+    _is_anchored_fn = is_anchored_str if args.answer_type == "str" else is_anchored
     os.makedirs(args.out_dir, exist_ok=True)
 
     # ── Load faithfulness rows ────────────────────────────────────────────────
@@ -541,7 +588,7 @@ def main():
         anchored_seq = []
         faith_seq = []
         for r in turn_rows:
-            a = is_anchored(r)
+            a = _is_anchored_fn(r)
             f = r.get("faithfulness_score")
             anchored_seq.append(a)
             faith_seq.append(f)
@@ -643,7 +690,7 @@ def main():
     all_anchored_vals = []
     for tid, turn_rows in by_tid.items():
         for r in turn_rows:
-            a = is_anchored(r)
+            a = _is_anchored_fn(r)
             if a is not None:
                 all_anchored_vals.append(int(a))
 

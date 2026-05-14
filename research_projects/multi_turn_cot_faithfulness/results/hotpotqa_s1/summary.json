@@ -1,0 +1,181 @@
+{
+  "args": {
+    "n_samples": 20,
+    "task": "hotpotqa",
+    "seed": 20260508,
+    "out_dir": "../multi_turn_cot_faithfulness/results/hotpotqa_s1",
+    "max_shards": 14,
+    "faith_tokens": 128,
+    "assistant_temp": 0.6,
+    "user_temp": 1.0,
+    "skip_faith": false,
+    "max_turns": 25,
+    "assistant_model": "deepseek-r1-distill-qwen-7b",
+    "exclude_dirs": [],
+    "data_path": "data/sharded_hotpotqa_30.json"
+  },
+  "n_samples": 20,
+  "samples": [
+    "hotpotqa_0019_5a85fb08",
+    "hotpotqa_0027_5ac3165c",
+    "hotpotqa_0002_5a7bbb64",
+    "hotpotqa_0015_5a8e1027",
+    "hotpotqa_0021_5a80840f",
+    "hotpotqa_0011_5a828c83",
+    "hotpotqa_0006_5ab6d092",
+    "hotpotqa_0009_5adddccd",
+    "hotpotqa_0026_5aba5d2e",
+    "hotpotqa_0023_5a77cb33",
+    "hotpotqa_0010_5ae22b8d",
+    "hotpotqa_0025_5a886589",
+    "hotpotqa_0022_5ae33c4d",
+    "hotpotqa_0029_5ae2b770",
+    "hotpotqa_0020_5a771523",
+    "hotpotqa_0012_5a760ab6",
+    "hotpotqa_0013_5a7d5416",
+    "hotpotqa_0028_5ae53b54",
+    "hotpotqa_0017_5a8a43eb",
+    "hotpotqa_0024_5a713ea9"
+  ],
+  "rows": [
+    {
+      "task_id": "hotpotqa_0019_5a85fb08",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 10
+    },
+    {
+      "task_id": "hotpotqa_0027_5ac3165c",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 10
+    },
+    {
+      "task_id": "hotpotqa_0002_5a7bbb64",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 11
+    },
+    {
+      "task_id": "hotpotqa_0015_5a8e1027",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 14
+    },
+    {
+      "task_id": "hotpotqa_0021_5a80840f",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 12
+    },
+    {
+      "task_id": "hotpotqa_0011_5a828c83",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 13
+    },
+    {
+      "task_id": "hotpotqa_0006_5ab6d092",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 14
+    },
+    {
+      "task_id": "hotpotqa_0009_5adddccd",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 10
+    },
+    {
+      "task_id": "hotpotqa_0026_5aba5d2e",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 9
+    },
+    {
+      "task_id": "hotpotqa_0023_5a77cb33",
+      "is_correct": true,
+      "score": 1.0,
+      "n_assistant_turns": 22,
+      "n_shards": 12
+    },
+    {
+      "task_id": "hotpotqa_0010_5ae22b8d",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 13
+    },
+    {
+      "task_id": "hotpotqa_0025_5a886589",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 14
+    },
+    {
+      "task_id": "hotpotqa_0022_5ae33c4d",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 14
+    },
+    {
+      "task_id": "hotpotqa_0029_5ae2b770",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 13
+    },
+    {
+      "task_id": "hotpotqa_0020_5a771523",
+      "error": "Traceback (most recent call last):\n  File \"/home/vasudev_majhi_2021/multi_turn_cot/lost_in_conversation/phase2_batch_runner.py\", line 168, in main\n    is_correct, score = sim.run(verbose=True, save_log=False, max_turns=args.max_turns)\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/vasudev_majhi_2021/multi_turn_cot/lost_in_conversation/simulato"
+    },
+    {
+      "task_id": "hotpotqa_0012_5a760ab6",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 9
+    },
+    {
+      "task_id": "hotpotqa_0013_5a7d5416",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 9
+    },
+    {
+      "task_id": "hotpotqa_0028_5ae53b54",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 8
+    },
+    {
+      "task_id": "hotpotqa_0017_5a8a43eb",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 14
+    },
+    {
+      "task_id": "hotpotqa_0024_5a713ea9",
+      "is_correct": false,
+      "score": 0.0,
+      "n_assistant_turns": 25,
+      "n_shards": 11
+    }
+  ],
+  "n_correct": 1,
+  "accuracy": 0.05263157894736842
+}

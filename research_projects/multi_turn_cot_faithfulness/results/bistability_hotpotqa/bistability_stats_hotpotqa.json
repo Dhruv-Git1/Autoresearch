@@ -1,0 +1,27 @@
+{
+  "n_rows": 472,
+  "n_conversations": 19,
+  "note": "All conversations ran to max_turns=25; length bin is uniformly 'long (>20)'",
+  "overall": {
+    "n_turns": 350,
+    "n_anchored": 204,
+    "frac_anchored": 0.5828571428571429
+  },
+  "anchored_by_length_bin": {
+    "short (<10)": {
+      "n_turns": 0,
+      "n_anchored": 0,
+      "frac_anchored": 0.0
+    },
+    "medium (10-20)": {
+      "n_turns": 0,
+      "n_anchored": 0,
+      "frac_anchored": 0.0
+    },
+    "long (>20)": {
+      "n_turns": 350,
+      "n_anchored": 204,
+      "frac_anchored": 0.5828571428571429
+    }
+  }
+}

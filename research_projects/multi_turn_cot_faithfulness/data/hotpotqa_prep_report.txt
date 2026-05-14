@@ -1,0 +1,40 @@
+HotpotQA prep report
+  Items: 30
+  Shard count: min=8 max=14 mean=11.3
+
+5 example items:
+
+  task_id: hotpotqa_0000_5a8c7595
+  question: What government position was held by the woman who portrayed Corliss Archer in the film Kiss and Tell?
+  raw_answer: Chief of Protocol
+  gold_answer (normalized): chief of protocol
+  n_shards: 13
+  shard[0]: {'shard_id': 1, 'shard': 'Born in the county of Hampshire in England on May 9, 1902, Craft would enter the film industry in Hollywood in 1927.'}
+
+  task_id: hotpotqa_0001_5a85ea09
+  question: What science fantasy young adult series, told in first person, has a set of companion books narrating the stories of enslaved worlds and alien species?
+  raw_answer: Animorphs
+  gold_answer (normalized): animorphs
+  n_shards: 14
+  shard[0]: {'shard_id': 1, 'shard': 'The books have been translated into French, German, Spanish, Finnish, Chinese, Japanese, Portuguese, Italian, Romanian and Dutch.'}
+
+  task_id: hotpotqa_0002_5a7bbb64
+  question: Who is older, Annie Morton or Terry Richardson?
+  raw_answer: Terry Richardson
+  gold_answer (normalized): terry richardson
+  n_shards: 11
+  shard[0]: {'shard_id': 1, 'shard': 'Piano Girl (Turkish: "Deli Deli Olma" ) is a 2009 Turkish comedy-drama film, directed by Murat Saraçoğlu, starring Tarık Akan and Şerif Sezer as two elderly people forced to question their histories and reveal their big secrets.'}
+
+  task_id: hotpotqa_0003_5a716639
+  question: What is the name of the fight song of the university whose main campus is in Lawrence, Kansas and whose branch campuses are in the Kansas City metropolitan area?
+  raw_answer: Kansas Song
+  gold_answer (normalized): kansas song
+  n_shards: 9
+  shard[0]: {'shard_id': 1, 'shard': "Two branch campuses are in the Kansas City metropolitan area: the Edwards Campus in Overland Park, and the university's medical school and hospital in Kansas City."}
+
+  task_id: hotpotqa_0004_5a877e5d
+  question: What screenwriter with credits for "Evolution" co-wrote a film starring Nicolas Cage and Téa Leoni?
+  raw_answer: David Weissman
+  gold_answer (normalized): david weissman
+  n_shards: 12
+  shard[0]: {'shard_id': 1, 'shard': 'A prequel/sequel, "Arsenal", starring Nicolas Cage as his character Eddie King, was released in 2017.'}
