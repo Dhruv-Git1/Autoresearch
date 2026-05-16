@@ -80,4 +80,11 @@ def get_model_memory_gb(model) -> float:
     return round(total / (1024 ** 3), 2)
 
 
+
+
+def token_entropy(logits: torch.Tensor) -> float:
+    probs = torch.softmax(logits.float(), dim=-1)
+    return float(-(probs * torch.log(probs + 1e-9)).sum())
+
+
 # EXTEND_MODEL_UTILS
