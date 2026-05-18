@@ -87,4 +87,11 @@ def token_entropy(logits: torch.Tensor) -> float:
     return float(-(probs * torch.log(probs + 1e-9)).sum())
 
 
+
+
+def estimate_kv_cache_gb(n_layers: int, n_heads: int, head_dim: int,
+                          seq_len: int, dtype_bytes: int = 2) -> float:
+    return 2 * n_layers * n_heads * head_dim * seq_len * dtype_bytes / (1024 ** 3)
+
+
 # EXTEND_MODEL_UTILS
